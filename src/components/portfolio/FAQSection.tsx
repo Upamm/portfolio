@@ -107,6 +107,9 @@ export default function FAQSection() {
             ))}
           </Accordion>
         </motion.div>
+
+        {/* Glow Separator - FAQ → Contact */}
+        <div className="glow-separator mt-24 sm:mt-32" />
       </div>
     </section>
   );

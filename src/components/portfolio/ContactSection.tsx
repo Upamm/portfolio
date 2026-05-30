@@ -235,8 +235,8 @@ export default function ContactSection() {
               className="glass-card rounded-2xl p-6 sm:p-8 space-y-5"
             >
               <div className="grid sm:grid-cols-2 gap-5">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-300" htmlFor="name">
+                <div className="space-y-2 contact-field-group">
+                  <label className="text-sm font-medium text-slate-300 transition-colors duration-300" htmlFor="name">
                     Your Name
                   </label>
                   <Input
@@ -248,11 +248,17 @@ export default function ContactSection() {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className="bg-[#0a1628]/50 border-teal-500/10 focus:border-teal-500/40 text-white placeholder:text-slate-500"
+                    onFocus={(e) => {
+                      e.currentTarget.parentElement?.querySelector('label')?.classList.add('text-teal-400');
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.parentElement?.querySelector('label')?.classList.remove('text-teal-400');
+                    }}
+                    className="contact-input bg-[#0a1628]/50 border-teal-500/10 text-white placeholder:text-slate-500"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-300" htmlFor="email">
+                <div className="space-y-2 contact-field-group">
+                  <label className="text-sm font-medium text-slate-300 transition-colors duration-300" htmlFor="email">
                     Email Address
                   </label>
                   <Input
@@ -264,13 +270,19 @@ export default function ContactSection() {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    className="bg-[#0a1628]/50 border-teal-500/10 focus:border-teal-500/40 text-white placeholder:text-slate-500"
+                    onFocus={(e) => {
+                      e.currentTarget.parentElement?.querySelector('label')?.classList.add('text-teal-400');
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.parentElement?.querySelector('label')?.classList.remove('text-teal-400');
+                    }}
+                    className="contact-input bg-[#0a1628]/50 border-teal-500/10 text-white placeholder:text-slate-500"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300" htmlFor="subject">
+              <div className="space-y-2 contact-field-group">
+                <label className="text-sm font-medium text-slate-300 transition-colors duration-300" htmlFor="subject">
                   Subject
                 </label>
                 <Input
@@ -282,12 +294,18 @@ export default function ContactSection() {
                   onChange={(e) =>
                     setFormData({ ...formData, subject: e.target.value })
                   }
-                  className="bg-[#0a1628]/50 border-teal-500/10 focus:border-teal-500/40 text-white placeholder:text-slate-500"
+                  onFocus={(e) => {
+                    e.currentTarget.parentElement?.querySelector('label')?.classList.add('text-teal-400');
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.parentElement?.querySelector('label')?.classList.remove('text-teal-400');
+                  }}
+                  className="contact-input bg-[#0a1628]/50 border-teal-500/10 text-white placeholder:text-slate-500"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300" htmlFor="message">
+              <div className="space-y-2 contact-field-group">
+                <label className="text-sm font-medium text-slate-300 transition-colors duration-300" htmlFor="message">
                   Message
                 </label>
                 <Textarea
@@ -299,7 +317,13 @@ export default function ContactSection() {
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
-                  className="bg-[#0a1628]/50 border-teal-500/10 focus:border-teal-500/40 text-white placeholder:text-slate-500 min-h-[120px]"
+                  onFocus={(e) => {
+                    e.currentTarget.parentElement?.querySelector('label')?.classList.add('text-teal-400');
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.parentElement?.querySelector('label')?.classList.remove('text-teal-400');
+                  }}
+                  className="contact-input bg-[#0a1628]/50 border-teal-500/10 text-white placeholder:text-slate-500 min-h-[120px]"
                 />
               </div>
 

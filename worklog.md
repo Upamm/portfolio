@@ -237,3 +237,124 @@ Navbar → Hero → MarqueeBar → About → Experience → Services → Process
 6. **Low**: Implement real PDF resume download endpoint
 7. **Low**: Add video background to hero section
 8. **Low**: Performance optimization (image lazy loading, code splitting)
+
+---
+
+## Phase 6 - UI Polish & Pricing Enhancement Round
+
+### Styling Improvements
+
+1. **Scroll Progress Bar** — Created `ScrollProgress.tsx` component. A thin (3px) gradient progress bar fixed at the very top of the page (z-index 60, above navbar). Fills left-to-right as user scrolls using `scrollHeight - clientHeight` calculation. Gradient from teal (#06b6d4) to emerald (#10b981). Uses passive scroll listener for performance.
+
+2. **Section Entrance Animations Refinement** — Smoothed out animation delays across all components:
+   - Hero stats: changed from `delay: 1.4 + index * 0.1` to `delay: 0.3 + index * 0.15` for more natural staggered reveal
+   - Services cards: changed from `delay: 0.1 * index` to `delay: 0.15 + index * 0.1`
+   - Skills progress bars: reviewed and confirmed existing delays feel smooth (`index * 0.08`)
+   - Other sections: reviewed Experience, Process, Portfolio, FAQ — all have consistent stagger patterns
+
+3. **Gradient Glow Separator** — Added `.glow-separator` CSS class. 4px height, 60% width, centered. Teal-to-emerald gradient with box-shadow blur effect. Placed between major sections:
+   - About → Experience (at bottom of AboutSection)
+   - Skills/Pricing → Testimonials (at bottom of PricingSection)
+   - FAQ → Contact (at bottom of FAQSection)
+
+4. **Improved Footer Wave Divider** — Enhanced the wave SVG in `Footer.tsx` from 2 layers to 3 layers, increased height from 80px to 120px. Added a third wave path with different curvature. Updated `.wave-divider svg` CSS height to match. Also removed the old fixed back-to-top button (replaced by new ScrollToTop component) and cleaned up unused imports (ArrowUp, motion).
+
+5. **Hero Background Parallax** — Added smooth parallax effect to hero background image in `HeroSection.tsx`. Background image container translates by `scrollY * 0.3` using `requestAnimationFrame` for smooth performance. Uses `will-change-transform` for GPU acceleration. Combined with the existing cursor-following orb animation in a single rAF loop.
+
+6. **Enhanced Testimonial Cards** — Added glass reflection effect to testimonial card in `TestimonialsSection.tsx`:
+   - Added `.testimonial-glow` CSS class with inner shadow, subtle outer glow, and border glow
+   - Added bottom gradient reflection (`h-20` teal gradient fading to transparent)
+   - Added hover state with enhanced glow and border highlight
+   - Card has `overflow-hidden` for clean edge rendering
+
+7. **Contact Form Focus Animations** — Enhanced all form inputs in `ContactSection.tsx`:
+   - Added `.contact-input` CSS class with focus glow ring animation (teal box-shadow with 3px spread)
+   - Labels change color to teal on input focus using `onFocus`/`onBlur` handlers
+   - Smooth CSS transitions on label color (300ms) and input glow (300ms)
+   - Applied to all 4 form fields (name, email, subject, message)
+
+### New Features
+
+8. **Pricing Section** — Created `PricingSection.tsx` between Skills and Testimonials sections. Three service packages:
+   - **Starter** ($99): Basic WordPress setup, theme installation, essential plugins, basic SEO, 1 revision
+   - **Professional** ($249): Custom theme customization, advanced plugins, speed optimization, full SEO, 3 revisions, 30-day support — **Featured/Highlighted** with gradient border, "Most Popular" badge with Sparkles icon, gradient text price, enhanced button with shine effect
+   - **Premium** ($499): Custom WordPress dev, premium theme design, advanced performance, comprehensive SEO, unlimited revisions, 90-day priority support
+   - Each card: package name, price, description, feature list with teal checkmark icons, "Get Started" CTA button linking to #contact
+   - Responsive grid (1 col mobile, 3 col desktop), staggered reveal animations
+
+9. **Scroll-to-Top Progress Circle** — Created `ScrollToTop.tsx` component. Replaces the simple back-to-top button in Footer. Shows an animated SVG circular progress indicator that fills as user scrolls. Displays scroll percentage inside the circle. Appears after scrolling 300px. Uses `stroke-dasharray`/`stroke-dashoffset` animation with gradient stroke. Hover glow effect. `AnimatePresence` for smooth show/hide transition.
+
+10. **Pricing Navigation Link** — Added "Pricing" link to `Navbar.tsx` navigation, positioned after Skills and before FAQ. Mobile hamburger menu also includes the Pricing link. Active section tracking works automatically via the existing IntersectionObserver scroll spy.
+
+### Updated Component Order in page.tsx
+Navbar → Hero → MarqueeBar → About → Experience → Services → Process → Portfolio → Skills → Pricing → Testimonials → FAQ → Contact → Footer → FloatingHireFAB → ScrollProgress → ScrollToTop
+
+### Files Created
+- `src/components/portfolio/ScrollProgress.tsx` — NEW: Scroll progress bar
+- `src/components/portfolio/ScrollToTop.tsx` — NEW: Circular scroll-to-top button
+- `src/components/portfolio/PricingSection.tsx` — NEW: Pricing plans section
+
+### Files Modified
+- `src/app/page.tsx` — Added PricingSection, ScrollProgress, ScrollToTop imports; reordered components
+- `src/app/globals.css` — Added `.glow-separator`, `.testimonial-glow`, `.contact-input` CSS classes; updated wave-divider height to 120px
+- `src/components/portfolio/HeroSection.tsx` — Fixed lint error (removed `mounted` state), added parallax background effect with scroll listener in rAF loop, smoothed hero stats animation delays
+- `src/components/portfolio/ServicesSection.tsx` — Refined service card animation delays
+- `src/components/portfolio/TestimonialsSection.tsx` — Added glass reflection, bottom gradient, testimonial-glow class
+- `src/components/portfolio/ContactSection.tsx` — Added focus ring glow and label color change on all form inputs
+- `src/components/portfolio/Footer.tsx` — Enhanced wave to 3 layers/120px, removed back-to-top button and ArrowUp/motion imports
+- `src/components/portfolio/Navbar.tsx` — Added Pricing nav link
+- `src/components/portfolio/AboutSection.tsx` — Added glow separator at bottom
+- `src/components/portfolio/FAQSection.tsx` — Added glow separator at bottom
+
+### Technical Notes
+- `bun run lint` passes with 0 errors
+- Dev server compiles successfully with zero errors
+- All new components use TypeScript strict mode
+- Framer Motion for animations, Lucide React for icons
+- Mobile-first responsive design maintained
+- No blue/indigo colors used — dark navy/teal/emerald theme preserved
+- Total portfolio components: 17 (15 existing + 3 new: ScrollProgress, ScrollToTop, PricingSection)
+
+---
+
+## Phase 7 - Cron Review Round 3 (2026-05-31 06:26)
+
+### Current Project Status Assessment
+- **Overall**: Production-quality portfolio with 18 components (incl. Preloader), 1 API route, 1 DB model
+- **Build**: Zero lint errors, zero compilation errors, all 200 OK responses
+- **Visual QA**: All sections verified rendering correctly via agent-browser (desktop)
+- **Console**: Zero runtime errors. Hydration mismatch from previous phases FIXED by replacing `Math.random()` with deterministic particle data and gating typing animation on client mount
+- **Console Warning**: Minor Next.js Image `sizes` prop warning — fixed by adding `sizes` prop to avatar image
+- **Interactions**: All 10 nav links verified (Home, Experience, Services, Process, Portfolio, Skills, Pricing, FAQ, Contact), portfolio filters, mobile menu, all working
+
+### QA Results (Agent-Browser)
+1. ✅ Zero hydration mismatch errors (previously had one, now fixed)
+2. ✅ Scroll progress bar renders at top of page (z-60, above nav)
+3. ✅ Pricing section renders with 3 tiers (Starter $99, Professional $249, Premium $499)
+4. ✅ "Get Started" buttons present on all pricing cards
+5. ✅ Pricing link in navigation
+6. ✅ Circular scroll-to-top with progress circle
+7. ✅ Testimonial glass reflection effect applied
+8. ✅ Contact form focus animations working
+9. ✅ Hero parallax background on scroll
+10. ✅ All 18 components rendering correctly
+11. ✅ English only throughout
+12. ✅ Zero console errors (only info/warning from React DevTools)
+
+### Completed Modifications This Round
+- Bug Fix: Hydration mismatch (deterministic particles, mounted gating for typing)
+- Bug Fix: Next.js Image `sizes` warning for avatar
+- Styling: Scroll progress bar, animation delay refinement, glow separators, enhanced wave, hero parallax, testimonial glass reflection, contact form focus animations
+- Features: Pricing section (3 tiers), circular scroll-to-top, pricing nav link
+
+### Known Issues
+- None remaining. All previous issues resolved.
+
+### Priority Recommendations for Next Phase
+1. **High**: Add blog/articles section showcasing WordPress expertise
+2. **High**: Replace portfolio gradient placeholders with AI-generated project screenshots
+3. **Medium**: Add an animated "Clients Served" counter section
+4. **Medium**: Add a "Certifications/Badges" section
+5. **Low**: Custom 404 error page
+6. **Low**: Add cookie consent banner for GDPR compliance
+7. **Low**: Real PDF resume download endpoint

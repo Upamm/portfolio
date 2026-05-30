@@ -7,11 +7,14 @@ import ServicesSection from '@/components/portfolio/ServicesSection';
 import ProcessSection from '@/components/portfolio/ProcessSection';
 import PortfolioSection from '@/components/portfolio/PortfolioSection';
 import SkillsSection from '@/components/portfolio/SkillsSection';
+import PricingSection from '@/components/portfolio/PricingSection';
 import TestimonialsSection from '@/components/portfolio/TestimonialsSection';
 import FAQSection from '@/components/portfolio/FAQSection';
 import ContactSection from '@/components/portfolio/ContactSection';
 import Footer from '@/components/portfolio/Footer';
 import FloatingHireFAB from '@/components/portfolio/FloatingHireFAB';
+import ScrollProgress from '@/components/portfolio/ScrollProgress';
+import ScrollToTop from '@/components/portfolio/ScrollToTop';
 
 export default function Home() {
   return (
@@ -25,11 +28,14 @@ export default function Home() {
       <ProcessSection />
       <PortfolioSection />
       <SkillsSection />
+      <PricingSection />
       <TestimonialsSection />
       <FAQSection />
       <ContactSection />
       <Footer />
       <FloatingHireFAB />
+      <ScrollProgress />
+      <ScrollToTop />
     </main>
   );
 }

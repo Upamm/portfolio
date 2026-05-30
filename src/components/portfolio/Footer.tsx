@@ -1,8 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ArrowUp } from 'lucide-react';
-
 const footerLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
@@ -14,10 +11,6 @@ const footerLinks = [
 ];
 
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const handleClick = (href: string) => {
     const el = document.querySelector(href);
     if (el) {
@@ -27,22 +20,26 @@ export default function Footer() {
 
   return (
     <footer className="relative mt-auto overflow-hidden">
-      {/* Wave Divider */}
+      {/* Wave Divider - 3 layers, 120px tall */}
       <div className="wave-divider">
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <path
-            d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z"
-            fill="rgba(6, 182, 212, 0.05)"
+            d="M0,60 C360,120 720,0 1080,60 C1260,90 1380,75 1440,60 L1440,120 L0,120 Z"
+            fill="rgba(6, 182, 212, 0.04)"
           />
           <path
-            d="M0,50 C240,20 480,70 720,40 C960,10 1200,60 1440,50 L1440,80 L0,80 Z"
+            d="M0,75 C240,30 480,105 720,60 C960,15 1200,90 1440,75 L1440,120 L0,120 Z"
+            fill="rgba(6, 182, 212, 0.03)"
+          />
+          <path
+            d="M0,90 C180,50 420,110 720,75 C960,40 1200,95 1440,85 L1440,120 L0,120 Z"
             fill="rgba(6, 15, 29, 1)"
           />
         </svg>
       </div>
 
       {/* Top divider */}
-      <div className="absolute top-0 left-0 right-0 section-divider" style={{ top: '60px' }} />
+      <div className="absolute top-0 left-0 right-0 section-divider" style={{ top: '90px' }} />
 
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#060f1d] to-[#040b16]" />
@@ -56,7 +53,7 @@ export default function Footer() {
               href="#home"
               onClick={(e) => {
                 e.preventDefault();
-                scrollToTop();
+                handleClick('#home');
               }}
               className="inline-block text-2xl font-bold tracking-wider mb-4"
             >
@@ -156,17 +153,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Back to Top Button */}
-      <motion.button
-        onClick={scrollToTop}
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1 }}
-        className="fixed bottom-8 right-8 w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 text-white flex items-center justify-center shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 hover:scale-110 transition-all duration-300 z-40"
-        aria-label="Back to top"
-      >
-        <ArrowUp className="w-5 h-5" />
-      </motion.button>
     </footer>
   );
 }

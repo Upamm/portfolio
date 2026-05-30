@@ -56,6 +56,7 @@ export default function AboutSection() {
                   src="/images/avatar.png"
                   alt="Upam - WordPress Virtual Assistant"
                   fill
+                  sizes="(max-width: 640px) 256px, 320px"
                   className="object-cover"
                   priority
                 />
@@ -162,6 +163,9 @@ export default function AboutSection() {
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Glow Separator - About → Experience */}
+        <div className="glow-separator mt-24 sm:mt-32" />
       </div>
     </section>
   );

@@ -116,9 +116,12 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-3xl mx-auto"
         >
-          <div className="relative glass-card rounded-2xl p-8 sm:p-12 min-h-[320px] flex items-center">
+          <div className="relative glass-card testimonial-glow rounded-2xl p-8 sm:p-12 min-h-[320px] flex items-center overflow-hidden">
             {/* Quote icon */}
             <Quote className="absolute top-6 right-6 w-12 h-12 text-teal-500/10" />
+
+            {/* Bottom reflection/glow gradient */}
+            <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-teal-500/5 to-transparent pointer-events-none" />
 
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div

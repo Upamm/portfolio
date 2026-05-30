@@ -97,7 +97,7 @@ function TiltCard({
       key={service.title}
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: 0.1 * index }}
+      transition={{ duration: 0.5, delay: 0.15 + index * 0.1 }}
       className="glass-card service-card-enhanced rounded-2xl p-6 sm:p-8 group cursor-pointer relative overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}

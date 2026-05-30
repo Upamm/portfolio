@@ -14,7 +14,7 @@ export function Preloader() {
   }, []);
 
   return (
-    <div className={`preloader-overlay ${!visible ? 'hidden' : ''}`}>
+    <div className={`preloader-overlay ${!visible ? 'hidden' : ''}`} suppressHydrationWarning>
       <div className="preloader-ring" />
     </div>
   );

@@ -314,6 +314,44 @@ body::before {
   background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.2), transparent);
 }
 
+/* Glow Separator between major sections */
+.glow-separator {
+  width: 60%;
+  height: 4px;
+  margin: 0 auto;
+  background: linear-gradient(90deg, transparent, #06b6d4, #10b981, transparent);
+  border-radius: 2px;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.4), 0 0 24px rgba(16, 185, 129, 0.2);
+  position: relative;
+}
+
+/* Testimonial card glow border effect */
+.testimonial-glow {
+  box-shadow: inset 0 -1px 0 rgba(6, 182, 212, 0.1),
+    0 0 30px rgba(6, 182, 212, 0.06);
+  border: 1px solid rgba(6, 182, 212, 0.12);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.testimonial-glow:hover {
+  box-shadow: inset 0 -1px 0 rgba(6, 182, 212, 0.15),
+    0 0 40px rgba(6, 182, 212, 0.12),
+    0 0 80px rgba(16, 185, 129, 0.06);
+  border-color: rgba(6, 182, 212, 0.25);
+}
+
+/* Contact form input focus glow */
+.contact-input {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-input:focus {
+  border-color: rgba(6, 182, 212, 0.4) !important;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1),
+    0 0 16px rgba(6, 182, 212, 0.08);
+  outline: none;
+}
+
 /* Animated gradient border */
 .animated-border {
   position: relative;
@@ -545,7 +583,7 @@ body::before {
 .wave-divider svg {
   display: block;
   width: 100%;
-  height: 80px;
+  height: 120px;
 }
 
 /* ==================== */

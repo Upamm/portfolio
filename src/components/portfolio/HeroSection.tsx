@@ -19,15 +19,27 @@ const stats = [
   { icon: Award, value: 'L2', label: 'Fiverr Seller' },
 ];
 
-// Generate particles data
-const particles = Array.from({ length: 18 }, (_, i) => ({
-  id: i,
-  left: `${Math.random() * 100}%`,
-  size: 2 + Math.random() * 4,
-  duration: 8 + Math.random() * 12,
-  delay: Math.random() * 8,
-  opacity: 0.2 + Math.random() * 0.5,
-}));
+// Deterministic particles data (no Math.random to avoid hydration mismatch)
+const particles = [
+  { id: 0, left: '5%', size: 3, duration: 12, delay: 0, opacity: 0.4 },
+  { id: 1, left: '12%', size: 4, duration: 15, delay: 2, opacity: 0.3 },
+  { id: 2, left: '20%', size: 2, duration: 10, delay: 4, opacity: 0.5 },
+  { id: 3, left: '28%', size: 5, duration: 18, delay: 1, opacity: 0.25 },
+  { id: 4, left: '35%', size: 3, duration: 11, delay: 6, opacity: 0.45 },
+  { id: 5, left: '42%', size: 4, duration: 14, delay: 3, opacity: 0.35 },
+  { id: 6, left: '50%', size: 2, duration: 9, delay: 5, opacity: 0.5 },
+  { id: 7, left: '58%', size: 5, duration: 16, delay: 0, opacity: 0.3 },
+  { id: 8, left: '65%', size: 3, duration: 13, delay: 7, opacity: 0.4 },
+  { id: 9, left: '72%', size: 4, duration: 11, delay: 2, opacity: 0.35 },
+  { id: 10, left: '78%', size: 2, duration: 17, delay: 4, opacity: 0.5 },
+  { id: 11, left: '85%', size: 5, duration: 12, delay: 1, opacity: 0.25 },
+  { id: 12, left: '90%', size: 3, duration: 15, delay: 6, opacity: 0.4 },
+  { id: 13, left: '95%', size: 4, duration: 10, delay: 3, opacity: 0.45 },
+  { id: 14, left: '8%', size: 2, duration: 14, delay: 5, opacity: 0.3 },
+  { id: 15, left: '18%', size: 3, duration: 16, delay: 0, opacity: 0.5 },
+  { id: 16, left: '38%', size: 4, duration: 9, delay: 7, opacity: 0.35 },
+  { id: 17, left: '55%', size: 3, duration: 13, delay: 2, opacity: 0.4 },
+];
 
 function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   const ref = useRef(null);
@@ -111,7 +123,10 @@ export default function HeroSection() {
   const orbPosition = useRef({ x: 0, y: 0 });
   const orbRef = useRef<HTMLDivElement>(null);
   const animFrameRef = useRef<number>(0);
+  const bgRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef({ y: 0 });
 
+  // Typing animation (client-only via useEffect)
   useEffect(() => {
     const currentRole = roles[roleIndex];
     let timeout: NodeJS.Timeout;
@@ -139,17 +154,23 @@ export default function HeroSection() {
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, roleIndex]);
 
-  // Gradient orb following cursor with lerp
+  // Parallax + Gradient orb following cursor with lerp
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       mousePosition.current = { x: e.clientX, y: e.clientY };
     };
 
+    const handleScroll = () => {
+      scrollRef.current.y = window.scrollY;
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     const lerpFactor = 0.08;
 
-    const animateOrb = () => {
+    const animate = () => {
+      // Orb
       orbPosition.current.x += (mousePosition.current.x - orbPosition.current.x) * lerpFactor;
       orbPosition.current.y += (mousePosition.current.y - orbPosition.current.y) * lerpFactor;
 
@@ -157,13 +178,19 @@ export default function HeroSection() {
         orbRef.current.style.transform = `translate(${orbPosition.current.x - 150}px, ${orbPosition.current.y - 150}px)`;
       }
 
-      animFrameRef.current = requestAnimationFrame(animateOrb);
+      // Parallax background
+      if (bgRef.current) {
+        bgRef.current.style.transform = `translateY(${scrollRef.current.y * 0.3}px)`;
+      }
+
+      animFrameRef.current = requestAnimationFrame(animate);
     };
 
-    animFrameRef.current = requestAnimationFrame(animateOrb);
+    animFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(animFrameRef.current);
     };
   }, []);
@@ -181,9 +208,10 @@ export default function HeroSection() {
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background Image */}
+      {/* Background Image with Parallax */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        ref={bgRef}
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat will-change-transform"
         style={{ backgroundImage: "url('/images/hero-bg.png')" }}
       />
       {/* Dark overlay */}
@@ -319,7 +347,7 @@ export default function HeroSection() {
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.4 + index * 0.1 }}
+              transition={{ duration: 0.5, delay: 0.3 + index * 0.15 }}
               className="glass-card rounded-xl p-4 sm:p-6 text-center"
             >
               <stat.icon className="w-6 h-6 text-teal-400 mx-auto mb-2" />
