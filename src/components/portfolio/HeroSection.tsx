@@ -1,0 +1,188 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { ChevronDown, Briefcase, Users, FolderOpen, Award } from 'lucide-react';
+
+const roles = [
+  'WordPress Virtual Assistant',
+  'Web Designer',
+  'B2B Lead Generation Expert',
+  'WordPress Developer',
+];
+
+const stats = [
+  { icon: Briefcase, value: '8+', label: 'Years Experience' },
+  { icon: Users, value: '847+', label: 'Happy Clients' },
+  { icon: FolderOpen, value: '500+', label: 'Projects Completed' },
+  { icon: Award, value: 'L2', label: 'Fiverr Seller' },
+];
+
+export default function HeroSection() {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentRole = roles[roleIndex];
+    let timeout: NodeJS.Timeout;
+
+    if (!isDeleting && displayedText === currentRole) {
+      timeout = setTimeout(() => setIsDeleting(true), 2000);
+    } else if (isDeleting && displayedText === '') {
+      timeout = setTimeout(() => {
+        setIsDeleting(false);
+        setRoleIndex((prev) => (prev + 1) % roles.length);
+      }, 300);
+    } else {
+      timeout = setTimeout(
+        () => {
+          setDisplayedText(
+            isDeleting
+              ? currentRole.substring(0, displayedText.length - 1)
+              : currentRole.substring(0, displayedText.length + 1)
+          );
+        },
+        isDeleting ? 30 : 60
+      );
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayedText, isDeleting, roleIndex]);
+
+  const scrollToPortfolio = () => {
+    document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollToContact = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/images/hero-bg.png')" }}
+      />
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/90 via-[#0a1628]/80 to-[#0a1628]" />
+
+      {/* Decorative elements */}
+      <div className="absolute top-1/4 left-10 w-72 h-72 bg-teal-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+      <div className="absolute inset-0 bg-grid opacity-30" />
+
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          {/* Greeting badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8"
+          >
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            <span className="text-sm text-slate-300">Available for freelance work</span>
+          </motion.div>
+
+          {/* Main Heading */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 tracking-tight">
+            <span className="text-white">I&apos;m </span>
+            <span className="gradient-text">Upam</span>
+          </h1>
+
+          {/* Typing subtitle */}
+          <div className="h-12 sm:h-14 flex items-center justify-center mb-8">
+            <p className="text-xl sm:text-2xl md:text-3xl text-slate-300 font-light">
+              {displayedText}
+              <span className="inline-block w-0.5 h-7 bg-teal-400 ml-1 animate-pulse" />
+            </p>
+          </div>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed"
+          >
+            Specialized in WordPress site management, theme customization,
+            plugin setup, speed optimization, and B2B lead generation with
+            8+ years of professional experience.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
+            <button
+              onClick={scrollToPortfolio}
+              className="group relative px-8 py-3.5 rounded-lg font-medium text-white bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 hover:scale-105"
+            >
+              View My Work
+              <span className="ml-2 inline-block group-hover:translate-x-1 transition-transform">
+                &rarr;
+              </span>
+            </button>
+            <button
+              onClick={scrollToContact}
+              className="px-8 py-3.5 rounded-lg font-medium text-teal-400 border border-teal-500/30 hover:border-teal-400/60 hover:bg-teal-500/10 transition-all duration-300 hover:scale-105"
+            >
+              Hire Me
+            </button>
+          </motion.div>
+        </motion.div>
+
+        {/* Stats Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
+          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto"
+        >
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 1.4 + index * 0.1 }}
+              className="glass-card rounded-xl p-4 sm:p-6 text-center"
+            >
+              <stat.icon className="w-6 h-6 text-teal-400 mx-auto mb-2" />
+              <div className="text-2xl sm:text-3xl font-bold gradient-text">{stat.value}</div>
+              <div className="text-xs sm:text-sm text-slate-400 mt-1">{stat.label}</div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Scroll Down Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      >
+        <span className="text-xs text-slate-500 uppercase tracking-widest">Scroll Down</span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5 }}
+        >
+          <ChevronDown className="w-5 h-5 text-teal-400" />
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}
