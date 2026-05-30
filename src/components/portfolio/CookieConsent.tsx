@@ -8,12 +8,18 @@ export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    // Only show on first visit
+    // Only show on first visit, after user scrolls past hero section
     const consent = localStorage.getItem('cookie-consent');
     if (!consent) {
-      // Delay showing the banner for 2 seconds
-      const timer = setTimeout(() => setShowBanner(true), 2000);
-      return () => clearTimeout(timer);
+      const handleScroll = () => {
+        // Show banner once user has scrolled past hero (100vh)
+        if (window.scrollY > window.innerHeight * 0.8) {
+          setShowBanner(true);
+          window.removeEventListener('scroll', handleScroll);
+        }
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
     }
   }, []);
 
