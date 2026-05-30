@@ -12,6 +12,7 @@ import PricingSection from '@/components/portfolio/PricingSection';
 import StatsBanner from '@/components/portfolio/StatsBanner';
 import ClientsSection from '@/components/portfolio/ClientsSection';
 import TestimonialsSection from '@/components/portfolio/TestimonialsSection';
+import CertificationsSection from '@/components/portfolio/CertificationsSection';
 import BlogSection from '@/components/portfolio/BlogSection';
 import FAQSection from '@/components/portfolio/FAQSection';
 import ContactSection from '@/components/portfolio/ContactSection';
@@ -38,6 +39,7 @@ export default function Home() {
       <StatsBanner />
       <ClientsSection />
       <TestimonialsSection />
+      <CertificationsSection />
       <BlogSection />
       <FAQSection />
       <ContactSection />

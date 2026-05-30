@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import ThemeToggle from '@/components/portfolio/ThemeToggle';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -102,6 +103,11 @@ export default function Navbar() {
             ))}
           </div>
 
+          {/* Theme Toggle (desktop only) */}
+          <div className="hidden lg:block ml-3">
+            <ThemeToggle />
+          </div>
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -144,6 +150,10 @@ export default function Navbar() {
                   {link.label}
                 </motion.a>
               ))}
+              <div className="border-t border-teal-500/10 pt-3 mt-3 flex items-center justify-between px-4">
+                <span className="text-sm text-slate-400">Theme</span>
+                <ThemeToggle />
+              </div>
             </div>
           </motion.div>
         )}

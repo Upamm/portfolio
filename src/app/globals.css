@@ -888,3 +888,163 @@ body::before {
   background: rgba(6, 182, 212, 0.3);
   color: #ffffff;
 }
+
+/* ==================== */
+/* CERTIFICATION BADGE GLOW */
+/* ==================== */
+.cert-badge {
+  position: relative;
+}
+
+.cert-badge::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--cert-angle, 0deg),
+    transparent 0%,
+    #06b6d4 10%,
+    #10b981 20%,
+    transparent 30%
+  );
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.cert-badge:hover::before {
+  opacity: 1;
+  animation: cert-glow-spin 3s linear infinite;
+}
+
+@keyframes cert-glow-spin {
+  to {
+    --cert-angle: 360deg;
+  }
+}
+
+@property --cert-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ==================== */
+/* ACCENT LINE ANIMATED  */
+/* ==================== */
+.accent-line-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.accent-line-hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #06b6d4, #10b981);
+  transition: width 0.4s ease;
+  border-radius: 1px;
+}
+
+.accent-line-hover:hover::after {
+  width: 100%;
+}
+
+/* ==================== */
+/* FLOATING KEYFRAMES    */
+/* ==================== */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(-3deg); }
+  66% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(-10px); }
+  50% { transform: translateY(10px); }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 5s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 4s ease-in-out infinite;
+}
+
+/* ==================== */
+/* TEXT GLOW EFFECT      */
+/* ==================== */
+.text-glow-teal {
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.3),
+               0 0 40px rgba(6, 182, 212, 0.1);
+}
+
+.text-glow-emerald {
+  text-shadow: 0 0 20px rgba(16, 185, 129, 0.3),
+               0 0 40px rgba(16, 185, 129, 0.1);
+}
+
+/* ==================== */
+/* GRADIENT BORDER ANIMATED */
+/* ==================== */
+.gradient-border-animated {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.gradient-border-animated::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    var(--gradient-angle, 135deg),
+    #06b6d4,
+    #10b981,
+    #06b6d4,
+    #10b981
+  );
+  background-size: 300% 300%;
+  animation: gradient-angle-shift 4s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+@keyframes gradient-angle-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ==================== */
+/* PULSE DOT INDICATOR   */
+/* ==================== */
+@keyframes pulse-dot {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(6, 182, 212, 0);
+  }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}

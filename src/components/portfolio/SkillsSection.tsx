@@ -76,6 +76,121 @@ function ProgressBar({
   );
 }
 
+function SkillRadarChart({ isInView }: { isInView: boolean }) {
+  const skills = [
+    { name: 'WordPress', value: 95 },
+    { name: 'Theme Dev', value: 90 },
+    { name: 'SEO', value: 88 },
+    { name: 'Speed Opt.', value: 92 },
+    { name: 'Lead Gen', value: 90 },
+    { name: 'Data Research', value: 95 },
+  ];
+
+  const size = 200;
+  const center = size / 2;
+  const radius = 80;
+  const levels = 5;
+
+  const getPoint = (index: number, value: number) => {
+    const angle = (Math.PI * 2 * index) / skills.length - Math.PI / 2;
+    const r = (value / 100) * radius;
+    return {
+      x: center + r * Math.cos(angle),
+      y: center + r * Math.sin(angle),
+    };
+  };
+
+  const gridPoints = (level: number) => {
+    return skills
+      .map((_, i) => {
+        const angle = (Math.PI * 2 * i) / skills.length - Math.PI / 2;
+        const r = (level / levels) * radius;
+        return `${center + r * Math.cos(angle)},${center + r * Math.sin(angle)}`;
+      })
+      .join(' ');
+  };
+
+  const dataPoints = skills.map((s, i) => getPoint(i, s.value));
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={isInView ? { opacity: 1, scale: 1 } : {}}
+      transition={{ duration: 0.8, delay: 1 }}
+      className="flex justify-center mt-8"
+    >
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="max-w-[200px]">
+        {/* Grid levels */}
+        {[1, 2, 3, 4, 5].map((level) => (
+          <polygon
+            key={level}
+            points={gridPoints(level)}
+            fill="none"
+            stroke="rgba(6, 182, 212, 0.1)"
+            strokeWidth="1"
+          />
+        ))}
+        {/* Axis lines */}
+        {skills.map((_, i) => {
+          const angle = (Math.PI * 2 * i) / skills.length - Math.PI / 2;
+          return (
+            <line
+              key={i}
+              x1={center}
+              y1={center}
+              x2={center + radius * Math.cos(angle)}
+              y2={center + radius * Math.sin(angle)}
+              stroke="rgba(6, 182, 212, 0.1)"
+              strokeWidth="1"
+            />
+          );
+        })}
+        {/* Data area */}
+        <motion.polygon
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 0.25 } : {}}
+          transition={{ duration: 1, delay: 1.2 }}
+          points={dataPoints.map((p) => `${p.x},${p.y}`).join(' ')}
+          fill="rgba(6, 182, 212, 0.25)"
+          stroke="rgba(6, 182, 212, 0.6)"
+          strokeWidth="2"
+        />
+        {/* Data points */}
+        {dataPoints.map((p, i) => (
+          <motion.circle
+            key={i}
+            initial={{ r: 0 }}
+            animate={isInView ? { r: 4 } : {}}
+            transition={{ duration: 0.3, delay: 1.4 + i * 0.1 }}
+            cx={p.x}
+            cy={p.y}
+            fill="#06b6d4"
+            stroke="#0a1628"
+            strokeWidth="2"
+          />
+        ))}
+        {/* Labels */}
+        {skills.map((skill, i) => {
+          const angle = (Math.PI * 2 * i) / skills.length - Math.PI / 2;
+          const labelR = radius + 20;
+          return (
+            <text
+              key={i}
+              x={center + labelR * Math.cos(angle)}
+              y={center + labelR * Math.sin(angle)}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              className="text-[10px] fill-slate-400"
+            >
+              {skill.name}
+            </text>
+          );
+        })}
+      </svg>
+    </motion.div>
+  );
+}
+
 export default function SkillsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
@@ -127,6 +242,7 @@ export default function SkillsSection() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
+            <SkillRadarChart isInView={isInView} />
             <h3 className="text-xl font-bold text-white mb-6">
               Tools & Technologies
             </h3>

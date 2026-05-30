@@ -118,7 +118,8 @@ export default function TestimonialsSection() {
         >
           <div className="relative glass-card testimonial-glow rounded-2xl p-8 sm:p-12 min-h-[320px] flex items-center overflow-hidden">
             {/* Quote icon */}
-            <Quote className="absolute top-6 right-6 w-12 h-12 text-teal-500/10" />
+            <Quote className="absolute top-8 right-10 w-20 h-20 text-teal-500/5 rotate-180" />
+            <Quote className="absolute bottom-6 left-10 w-16 h-16 text-emerald-500/5" />
 
             {/* Bottom reflection/glow gradient */}
             <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-teal-500/5 to-transparent pointer-events-none" />
@@ -139,9 +140,9 @@ export default function TestimonialsSection() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-5 h-5 ${
+                      className={`w-6 h-6 transition-all duration-300 ${
                         i < testimonials[current].rating
-                          ? 'fill-yellow-400 text-yellow-400'
+                          ? 'fill-yellow-400 text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.3)]'
                           : 'text-slate-600'
                       }`}
                     />
@@ -175,6 +176,21 @@ export default function TestimonialsSection() {
               </motion.div>
             </AnimatePresence>
           </div>
+
+          {/* Auto-play Progress Bar */}
+          <div className="mt-4 h-0.5 rounded-full bg-slate-700/50 overflow-hidden max-w-xs mx-auto">
+            <motion.div
+              key={current}
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: 5, ease: 'linear' }}
+              className="h-full rounded-full bg-gradient-to-r from-teal-500 to-emerald-500"
+            />
+          </div>
+
+          <p className="text-xs text-slate-500 mt-2 text-center">
+            {current + 1} / {testimonials.length}
+          </p>
 
           {/* Controls */}
           <div className="flex items-center justify-center gap-4 mt-8">

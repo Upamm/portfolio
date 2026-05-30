@@ -1,26 +1,28 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 import { motion } from 'framer-motion';
 import { Moon, Sun } from 'lucide-react';
 
-export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(true);
-  const [mounted, setMounted] = useState(false);
+const emptySubscribe = () => () => {};
 
-  useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem('theme');
-    if (saved === 'light') {
-      setIsDark(false);
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
+function useMounted() {
+  return useSyncExternalStore(emptySubscribe, () => true, () => false);
+}
+
+function useTheme() {
+  const getSnapshot = () => localStorage.getItem('theme') !== 'light';
+  const getServerSnapshot = () => true;
+  return useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);
+}
+
+export default function ThemeToggle() {
+  const isDark = useTheme();
+  const mounted = useMounted();
 
   const toggle = useCallback(() => {
-    const newTheme = !isDark;
-    setIsDark(newTheme);
+    const newIsDark = localStorage.getItem('theme') !== 'light';
+    const newTheme = !newIsDark;
     localStorage.setItem('theme', newTheme ? 'dark' : 'light');
     if (newTheme) {
       document.documentElement.classList.remove('light');
@@ -29,9 +31,10 @@ export default function ThemeToggle() {
       document.documentElement.classList.remove('dark');
       document.documentElement.classList.add('light');
     }
-  }, [isDark]);
+    // Trigger re-render by dispatching a storage event
+    window.dispatchEvent(new Event('storage'));
+  }, []);
 
-  // Prevent flash of wrong theme
   if (!mounted) return null;
 
   return (
