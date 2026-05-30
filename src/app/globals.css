@@ -803,6 +803,86 @@ body::before {
   box-shadow: 0 12px 40px rgba(6, 182, 212, 0.12);
 }
 
+/* ==================== */
+/* TYPING CURSOR BLINK    */
+/* ==================== */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+/* ==================== */
+/* PROJECT IMAGE OVERLAY   */
+/* ==================== */
+.project-image-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.project-image-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 40%,
+    rgba(10, 22, 40, 0.7) 100%
+  );
+  pointer-events: none;
+}
+
+/* ==================== */
+/* SECTION SUBTLE FADE-IN */
+/* ==================== */
+@keyframes subtle-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== */
+/* GRADIENT BORDER FOR PRICING */
+/* ==================== */
+.pricing-gradient-border {
+  background: conic-gradient(
+    from 0deg,
+    #06b6d4,
+    #10b981,
+    #06b6d4,
+    transparent 70%,
+    #06b6d4
+  );
+  padding: 1.5px;
+  border-radius: 1rem;
+  animation: pricing-border-spin 6s linear infinite;
+}
+
+@keyframes pricing-border-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==================== */
+/* COOKIE CONSENT PULSE    */
+/* ==================== */
+@keyframes cookie-pulse {
+  0%, 100% {
+    box-shadow: 0 8px 32px rgba(6, 182, 212, 0.1), 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(6, 182, 212, 0.2), 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+}
+
 /* Selection color */
 ::selection {
   background: rgba(6, 182, 212, 0.3);

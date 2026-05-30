@@ -7,6 +7,7 @@ import ServicesSection from '@/components/portfolio/ServicesSection';
 import ProcessSection from '@/components/portfolio/ProcessSection';
 import PortfolioSection from '@/components/portfolio/PortfolioSection';
 import SkillsSection from '@/components/portfolio/SkillsSection';
+import ValuesSection from '@/components/portfolio/ValuesSection';
 import PricingSection from '@/components/portfolio/PricingSection';
 import StatsBanner from '@/components/portfolio/StatsBanner';
 import ClientsSection from '@/components/portfolio/ClientsSection';
@@ -18,6 +19,7 @@ import Footer from '@/components/portfolio/Footer';
 import FloatingHireFAB from '@/components/portfolio/FloatingHireFAB';
 import ScrollProgress from '@/components/portfolio/ScrollProgress';
 import ScrollToTop from '@/components/portfolio/ScrollToTop';
+import CookieConsent from '@/components/portfolio/CookieConsent';
 
 export default function Home() {
   return (
@@ -31,6 +33,7 @@ export default function Home() {
       <ProcessSection />
       <PortfolioSection />
       <SkillsSection />
+      <ValuesSection />
       <PricingSection />
       <StatsBanner />
       <ClientsSection />
@@ -42,6 +45,7 @@ export default function Home() {
       <FloatingHireFAB />
       <ScrollProgress />
       <ScrollToTop />
+      <CookieConsent />
     </main>
   );
 }

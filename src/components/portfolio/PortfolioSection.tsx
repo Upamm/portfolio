@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
+import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
@@ -23,6 +24,7 @@ const projects = [
     description: 'Full-featured WooCommerce store with payment integration',
     fullDescription: 'Built a complete e-commerce platform using WooCommerce with secure payment gateway integration, inventory management, order tracking, and a responsive design that increased online sales by 35%.',
     gradient: 'from-teal-600 to-cyan-600',
+    image: '/images/project-ecommerce.png',
     tags: ['WooCommerce', 'Elementor'],
   },
   {
@@ -31,6 +33,7 @@ const projects = [
     description: 'Professional corporate site with custom theme and animations',
     fullDescription: 'Designed and developed a modern corporate website with custom theme development, smooth animations, responsive layout, and SEO optimization that improved organic traffic by 45%.',
     gradient: 'from-emerald-600 to-teal-600',
+    image: '/images/project-corporate.png',
     tags: ['Custom Theme', 'Astra'],
   },
   {
@@ -39,6 +42,7 @@ const projects = [
     description: 'Property listing website with advanced search and filtering',
     fullDescription: 'Created a comprehensive real estate portal with advanced property search, map integration, virtual tours, agent management system, and lead capture forms for a major property agency.',
     gradient: 'from-cyan-600 to-teal-600',
+    image: '/images/project-realestate.png',
     tags: ['WP Residence', 'Maps API'],
   },
   {
@@ -47,6 +51,7 @@ const projects = [
     description: 'Medical practice website with appointment booking system',
     fullDescription: 'Developed a healthcare website for a medical practice featuring online appointment booking, patient portal, doctor profiles, service listings, and HIPAA-compliant contact forms.',
     gradient: 'from-teal-500 to-emerald-500',
+    image: '/images/project-healthcare.png',
     tags: ['Healthcare', 'Booking'],
   },
   {
@@ -55,6 +60,7 @@ const projects = [
     description: 'Restaurant website with online ordering and delivery tracking',
     fullDescription: 'Built a restaurant website with full online ordering system, menu management, delivery tracking integration, table reservation system, and customer loyalty program.',
     gradient: 'from-emerald-500 to-cyan-500',
+    image: '/images/project-restaurant.png',
     tags: ['Food Delivery', 'WooCommerce'],
   },
   {
@@ -63,6 +69,7 @@ const projects = [
     description: 'Comprehensive lead research campaign with 5000+ verified contacts',
     fullDescription: 'Executed a large-scale B2B lead generation campaign delivering 5000+ verified contacts across multiple industries with decision-maker contacts, company profiles, and verified email addresses.',
     gradient: 'from-cyan-500 to-teal-500',
+    image: '/images/project-leadgen.png',
     tags: ['Data Research', 'LinkedIn'],
   },
 ];
@@ -158,17 +165,20 @@ export default function PortfolioSection() {
                 className="glass-card card-spotlight rounded-2xl overflow-hidden group cursor-pointer hover-glow hover-lift"
                 onClick={() => openProjectDetail(project)}
               >
-                {/* Image Placeholder */}
+                {/* Project Image */}
                 <div
                   className={`relative h-48 bg-gradient-to-br ${project.gradient} overflow-hidden`}
                 >
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                  {/* Decorative elements */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center">
-                      <div className="w-8 h-8 rounded-full border-2 border-white/30" />
-                    </div>
-                  </div>
+                  {project.image && (
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/60 via-transparent to-transparent" />
                   {/* Hover overlay */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40">
                     <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform">
@@ -214,14 +224,18 @@ export default function PortfolioSection() {
         <DialogContent className="sm:max-w-lg bg-[#0f1f38] border border-teal-500/20 text-slate-200 p-0 overflow-hidden">
           {selectedProject && (
             <>
-              {/* Gradient header image */}
+              {/* Project image in modal */}
               <div className={`relative h-48 sm:h-56 bg-gradient-to-br ${selectedProject.gradient}`}>
-                <div className="absolute inset-0 bg-black/10" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 rounded-full border-2 border-white/20 flex items-center justify-center">
-                    <div className="w-10 h-10 rounded-full border-2 border-white/30" />
-                  </div>
-                </div>
+                {selectedProject.image && (
+                  <Image
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 512px"
+                    className="object-cover"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0f1f38] via-transparent to-transparent" />
                 {/* Category badge */}
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-black/30 backdrop-blur-sm text-white border-white/10 text-xs">
