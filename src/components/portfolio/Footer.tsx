@@ -3,9 +3,10 @@
 const footerLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
-  { label: 'Experience', href: '#experience' },
   { label: 'Services', href: '#services' },
   { label: 'Portfolio', href: '#portfolio' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'Blog', href: '#blog' },
   { label: 'FAQ', href: '#faq' },
   { label: 'Contact', href: '#contact' },
 ];
@@ -44,7 +45,41 @@ export default function Footer() {
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#060f1d] to-[#040b16]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
+      {/* CTA Banner before footer content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div className="glass-card rounded-2xl p-8 sm:p-12 mb-12 text-center relative overflow-hidden shimmer-bg">
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal-500/40 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
+          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+            Ready to Start Your <span className="gradient-text">Project</span>?
+          </h3>
+          <p className="text-slate-400 text-sm sm:text-base max-w-lg mx-auto mb-6">
+            Let&apos;s work together to build something amazing. Contact me today for a free consultation.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                handleClick('#contact');
+              }}
+              className="btn-shine px-8 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 hover:scale-105"
+            >
+              Get In Touch
+            </a>
+            <a
+              href="https://www.fiverr.com/upam1721"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-3 rounded-xl font-medium text-teal-400 border border-teal-500/30 hover:border-teal-400/60 hover:bg-teal-500/10 transition-all duration-300 hover:scale-105"
+            >
+              Hire Me on Fiverr
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-8">
         {/* Main Footer Content */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
           {/* Brand */}
@@ -145,7 +180,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-slate-500 text-sm">
-            &copy; 2025 Upam. All Rights Reserved.
+            &copy; {new Date().getFullYear()} Upam. All Rights Reserved.
           </p>
           <p className="text-slate-600 text-xs">
             WordPress Virtual Assistant & Web Designer

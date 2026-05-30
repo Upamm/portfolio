@@ -624,6 +624,185 @@ body::before {
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+/* ==================== */
+/* REVERSE MARQUEE        */
+/* ==================== */
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ==================== */
+/* MESH GRADIENT ANIMATION */
+/* ==================== */
+@keyframes mesh-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(30px, -20px) scale(1.1);
+  }
+  50% {
+    transform: translate(-20px, 30px) scale(0.95);
+  }
+  75% {
+    transform: translate(20px, 20px) scale(1.05);
+  }
+}
+
+.mesh-gradient-orb {
+  animation: mesh-float 8s ease-in-out infinite;
+}
+
+.mesh-gradient-orb-delay {
+  animation: mesh-float 10s ease-in-out infinite;
+  animation-delay: -3s;
+}
+
+.mesh-gradient-orb-slow {
+  animation: mesh-float 12s ease-in-out infinite;
+  animation-delay: -6s;
+}
+
+/* ==================== */
+/* TEXT CHARACTER REVEAL  */
+/* ==================== */
+@keyframes char-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* ==================== */
+/* CARD SPOTLIGHT EFFECT  */
+/* ==================== */
+.card-spotlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-spotlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(6, 182, 212, 0.06),
+    transparent 40%
+  );
+}
+
+.card-spotlight:hover::after {
+  opacity: 1;
+}
+
+/* ==================== */
+/* GLOWING BORDER ROTATE  */
+/* ==================== */
+@keyframes border-rotate {
+  0% {
+    --border-angle: 0deg;
+  }
+  100% {
+    --border-angle: 360deg;
+  }
+}
+
+.animated-border-rotate {
+  --border-angle: 0deg;
+  position: relative;
+  border-radius: 1rem;
+  animation: border-rotate 3s linear infinite;
+}
+
+.animated-border-rotate::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--border-angle),
+    #06b6d4,
+    #10b981,
+    transparent 40%,
+    #06b6d4
+  );
+  z-index: -1;
+  animation: border-rotate 3s linear infinite;
+}
+
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ==================== */
+/* FLOATING ACTION ORB   */
+/* ==================== */
+@keyframes orb-breathe {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.15), 0 0 60px rgba(16, 185, 129, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(6, 182, 212, 0.25), 0 0 100px rgba(16, 185, 129, 0.15);
+  }
+}
+
+.orb-breathe {
+  animation: orb-breathe 4s ease-in-out infinite;
+}
+
+/* ==================== */
+/* SHIMMER LOADING EFFECT */
+/* ==================== */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(6, 182, 212, 0.05) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* ==================== */
+/* ENHANCED HOVER EFFECTS */
+/* ==================== */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(6, 182, 212, 0.12);
+}
+
 /* Selection color */
 ::selection {
   background: rgba(6, 182, 212, 0.3);

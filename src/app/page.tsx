@@ -8,7 +8,10 @@ import ProcessSection from '@/components/portfolio/ProcessSection';
 import PortfolioSection from '@/components/portfolio/PortfolioSection';
 import SkillsSection from '@/components/portfolio/SkillsSection';
 import PricingSection from '@/components/portfolio/PricingSection';
+import StatsBanner from '@/components/portfolio/StatsBanner';
+import ClientsSection from '@/components/portfolio/ClientsSection';
 import TestimonialsSection from '@/components/portfolio/TestimonialsSection';
+import BlogSection from '@/components/portfolio/BlogSection';
 import FAQSection from '@/components/portfolio/FAQSection';
 import ContactSection from '@/components/portfolio/ContactSection';
 import Footer from '@/components/portfolio/Footer';
@@ -29,7 +32,10 @@ export default function Home() {
       <PortfolioSection />
       <SkillsSection />
       <PricingSection />
+      <StatsBanner />
+      <ClientsSection />
       <TestimonialsSection />
+      <BlogSection />
       <FAQSection />
       <ContactSection />
       <Footer />

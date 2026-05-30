@@ -85,11 +85,16 @@ function TiltCard({
       x: (x / rect.width) * 100,
       y: (y / rect.height) * 100,
     });
+    // Update CSS custom properties for card-spotlight
+    card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+    card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
   }, []);
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     setTransform('perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)');
     setShinePosition({ x: 50, y: 50 });
+    e.currentTarget.style.setProperty('--mouse-x', '50%');
+    e.currentTarget.style.setProperty('--mouse-y', '50%');
   }, []);
 
   return (
@@ -98,7 +103,7 @@ function TiltCard({
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: 0.15 + index * 0.1 }}
-      className="glass-card service-card-enhanced rounded-2xl p-6 sm:p-8 group cursor-pointer relative overflow-hidden"
+      className="glass-card service-card-enhanced card-spotlight rounded-2xl p-6 sm:p-8 group cursor-pointer relative overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{

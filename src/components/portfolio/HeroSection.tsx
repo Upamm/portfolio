@@ -217,18 +217,19 @@ export default function HeroSection() {
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/90 via-[#0a1628]/80 to-[#0a1628]" />
 
-      {/* Decorative elements */}
-      <div className="absolute top-1/4 left-10 w-72 h-72 bg-teal-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+      {/* Animated mesh gradient orbs */}
+      <div className="absolute top-1/4 left-10 w-72 h-72 bg-teal-500/5 rounded-full blur-3xl mesh-gradient-orb" />
+      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl mesh-gradient-orb-delay" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/3 rounded-full blur-3xl mesh-gradient-orb-slow" />
       <div className="absolute inset-0 bg-grid opacity-30" />
 
-      {/* Gradient Orb following cursor */}
+      {/* Gradient Orb following cursor with breathing glow */}
       <div
         ref={orbRef}
         className="fixed pointer-events-none z-0"
         style={{ width: '300px', height: '300px' }}
       >
-        <div className="w-full h-full rounded-full bg-radial-teal" />
+        <div className="w-full h-full rounded-full bg-radial-teal orb-breathe" />
       </div>
 
       {/* Floating Particles */}
