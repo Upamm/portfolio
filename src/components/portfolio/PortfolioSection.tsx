@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef, useState, useCallback } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -79,15 +79,21 @@ export default function PortfolioSection() {
       ? projects
       : projects.filter((p) => p.category === activeFilter);
 
-  const openProjectDetail = (project: (typeof projects)[0]) => {
+  const openProjectDetail = useCallback((project: (typeof projects)[0]) => {
     setSelectedProject(project);
-    setDialogOpen(true);
-  };
+    // Use requestAnimationFrame to ensure state is set before dialog opens
+    requestAnimationFrame(() => {
+      setDialogOpen(true);
+    });
+  }, []);
 
-  const closeDialog = () => {
-    setDialogOpen(false);
-    setTimeout(() => setSelectedProject(null), 200);
-  };
+  const handleDialogChange = useCallback((open: boolean) => {
+    if (!open) {
+      setDialogOpen(false);
+      // Delay clearing selected project to allow close animation
+      setTimeout(() => setSelectedProject(null), 200);
+    }
+  }, []);
 
   return (
     <section id="portfolio" className="relative py-24 sm:py-32 overflow-hidden">
@@ -110,7 +116,8 @@ export default function PortfolioSection() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
             Featured <span className="gradient-text">Projects</span>
           </h2>
-          <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+          <span className="section-heading-line" />
+          <p className="text-slate-400 mt-6 max-w-2xl mx-auto">
             A showcase of my recent work across various industries and technologies.
           </p>
         </motion.div>
@@ -139,69 +146,71 @@ export default function PortfolioSection() {
 
         {/* Projects Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="glass-card rounded-2xl overflow-hidden group cursor-pointer hover-glow"
-              onClick={() => openProjectDetail(project)}
-            >
-              {/* Image Placeholder */}
-              <div
-                className={`relative h-48 bg-gradient-to-br ${project.gradient} overflow-hidden`}
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project, index) => (
+              <motion.div
+                key={project.title}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="glass-card rounded-2xl overflow-hidden group cursor-pointer hover-glow"
+                onClick={() => openProjectDetail(project)}
               >
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                {/* Decorative elements */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full border-2 border-white/30" />
+                {/* Image Placeholder */}
+                <div
+                  className={`relative h-48 bg-gradient-to-br ${project.gradient} overflow-hidden`}
+                >
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                  {/* Decorative elements */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full border-2 border-white/30" />
+                    </div>
                   </div>
-                </div>
-                {/* Hover overlay */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40">
-                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform">
-                    <ExternalLink className="w-5 h-5 text-white" />
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40">
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform">
+                      <ExternalLink className="w-5 h-5 text-white" />
+                    </div>
                   </div>
-                </div>
-                {/* Category Badge */}
-                <div className="absolute top-4 left-4">
-                  <Badge
-                    variant="secondary"
-                    className="bg-black/30 backdrop-blur-sm text-white border-white/10 text-xs"
-                  >
-                    {project.category}
-                  </Badge>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-teal-300 transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-slate-400 text-sm mb-4">{project.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20"
+                  {/* Category Badge */}
+                  <div className="absolute top-4 left-4">
+                    <Badge
+                      variant="secondary"
+                      className="bg-black/30 backdrop-blur-sm text-white border-white/10 text-xs"
                     >
-                      {tag}
-                    </span>
-                  ))}
+                      {project.category}
+                    </Badge>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+
+                {/* Content */}
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-teal-300 transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="text-slate-400 text-sm mb-4">{project.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-xs px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
 
       {/* Project Detail Modal */}
-      <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) closeDialog(); }}>
+      <Dialog open={dialogOpen} onOpenChange={handleDialogChange} modal>
         <DialogContent className="sm:max-w-lg bg-[#0f1f38] border border-teal-500/20 text-slate-200 p-0 overflow-hidden">
           {selectedProject && (
             <>
@@ -255,7 +264,7 @@ export default function PortfolioSection() {
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={closeDialog}
+                    onClick={() => handleDialogChange(false)}
                     className="border-slate-600/50 text-slate-300 hover:text-white hover:border-slate-500"
                   >
                     Close

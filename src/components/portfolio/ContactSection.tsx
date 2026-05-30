@@ -137,7 +137,8 @@ export default function ContactSection() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
             Get In <span className="gradient-text">Touch</span>
           </h2>
-          <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+          <span className="section-heading-line" />
+          <p className="text-slate-400 mt-6 max-w-2xl mx-auto">
             Have a project in mind? Let&apos;s discuss how I can help you achieve
             your goals.
           </p>

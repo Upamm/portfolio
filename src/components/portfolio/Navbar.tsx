@@ -7,10 +7,12 @@ import { Menu, X } from 'lucide-react';
 const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
+  { label: 'Experience', href: '#experience' },
   { label: 'Services', href: '#services' },
   { label: 'Process', href: '#process' },
   { label: 'Portfolio', href: '#portfolio' },
   { label: 'Skills', href: '#skills' },
+  { label: 'FAQ', href: '#faq' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -73,7 +75,7 @@ export default function Navbar() {
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -82,7 +84,7 @@ export default function Navbar() {
                   e.preventDefault();
                   handleClick(link.href);
                 }}
-                className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-300 ${
+                className={`relative px-2.5 py-2 text-sm font-medium rounded-lg transition-colors duration-300 ${
                   activeSection === link.href.replace('#', '')
                     ? 'text-teal-400'
                     : 'text-slate-300 hover:text-white'
@@ -103,7 +105,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+            className="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -119,7 +121,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden glass-nav border-t border-teal-500/10 overflow-hidden"
+            className="lg:hidden glass-nav border-t border-teal-500/10 overflow-hidden"
           >
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link, index) => (

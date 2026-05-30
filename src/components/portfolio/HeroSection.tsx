@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { ChevronDown, Briefcase, Users, FolderOpen, Award, Download } from 'lucide-react';
 
 const roles = [
@@ -65,10 +65,52 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
   );
 }
 
+function MagneticButton({
+  children,
+  className,
+  onClick,
+}: {
+  children: React.ReactNode;
+  className: string;
+  onClick: () => void;
+}) {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10; // max 5px movement
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
+    setPosition({ x, y });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setPosition({ x: 0, y: 0 });
+  }, []);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        transition: 'transform 0.15s ease-out',
+      }}
+      className={className}
+    >
+      {children}
+    </button>
+  );
+}
+
 export default function HeroSection() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const mousePosition = useRef({ x: 0, y: 0 });
+  const orbPosition = useRef({ x: 0, y: 0 });
+  const orbRef = useRef<HTMLDivElement>(null);
+  const animFrameRef = useRef<number>(0);
 
   useEffect(() => {
     const currentRole = roles[roleIndex];
@@ -97,6 +139,35 @@ export default function HeroSection() {
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, roleIndex]);
 
+  // Gradient orb following cursor with lerp
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mousePosition.current = { x: e.clientX, y: e.clientY };
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    const lerpFactor = 0.08;
+
+    const animateOrb = () => {
+      orbPosition.current.x += (mousePosition.current.x - orbPosition.current.x) * lerpFactor;
+      orbPosition.current.y += (mousePosition.current.y - orbPosition.current.y) * lerpFactor;
+
+      if (orbRef.current) {
+        orbRef.current.style.transform = `translate(${orbPosition.current.x - 150}px, ${orbPosition.current.y - 150}px)`;
+      }
+
+      animFrameRef.current = requestAnimationFrame(animateOrb);
+    };
+
+    animFrameRef.current = requestAnimationFrame(animateOrb);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animFrameRef.current);
+    };
+  }, []);
+
   const scrollToPortfolio = () => {
     document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -122,6 +193,15 @@ export default function HeroSection() {
       <div className="absolute top-1/4 left-10 w-72 h-72 bg-teal-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
       <div className="absolute inset-0 bg-grid opacity-30" />
+
+      {/* Gradient Orb following cursor */}
+      <div
+        ref={orbRef}
+        className="fixed pointer-events-none z-0"
+        style={{ width: '300px', height: '300px' }}
+      >
+        <div className="w-full h-full rounded-full bg-radial-teal" />
+      </div>
 
       {/* Floating Particles */}
       <div className="hero-particles">
@@ -163,7 +243,7 @@ export default function HeroSection() {
           {/* Main Heading */}
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-4 tracking-tight">
             <span className="text-white">I&apos;m </span>
-            <span className="gradient-text">Upam</span>
+            <span className="gradient-reveal">Upam</span>
           </h1>
 
           {/* Typing subtitle */}
@@ -186,14 +266,14 @@ export default function HeroSection() {
             8+ years of professional experience.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons with Magnetic Effect */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <button
+            <MagneticButton
               onClick={scrollToPortfolio}
               className="btn-shine group relative px-8 py-3.5 rounded-lg font-medium text-white bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 hover:scale-105"
             >
@@ -201,13 +281,13 @@ export default function HeroSection() {
               <span className="ml-2 inline-block group-hover:translate-x-1 transition-transform">
                 &rarr;
               </span>
-            </button>
-            <button
+            </MagneticButton>
+            <MagneticButton
               onClick={scrollToContact}
               className="px-8 py-3.5 rounded-lg font-medium text-teal-400 border border-teal-500/30 hover:border-teal-400/60 hover:bg-teal-500/10 transition-all duration-300 hover:scale-105"
             >
               Hire Me
-            </button>
+            </MagneticButton>
           </motion.div>
 
           {/* Download Resume Button */}

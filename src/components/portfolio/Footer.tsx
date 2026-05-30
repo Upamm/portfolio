@@ -6,10 +6,10 @@ import { ArrowUp } from 'lucide-react';
 const footerLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
+  { label: 'Experience', href: '#experience' },
   { label: 'Services', href: '#services' },
-  { label: 'Process', href: '#process' },
   { label: 'Portfolio', href: '#portfolio' },
-  { label: 'Skills', href: '#skills' },
+  { label: 'FAQ', href: '#faq' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -162,7 +162,7 @@ export default function Footer() {
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1 }}
-        className="fixed bottom-8 right-8 w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 text-white flex items-center justify-center shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 hover:scale-110 transition-all duration-300 z-50"
+        className="fixed bottom-8 right-8 w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 text-white flex items-center justify-center shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 hover:scale-110 transition-all duration-300 z-40"
         aria-label="Back to top"
       >
         <ArrowUp className="w-5 h-5" />

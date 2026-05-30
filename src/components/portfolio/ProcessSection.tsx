@@ -57,7 +57,8 @@ export default function ProcessSection() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
             How I <span className="gradient-text">Work</span>
           </h2>
-          <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+          <span className="section-heading-line" />
+          <p className="text-slate-400 mt-6 max-w-2xl mx-auto">
             A simple and transparent process to ensure your project is delivered
             exactly how you envision it.
           </p>

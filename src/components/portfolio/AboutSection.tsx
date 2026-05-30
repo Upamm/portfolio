@@ -37,6 +37,7 @@ export default function AboutSection() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
             About <span className="gradient-text">Me</span>
           </h2>
+          <span className="section-heading-line" />
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
