@@ -1,8 +1,9 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Calendar, Clock, ArrowUpRight, BookOpen } from 'lucide-react';
+import BlogArticleModal from '@/components/portfolio/BlogArticleModal';
 
 const articles = [
   {
@@ -41,13 +42,16 @@ function BlogCard({
   article,
   index,
   isInView,
+  onClick,
 }: {
   article: (typeof articles)[0];
   index: number;
   isInView: boolean;
+  onClick: () => void;
 }) {
   return (
     <motion.article
+      onClick={onClick}
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: 0.15 + index * 0.15 }}
@@ -123,6 +127,10 @@ function BlogCard({
 export default function BlogSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const [openArticleIndex, setOpenArticleIndex] = useState<number | null>(null);
+
+  const openArticle =
+    openArticleIndex !== null ? articles[openArticleIndex] : null;
 
   return (
     <section id="blog" className="relative py-24 sm:py-32 overflow-hidden">
@@ -161,9 +169,17 @@ export default function BlogSection() {
               article={article}
               index={index}
               isInView={isInView}
+              onClick={() => setOpenArticleIndex(index)}
             />
           ))}
         </div>
+
+        {/* Article Detail Modal */}
+        <BlogArticleModal
+          article={openArticle}
+          isOpen={openArticleIndex !== null}
+          onClose={() => setOpenArticleIndex(null)}
+        />
 
         {/* View all articles CTA */}
         <motion.div

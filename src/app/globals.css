@@ -1048,3 +1048,203 @@ body::before {
 .pulse-dot {
   animation: pulse-dot 2s ease-in-out infinite;
 }
+
+/* ==================== */
+/* RIPPLE BUTTON EFFECT   */
+/* ==================== */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: ripple-expand 0.6s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ==================== */
+/* ENHANCED NAV SCROLL STATE */
+/* ==================== */
+.nav-scrolled-enhanced {
+  background: rgba(10, 22, 40, 0.92) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.12) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2),
+              0 1px 0 rgba(6, 182, 212, 0.05);
+}
+
+/* ==================== */
+/* SMOOTH LINK TRANSITIONS  */
+/* ==================== */
+.link-hover-slide {
+  position: relative;
+  display: inline-block;
+}
+
+.link-hover-slide::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #06b6d4, #10b981);
+  transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.link-hover-slide:hover::after {
+  width: 100%;
+}
+
+/* ==================== */
+/* CARD DEPTH ENHANCEMENT   */
+/* ==================== */
+.card-depth {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15),
+              0 1px 3px rgba(0, 0, 0, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.card-depth:hover {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2),
+              0 2px 6px rgba(0, 0, 0, 0.1),
+              0 0 20px rgba(6, 182, 212, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+/* ==================== */
+/* SECTION TITLE GLOW ANIM */
+/* ==================== */
+@keyframes title-glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(6, 182, 212, 0.15),
+                 0 0 40px rgba(6, 182, 212, 0.05);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(6, 182, 212, 0.25),
+                 0 0 60px rgba(6, 182, 212, 0.1);
+  }
+}
+
+.section-title-glow {
+  animation: title-glow-pulse 4s ease-in-out infinite;
+}
+
+/* ==================== */
+/* AVAILABILITY BADGE V2   */
+/* ==================== */
+.availability-badge-v2 {
+  position: relative;
+  overflow: hidden;
+}
+
+.availability-badge-v2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(16, 185, 129, 0.08) 50%,
+    transparent 100%
+  );
+  animation: badge-sweep 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes badge-sweep {
+  0%, 100% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
+/* ==================== */
+/* SUBTLE PARALLAX SECTIONS */
+/* ==================== */
+.section-parallax {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+/* ==================== */
+/* ENHANCED TOOL CARD HOVER */
+/* ==================== */
+.tool-card-hover {
+  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.tool-card-hover:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 16px 48px rgba(6, 182, 212, 0.12),
+              0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tool-card-hover .tool-description {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.35s ease, margin 0.35s ease;
+  margin-top: 0;
+}
+
+.tool-card-hover:hover .tool-description {
+  max-height: 60px;
+  opacity: 1;
+  margin-top: 6px;
+}
+
+/* ==================== */
+/* TYPOGRAPHY REFINEMENTS   */
+/* ==================== */
+.section-subtitle {
+  letter-spacing: 0.15em;
+  font-weight: 500;
+}
+
+.heading-gradient-animated {
+  background: linear-gradient(
+    135deg,
+    #06b6d4 0%,
+    #22d3ee 25%,
+    #10b981 50%,
+    #06b6d4 75%,
+    #22d3ee 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: heading-gradient-flow 6s ease infinite;
+}
+
+@keyframes heading-gradient-flow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}

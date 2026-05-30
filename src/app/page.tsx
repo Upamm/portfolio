@@ -7,6 +7,7 @@ import ServicesSection from '@/components/portfolio/ServicesSection';
 import ProcessSection from '@/components/portfolio/ProcessSection';
 import PortfolioSection from '@/components/portfolio/PortfolioSection';
 import SkillsSection from '@/components/portfolio/SkillsSection';
+import ToolsGrid from '@/components/portfolio/ToolsGrid';
 import ValuesSection from '@/components/portfolio/ValuesSection';
 import PricingSection from '@/components/portfolio/PricingSection';
 import StatsBanner from '@/components/portfolio/StatsBanner';
@@ -18,6 +19,7 @@ import FAQSection from '@/components/portfolio/FAQSection';
 import ContactSection from '@/components/portfolio/ContactSection';
 import Footer from '@/components/portfolio/Footer';
 import FloatingHireFAB from '@/components/portfolio/FloatingHireFAB';
+import WhatsAppFAB from '@/components/portfolio/WhatsAppFAB';
 import ScrollProgress from '@/components/portfolio/ScrollProgress';
 import ScrollToTop from '@/components/portfolio/ScrollToTop';
 import CookieConsent from '@/components/portfolio/CookieConsent';
@@ -34,6 +36,7 @@ export default function Home() {
       <ProcessSection />
       <PortfolioSection />
       <SkillsSection />
+      <ToolsGrid />
       <ValuesSection />
       <PricingSection />
       <StatsBanner />
@@ -45,6 +48,7 @@ export default function Home() {
       <ContactSection />
       <Footer />
       <FloatingHireFAB />
+      <WhatsAppFAB />
       <ScrollProgress />
       <ScrollToTop />
       <CookieConsent />
