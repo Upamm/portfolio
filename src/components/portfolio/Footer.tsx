@@ -7,6 +7,7 @@ const footerLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
   { label: 'Services', href: '#services' },
+  { label: 'Process', href: '#process' },
   { label: 'Portfolio', href: '#portfolio' },
   { label: 'Skills', href: '#skills' },
   { label: 'Contact', href: '#contact' },
@@ -25,14 +26,28 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative pt-16 pb-8 overflow-hidden">
+    <footer className="relative mt-auto overflow-hidden">
+      {/* Wave Divider */}
+      <div className="wave-divider">
+        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z"
+            fill="rgba(6, 182, 212, 0.05)"
+          />
+          <path
+            d="M0,50 C240,20 480,70 720,40 C960,10 1200,60 1440,50 L1440,80 L0,80 Z"
+            fill="rgba(6, 15, 29, 1)"
+          />
+        </svg>
+      </div>
+
       {/* Top divider */}
-      <div className="absolute top-0 left-0 right-0 section-divider" />
+      <div className="absolute top-0 left-0 right-0 section-divider" style={{ top: '60px' }} />
 
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628] to-[#060f1d]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#060f1d] to-[#040b16]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
         {/* Main Footer Content */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 mb-12">
           {/* Brand */}

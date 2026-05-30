@@ -1,8 +1,9 @@
 'use client';
 
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronDown, Briefcase, Users, FolderOpen, Award } from 'lucide-react';
+import { ChevronDown, Briefcase, Users, FolderOpen, Award, Download } from 'lucide-react';
 
 const roles = [
   'WordPress Virtual Assistant',
@@ -12,11 +13,57 @@ const roles = [
 ];
 
 const stats = [
-  { icon: Briefcase, value: '8+', label: 'Years Experience' },
-  { icon: Users, value: '847+', label: 'Happy Clients' },
-  { icon: FolderOpen, value: '500+', label: 'Projects Completed' },
+  { icon: Briefcase, value: 8, suffix: '+', label: 'Years Experience' },
+  { icon: Users, value: 847, suffix: '+', label: 'Happy Clients' },
+  { icon: FolderOpen, value: 500, suffix: '+', label: 'Projects Completed' },
   { icon: Award, value: 'L2', label: 'Fiverr Seller' },
 ];
+
+// Generate particles data
+const particles = Array.from({ length: 18 }, (_, i) => ({
+  id: i,
+  left: `${Math.random() * 100}%`,
+  size: 2 + Math.random() * 4,
+  duration: 8 + Math.random() * 12,
+  delay: Math.random() * 8,
+  opacity: 0.2 + Math.random() * 0.5,
+}));
+
+function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    const duration = 2000;
+    const steps = 60;
+    const stepTime = duration / steps;
+    const increment = value / steps;
+    let current = 0;
+    let step = 0;
+
+    const timer = setInterval(() => {
+      step++;
+      current += increment;
+      if (step >= steps) {
+        setCount(value);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, stepTime);
+
+    return () => clearInterval(timer);
+  }, [isInView, value]);
+
+  return (
+    <span ref={ref} className="text-2xl sm:text-3xl font-bold gradient-text">
+      {typeof value === 'number' ? `${count}${suffix}` : value}
+    </span>
+  );
+}
 
 export default function HeroSection() {
   const [roleIndex, setRoleIndex] = useState(0);
@@ -76,6 +123,25 @@ export default function HeroSection() {
       <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
       <div className="absolute inset-0 bg-grid opacity-30" />
 
+      {/* Floating Particles */}
+      <div className="hero-particles">
+        {particles.map((p) => (
+          <div
+            key={p.id}
+            className="hero-particle"
+            style={{
+              left: p.left,
+              bottom: '-10px',
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              animationDuration: `${p.duration}s`,
+              animationDelay: `${p.delay}s`,
+              opacity: p.opacity,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
@@ -129,7 +195,7 @@ export default function HeroSection() {
           >
             <button
               onClick={scrollToPortfolio}
-              className="group relative px-8 py-3.5 rounded-lg font-medium text-white bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 hover:scale-105"
+              className="btn-shine group relative px-8 py-3.5 rounded-lg font-medium text-white bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 hover:scale-105"
             >
               View My Work
               <span className="ml-2 inline-block group-hover:translate-x-1 transition-transform">
@@ -143,6 +209,22 @@ export default function HeroSection() {
               Hire Me
             </button>
           </motion.div>
+
+          {/* Download Resume Button */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1 }}
+            className="mt-6"
+          >
+            <a
+              href="#"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium text-slate-400 border border-slate-600/30 hover:border-teal-500/40 hover:text-teal-400 transition-all duration-300"
+            >
+              <Download className="w-4 h-4" />
+              Download Resume
+            </a>
+          </motion.div>
         </motion.div>
 
         {/* Stats Bar */}
@@ -150,7 +232,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto"
+          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto"
         >
           {stats.map((stat, index) => (
             <motion.div
@@ -161,7 +243,11 @@ export default function HeroSection() {
               className="glass-card rounded-xl p-4 sm:p-6 text-center"
             >
               <stat.icon className="w-6 h-6 text-teal-400 mx-auto mb-2" />
-              <div className="text-2xl sm:text-3xl font-bold gradient-text">{stat.value}</div>
+              {typeof stat.value === 'number' ? (
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+              ) : (
+                <div className="text-2xl sm:text-3xl font-bold gradient-text">{stat.value}</div>
+              )}
               <div className="text-xs sm:text-sm text-slate-400 mt-1">{stat.label}</div>
             </motion.div>
           ))}

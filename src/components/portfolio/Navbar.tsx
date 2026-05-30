@@ -8,6 +8,7 @@ const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
   { label: 'Services', href: '#services' },
+  { label: 'Process', href: '#process' },
   { label: 'Portfolio', href: '#portfolio' },
   { label: 'Skills', href: '#skills' },
   { label: 'Contact', href: '#contact' },
@@ -81,7 +82,7 @@ export default function Navbar() {
                   e.preventDefault();
                   handleClick(link.href);
                 }}
-                className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
+                className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-300 ${
                   activeSection === link.href.replace('#', '')
                     ? 'text-teal-400'
                     : 'text-slate-300 hover:text-white'

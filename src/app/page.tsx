@@ -2,6 +2,7 @@ import Navbar from '@/components/portfolio/Navbar';
 import HeroSection from '@/components/portfolio/HeroSection';
 import AboutSection from '@/components/portfolio/AboutSection';
 import ServicesSection from '@/components/portfolio/ServicesSection';
+import ProcessSection from '@/components/portfolio/ProcessSection';
 import PortfolioSection from '@/components/portfolio/PortfolioSection';
 import SkillsSection from '@/components/portfolio/SkillsSection';
 import TestimonialsSection from '@/components/portfolio/TestimonialsSection';
@@ -10,11 +11,12 @@ import Footer from '@/components/portfolio/Footer';
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen flex flex-col">
       <Navbar />
       <HeroSection />
       <AboutSection />
       <ServicesSection />
+      <ProcessSection />
       <PortfolioSection />
       <SkillsSection />
       <TestimonialsSection />

@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { MapPin, Clock, Globe, MessageCircle, Star } from 'lucide-react';
+import { MapPin, Clock, Globe, MessageCircle, Star, Download } from 'lucide-react';
 import Image from 'next/image';
 
 const quickInfo = [
@@ -21,6 +21,7 @@ export default function AboutSection() {
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-20" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
+      <div className="absolute top-1/4 right-0 w-80 h-80 bg-teal-500/5 rounded-full blur-3xl" />
 
       <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -142,6 +143,22 @@ export default function AboutSection() {
                 </motion.div>
               ))}
             </div>
+
+            {/* Download Resume Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.9 }}
+              className="mt-8"
+            >
+              <a
+                href="#"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-teal-400 border border-teal-500/30 hover:border-teal-400/60 hover:bg-teal-500/10 transition-all duration-300 hover:scale-105"
+              >
+                <Download className="w-4 h-4" />
+                Download Resume
+              </a>
+            </motion.div>
           </motion.div>
         </div>
       </div>

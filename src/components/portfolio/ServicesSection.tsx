@@ -31,7 +31,7 @@ const services = [
     title: 'B2B Lead Generation',
     description:
       'Targeted prospect list building, company research, decision-maker identification, and verified contact information for your outreach campaigns.',
-    gradient: 'from-cyan-500 to-blue-500',
+    gradient: 'from-cyan-500 to-teal-500',
   },
   {
     icon: Headphones,
@@ -96,11 +96,11 @@ export default function ServicesSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.1 * index }}
-              className="glass-card rounded-2xl p-6 sm:p-8 group cursor-pointer hover-glow"
+              className="glass-card service-card-enhanced rounded-2xl p-6 sm:p-8 group cursor-pointer"
             >
               {/* Icon */}
               <div
-                className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.gradient} bg-opacity-10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                className={`service-icon-glow w-14 h-14 rounded-xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
               >
                 <service.icon className="w-7 h-7 text-white" />
               </div>
