@@ -994,3 +994,42 @@ Stage Summary:
 - CSS build error completely resolved
 - Dev server compiles cleanly with no parsing errors
 - Light theme overrides for backgrounds and gradients still functional via attribute selectors
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix light mode text visibility across all pages + responsive theme toggle
+
+Work Log:
+- Audited all 30+ component files: found ~200+ hardcoded text-white, text-slate-300/400/500, text-gray-300/400/500 usages
+- Added comprehensive CSS overrides in globals.css (~250 lines) covering:
+  - Text colors: text-white → #0f172a, text-slate-300 → #475569, text-slate-400 → #64748b, text-slate-500 → #94a3b8, gray/zinc/neutral variants
+  - White text restoration: on gradient backgrounds, colored bg parents, black overlay badges, icon containers
+  - Backgrounds: bg-[#0a1628], bg-[#0f1f38], bg-[#060f1d], bg-[#162a4a] → #f8fafc; navy with opacity → light; black/20/30/40 → subtle dark
+  - Borders: border-white/10/20/30, border-slate-600/700/800 → light equivalents
+  - Inputs/Forms: contact-input, placeholder colors
+  - Hover states: hover:text-white, hover:bg-white/5/10/20
+  - Mobile menu dropdown: new CSS class replacing inline style, light mode override
+  - Hero gradient overlays: from-[#0a1628]/80, /90 → light gradient via CSS custom properties
+- Fixed ThemeToggle component:
+  - Replaced broken useSyncExternalStore(emptySubscribe) with proper subscribeTheme that listens to 'theme-change' custom event
+  - Toggle now properly re-renders on click, syncs across mobile+desktop instances
+  - Fixed lint error (no setState in effect)
+- Fixed Navbar:
+  - ThemeToggle now visible on BOTH desktop (inside nav links) and mobile (separate wrapper)
+  - Removed hardcoded inline style from mobile menu, replaced with .mobile-menu-dropdown CSS class
+  - Light mode override for mobile menu dropdown background
+- Verified via agent-browser:
+  - Toggle works: switches between "Switch to light mode" and "Switch to dark mode"
+  - All text visible in light mode across Hero, About, Services, Portfolio, Pricing, FAQ, Contact, Footer
+  - Pricing cards show all text, prices, and feature lists
+  - FAQ accordion headings visible
+  - Contact section text and footer CTA visible
+  - Lint passes with 0 errors
+  - Build compiles cleanly with GET / 200
+
+Stage Summary:
+- Light mode is now fully functional with all text clearly visible
+- Theme toggle properly syncs state between mobile and desktop instances
+- CSS approach uses attribute selectors to avoid modifying 30+ component files
+- White text is preserved on gradient buttons/badges through specific override rules

@@ -82,8 +82,8 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
             ))}
           </div>
 
-          {/* Theme Toggle + Mobile Menu Button */}
-          <div className="flex items-center gap-2">
+          {/* Mobile: Theme Toggle + Menu Button */}
+          <div className="flex items-center gap-2 md:hidden">
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -104,8 +104,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="md:hidden overflow-hidden border-t border-teal-500/10"
-            style={{ background: 'rgba(10, 22, 40, 0.95)', backdropFilter: 'blur(20px)' }}
+            className="md:hidden overflow-hidden border-t border-teal-500/10 mobile-menu-dropdown"
           >
             <div className="px-3 py-3 space-y-0.5">
               {navLinks.map((link, index) => (

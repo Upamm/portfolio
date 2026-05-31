@@ -281,6 +281,12 @@ body::before {
   border-bottom: 1px solid rgba(6, 182, 212, 0.08);
 }
 
+.mobile-menu-dropdown {
+  background: rgba(10, 22, 40, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 /* Glow Effects */
 .glow-teal {
   box-shadow: 0 0 20px rgba(6, 182, 212, 0.15), 0 0 40px rgba(6, 182, 212, 0.05);
@@ -1464,6 +1470,11 @@ body::before {
   border-bottom: 1px solid rgba(6, 182, 212, 0.1);
 }
 
+.light .mobile-menu-dropdown {
+  background: rgba(248, 250, 252, 0.95);
+  border-top-color: rgba(6, 182, 212, 0.12);
+}
+
 /* Light background patterns */
 .light .bg-grid {
   background-image:
@@ -1594,6 +1605,258 @@ body::before {
 /* Light project image overlay */
 .light .project-image-overlay::after {
   background: linear-gradient(to bottom, transparent 0%, transparent 40%, rgba(248, 250, 252, 0.8) 100%);
+}
+
+/* ========================================
+   LIGHT MODE - COMPREHENSIVE TEXT COLORS
+   ======================================== */
+
+/* Primary headings: text-white → dark navy */
+.light .text-white {
+  color: #0f172a !important;
+}
+
+/* Secondary text: text-slate-300 → medium dark */
+.light .text-slate-300 {
+  color: #475569 !important;
+}
+
+/* Body/description text: text-slate-400 → medium gray */
+.light .text-slate-400 {
+  color: #64748b !important;
+}
+
+/* Placeholder/label text: text-slate-500 → slightly lighter */
+.light .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Dark subtitle text */
+.light .text-slate-600 {
+  color: #475569 !important;
+}
+
+/* Gray variants */
+.light .text-gray-300 {
+  color: #475569 !important;
+}
+.light .text-gray-400 {
+  color: #64748b !important;
+}
+.light .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+/* Zinc variants */
+.light .text-zinc-300 {
+  color: #475569 !important;
+}
+.light .text-zinc-400 {
+  color: #64748b !important;
+}
+.light .text-zinc-500 {
+  color: #94a3b8 !important;
+}
+
+/* Neutral variants */
+.light .text-neutral-300 {
+  color: #475569 !important;
+}
+.light .text-neutral-400 {
+  color: #64748b !important;
+}
+
+/* ========================================
+   LIGHT MODE - RESTORE WHITE ON COLORED BGs
+   ======================================== */
+
+/* White text on gradient/colored backgrounds stays white */
+.light [class*="from-teal-"].text-white,
+.light [class*="from-emerald-"].text-white,
+.light [class*="from-green-"].text-white,
+.light [class*="from-cyan-"].text-white,
+.light [class*="from-rose-"].text-white,
+.light [class*="from-red-"].text-white,
+.light [class*="from-orange-"].text-white,
+.light [class*="from-amber-"].text-white,
+.light [class*="from-purple-"].text-white,
+.light [class*="from-pink-"].text-white,
+.light [class*="from-violet-"].text-white,
+.light [class*="to-teal-"].text-white,
+.light [class*="to-emerald-"].text-white,
+.light [class*="to-green-"].text-white,
+.light [class*="to-cyan-"].text-white {
+  color: #ffffff !important;
+}
+
+/* White text inside gradient bg parents (e.g., badges, icon circles) */
+.light [class*="bg-gradient-to-"] > .text-white,
+.light [class*="bg-gradient-to-"] .text-white,
+.light [class*="bg-teal-"] .text-white,
+.light [class*="bg-emerald-"] .text-white,
+.light [class*="bg-green-"] .text-white,
+.light [class*="bg-cyan-"] .text-white,
+.light [class*="bg-sky-"] .text-white,
+.light [class*="bg-rose-"] .text-white,
+.light [class*="bg-red-"] .text-white,
+.light [class*="bg-orange-"] .text-white {
+  color: #ffffff !important;
+}
+
+/* White text on black overlay badges (e.g., project category badges) */
+.light [class*="bg-black/"].text-white,
+.light .bg-black\/30 .text-white,
+.light .bg-black\/40 .text-white {
+  color: #ffffff !important;
+}
+
+/* White text inside specific colored icon containers */
+.light .bg-teal-500\/10 .text-white,
+.light .bg-emerald-500\/10 .text-white,
+.light .bg-cyan-500\/10 .text-white,
+.light .bg-sky-500\/10 .text-white,
+.light .bg-green-500\/10 .text-white {
+  color: #ffffff !important;
+}
+
+/* White text in gradient badge pills */
+.light .bg-gradient-to-r .text-white {
+  color: #ffffff !important;
+}
+
+/* ========================================
+   LIGHT MODE - BACKGROUND OVERRIDES
+   ======================================== */
+
+/* Main dark navy backgrounds → light */
+.light [class*="bg-[#0a1628]"],
+.light [class*="bg-[#060f1d]"],
+.light [class*="bg-[#0f1f38]"],
+.light [class*="bg-[#162a4a]"] {
+  background-color: #f8fafc !important;
+}
+
+/* Dark navy with opacity */
+.light [class*="bg-[#0a1628]/50"] {
+  background-color: rgba(241, 245, 249, 0.8) !important;
+}
+
+/* Black overlays → subtle dark overlays */
+.light [class*="bg-black/20"] {
+  background-color: rgba(15, 23, 42, 0.05) !important;
+}
+.light [class*="bg-black/30"] {
+  background-color: rgba(15, 23, 42, 0.08) !important;
+}
+.light [class*="bg-black/40"] {
+  background-color: rgba(15, 23, 42, 0.1) !important;
+}
+.light [class*="bg-black/50"] {
+  background-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+/* ========================================
+   LIGHT MODE - BORDER OVERRIDES
+   ======================================== */
+
+.light [class*="border-white/10"] {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+.light [class*="border-white/20"] {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+.light [class*="border-white/30"] {
+  border-color: rgba(15, 23, 42, 0.15) !important;
+}
+.light [class*="border-slate-700"] {
+  border-color: #cbd5e1 !important;
+}
+.light [class*="border-slate-600"] {
+  border-color: #94a3b8 !important;
+}
+.light [class*="border-slate-500/20"] {
+  border-color: rgba(100, 116, 139, 0.2) !important;
+}
+.light [class*="border-slate-800"] {
+  border-color: #e2e8f0 !important;
+}
+
+/* ========================================
+   LIGHT MODE - INPUT & FORM OVERRIDES
+   ======================================== */
+
+.light .contact-input,
+.light [class*="bg-[#0a1628]/50"] {
+  background-color: rgba(248, 250, 252, 0.9) !important;
+  border-color: rgba(6, 182, 212, 0.15) !important;
+  color: #1e293b !important;
+}
+
+.light .contact-input::placeholder,
+.light [class*="placeholder:text-slate-500"]::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* ========================================
+   LIGHT MODE - HOVER STATE OVERRIDES
+   ======================================== */
+
+.light .text-slate-300.hover\:text-white:hover {
+  color: #0f172a !important;
+}
+.light .text-slate-400.hover\:text-white:hover {
+  color: #1e293b !important;
+}
+.light [class*="hover:text-white"]:hover {
+  color: #0f172a !important;
+}
+
+/* Restore hover:text-teal on colored bg elements */
+.light [class*="from-teal-"].hover\:text-teal-300:hover,
+.light [class*="from-emerald-"].hover\:text-teal-300:hover,
+.light [class*="bg-teal-"].hover\:text-teal-300:hover,
+.light [class*="bg-emerald-"].hover\:text-teal-300:hover {
+  color: #5eead4 !important;
+}
+
+/* ========================================
+   LIGHT MODE - HOVER BG OVERRIDES
+   ======================================== */
+
+.light [class*="hover:bg-white/5"]:hover {
+  background-color: rgba(6, 182, 212, 0.06) !important;
+}
+.light [class*="hover:bg-white/10"]:hover {
+  background-color: rgba(6, 182, 212, 0.1) !important;
+}
+.light [class*="hover:bg-white/20"]:hover {
+  background-color: rgba(6, 182, 212, 0.15) !important;
+}
+
+/* ========================================
+   LIGHT MODE - SPECIFIC COMPONENT OVERRIDES
+   ======================================== */
+
+/* Modal/Dialog backgrounds */
+.light [class*="bg-[#0f1f38]"] {
+  background-color: #ffffff !important;
+}
+
+/* Cookie consent card */
+.light .shadow-2xl.shadow-black\/20 {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* ScrollToTop button */
+.light .shadow-lg.shadow-teal-500\/10 {
+  box-shadow: 0 10px 30px rgba(6, 182, 212, 0.15);
+}
+
+/* FloatingHireFAB gradient text stays */
+.light .bg-gradient-to-r .text-white,
+.light .bg-gradient-to-r .text-slate-300 {
+  color: #ffffff !important;
 }
 
 /* Light wave divider */
@@ -1744,6 +2007,14 @@ body::before {
 .light [class*="from-[#0a1628]/60"] {
   --tw-gradient-from: rgba(248, 250, 252, 0.7) !important;
   --tw-gradient-to: #f8fafc !important;
+}
+
+/* Light hero section - full gradient overlay */
+.light [class*="from-[#0a1628]/90"],
+.light [class*="from-[#0a1628]/80"] {
+  --tw-gradient-from: rgba(248, 250, 252, 0.85) !important;
+  --tw-gradient-via: rgba(241, 245, 249, 0.9) !important;
+  --tw-gradient-to: #f1f5f9 !important;
 }
 
 /* Light price shadow */
