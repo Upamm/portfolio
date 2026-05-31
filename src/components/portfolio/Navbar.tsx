@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import type { PageKey } from './PortfolioApp';
 import ThemeToggle from './ThemeToggle';
+import Logo from './Logo';
 
 const navLinks: { label: string; key: PageKey }[] = [
   { label: 'Home', key: 'home' },
@@ -50,12 +51,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
-          <button
-            onClick={() => handleClick('home')}
-            className="text-xl sm:text-2xl font-bold tracking-wider hover:scale-105 transition-transform"
-          >
-            <span className="gradient-text">UPAM</span>
-          </button>
+          <Logo size="sm" onClick={() => handleClick('home')} />
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-0.5">

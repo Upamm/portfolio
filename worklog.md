@@ -1500,3 +1500,30 @@ Stage Summary:
 - Fixed: Pricing plan cards "Get Started" buttons now center-aligned within each card
 - File modified: `src/components/portfolio/PricingSection.tsx`
 - Cron job created (ID: 178430) — WebDevReview every 15 minutes
+
+---
+## Animated SVG Logo Creation
+
+### Work Log:
+- Created `src/components/portfolio/Logo.tsx` — reusable animated SVG logo component with freelance-themed design
+  - SVG icon mark: rounded rectangle with stroke-draw animation, cursor/pen icon (freelancer theme), code bracket accents (`<` `>`), floating particles, pulsing center dot, slow-spinning dashed outer ring
+  - Supports 3 sizes: `sm` (28px), `md` (36px), `lg` (44px) with `showText` prop
+  - Teal-to-emerald gradient via SVG `linearGradient`, glow filter
+- Added 160+ lines of CSS animations to `globals.css`:
+  - `logo-draw`: stroke-dashoffset draw-in for the rounded rectangle (1.8s)
+  - `logo-ring-spin`: slow 20s infinite rotation for outer dashed ring
+  - `logo-cursor-in`: fade+slide entrance for cursor icon (0.6s delay)
+  - `logo-cursor-shimmer`: brightness pulse on cursor fill (3s loop)
+  - `logo-bracket-left-in` / `logo-bracket-right-in`: staggered slide-in for code brackets
+  - `logo-particle-float`: vertical float with opacity fade (4 particles, staggered delays)
+  - `logo-dot-beat`: scale pulse for center dot
+  - Hover: enhanced drop-shadow glow, faster shimmer, faster particle float
+- Integrated Logo in `Navbar.tsx` — replaced plain `<span>UPAM</span>` with `<Logo size="sm" />`
+- Integrated Logo in `Footer.tsx` — replaced plain `<span>UPAM</span>` with `<Logo size="sm" />`
+- Light mode: `.light .gradient-text` override already handles the UPAM text color
+
+### Stage Summary:
+- New file: `src/components/portfolio/Logo.tsx`
+- Modified: `src/app/globals.css` (logo animations), `src/components/portfolio/Navbar.tsx`, `src/components/portfolio/Footer.tsx`
+- Zero lint errors, zero compilation errors
+- Logo appears in navbar and footer with draw-in, particle float, cursor shimmer, and ring spin animations

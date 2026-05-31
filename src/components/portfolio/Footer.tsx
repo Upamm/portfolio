@@ -2,6 +2,7 @@
 
 import { ArrowRight } from 'lucide-react';
 import type { PageKey } from './PortfolioApp';
+import Logo from './Logo';
 
 const footerLinks: { label: string; key: PageKey }[] = [
   { label: 'About', key: 'about' },
@@ -66,12 +67,7 @@ export default function Footer({ onNavigate }: FooterProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 text-center sm:text-left">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <button
-              onClick={() => onNavigate('home')}
-              className="text-xl font-bold tracking-wider mb-3 inline-block"
-            >
-              <span className="gradient-text">UPAM</span>
-            </button>
+            <Logo size="sm" onClick={() => onNavigate('home')} />
             <p className="text-slate-400 text-sm leading-relaxed max-w-sm mx-auto sm:max-w-none">
               WordPress Virtual Assistant & B2B Lead Generation specialist helping businesses grow online since 2016.
             </p>

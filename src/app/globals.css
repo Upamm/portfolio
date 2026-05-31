@@ -974,6 +974,171 @@ body::before {
 }
 
 /* ==================== */
+/* ANIMATED SVG LOGO        */
+/* ==================== */
+
+/* Logo shape draw-in animation */
+@keyframes logo-draw {
+  0% {
+    stroke-dashoffset: 160;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.logo-shape-draw {
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: logo-draw 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Outer ring slow spin */
+@keyframes logo-ring-spin {
+  from {
+    transform: rotate(0deg);
+    transform-origin: 24px 24px;
+  }
+  to {
+    transform: rotate(360deg);
+    transform-origin: 24px 24px;
+  }
+}
+
+.logo-ring-outer {
+  animation: logo-ring-spin 20s linear infinite;
+}
+
+/* Cursor fade+slide in */
+@keyframes logo-cursor-in {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo-cursor-group {
+  animation: logo-cursor-in 0.8s 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Cursor fill shimmer */
+@keyframes logo-cursor-shimmer {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
+}
+
+.logo-cursor-fill {
+  animation: logo-cursor-shimmer 3s ease-in-out infinite 1.5s;
+}
+
+/* Code brackets slide in */
+@keyframes logo-bracket-left-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+  100% {
+    opacity: 0.7;
+    transform: translateX(0);
+  }
+}
+
+.logo-bracket-left {
+  animation: logo-bracket-left-in 0.5s 1.2s ease-out both;
+}
+
+@keyframes logo-bracket-right-in {
+  0% {
+    opacity: 0;
+    transform: translateX(4px);
+  }
+  100% {
+    opacity: 0.7;
+    transform: translateX(0);
+  }
+}
+
+.logo-bracket-right {
+  animation: logo-bracket-right-in 0.5s 1.4s ease-out both;
+}
+
+/* Floating particles */
+@keyframes logo-particle-float {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.logo-particle {
+  animation: logo-particle-float 2.5s ease-in-out infinite;
+}
+.logo-particle-1 { animation-delay: 0s; }
+.logo-particle-2 { animation-delay: 0.6s; }
+.logo-particle-3 { animation-delay: 1.2s; }
+.logo-particle-4 { animation-delay: 1.8s; }
+
+/* Center dot pulse */
+@keyframes logo-dot-beat {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.6;
+  }
+}
+
+.logo-dot-pulse {
+  transform-origin: center;
+  animation: logo-dot-beat 2s ease-in-out infinite 1s;
+}
+
+/* Logo hover glow boost */
+.logo-svg {
+  transition: filter 0.3s ease;
+}
+.logo-svg:hover {
+  filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.5));
+}
+.logo-svg:hover .logo-cursor-fill {
+  animation: logo-cursor-shimmer 1s ease-in-out infinite;
+}
+.logo-svg:hover .logo-particle {
+  animation-duration: 1.5s;
+}
+
+/* Text gradient shift on hover */
+.logo-text-group {
+  transition: filter 0.3s ease;
+}
+.logo-svg:hover + .logo-text-group,
+button:hover .logo-text-group {
+  filter: brightness(1.2);
+}
+
+/* ==================== */
 /* PROJECT IMAGE OVERLAY   */
 /* ==================== */
 .project-image-overlay {
