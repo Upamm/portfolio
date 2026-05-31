@@ -3,8 +3,8 @@
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
-import { Briefcase, Users, FolderOpen, Award, Download, ArrowRight } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Briefcase, Users, FolderOpen, Award, ArrowRight } from 'lucide-react';
+
 
 const FIVERR_IMAGE = 'https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_original/v1/attachments/profile/photo/c4f0de1b0c500594ed3b984332754e19-1551338465000/ade0268f-4643-49c9-804b-c301b683facb.jpg';
 
@@ -56,7 +56,6 @@ function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export default function HeroSection() {
-  const { toast } = useToast();
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -209,21 +208,6 @@ export default function HeroSection() {
             </a>
           </motion.div>
 
-          {/* Download Resume */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.9 }}
-            className="mt-4"
-          >
-            <button
-              onClick={() => toast({ title: 'Resume Available', description: 'Contact me to request a copy!' })}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-400 border border-slate-600/30 hover:border-teal-500/40 hover:text-teal-400 transition-all duration-200"
-            >
-              <Download className="w-3.5 h-3.5" />
-              Download Resume
-            </button>
-          </motion.div>
         </motion.div>
 
         {/* Stats Bar */}
@@ -253,34 +237,33 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Scroll Down Indicator - hides on scroll */}
+      {/* Scroll Down Indicator - interactive, hides on scroll */}
       <motion.a
         href="#about"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: showScrollIndicator ? 1 : 0, y: showScrollIndicator ? 0 : 10 }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: showScrollIndicator ? 1 : 0, y: showScrollIndicator ? 0 : 15, scale: showScrollIndicator ? 1 : 0.8 }}
         transition={{ delay: 1.5, duration: 0.3 }}
         onClick={(e) => {
           e.preventDefault();
           const nav = (window as unknown as Record<string, unknown>).__navigateTo as ((p: string) => void) | undefined;
           nav?.('about');
         }}
-        className="absolute bottom-10 sm:bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group z-10 pointer-events-none"
+        className="absolute bottom-8 sm:bottom-12 lg:bottom-16 left-1/2 -translate-x-1/2 cursor-pointer group z-10"
+        aria-label="Scroll to about section"
       >
-        {/* Mouse icon with animated dot */}
         <motion.div
-          animate={{ y: [0, 3, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-          className="relative w-6 h-10 sm:w-7 sm:h-11 rounded-full border-2 border-slate-600/40 group-hover:border-teal-500/50 flex items-start justify-center pt-2 transition-colors duration-300"
+          whileHover={{ scale: 1.2 }}
+          whileTap={{ scale: 0.85 }}
+          animate={{ y: [0, 5, 0] }}
+          transition={{ y: { repeat: Infinity, duration: 2.5, ease: 'easeInOut' }, scale: { duration: 0.15 } }}
+          className="relative w-8 h-12 sm:w-9 sm:h-13 rounded-full border-2 border-slate-600/30 group-hover:border-teal-400/70 flex items-start justify-center pt-2.5 transition-all duration-300 bg-white/[0.02] group-hover:bg-teal-500/8 group-hover:shadow-lg group-hover:shadow-teal-500/15"
         >
           <motion.div
-            animate={{ y: [0, 8, 0], opacity: [1, 0.2, 1] }}
-            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-            className="w-1 h-1.5 rounded-full bg-teal-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]"
+            animate={{ y: [0, 12, 0], opacity: [1, 0.1, 1] }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
+            className="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_10px_rgba(6,182,212,0.8)]"
           />
         </motion.div>
-        <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-[0.2em] font-medium group-hover:text-teal-400 transition-colors duration-300">
-          Scroll
-        </span>
       </motion.a>
     </section>
   );
