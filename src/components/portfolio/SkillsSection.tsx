@@ -86,7 +86,9 @@ function SkillRadarChart({ isInView }: { isInView: boolean }) {
     { name: 'Data Research', value: 95 },
   ];
 
-  const size = 200;
+  const chartSize = 200;
+  const padding = 40;
+  const size = chartSize + padding * 2;
   const center = size / 2;
   const radius = 80;
   const levels = 5;
@@ -119,7 +121,7 @@ function SkillRadarChart({ isInView }: { isInView: boolean }) {
       transition={{ duration: 0.8, delay: 1 }}
       className="flex justify-center mt-8"
     >
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="max-w-[200px]">
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="max-w-[280px] w-full">
         {/* Grid levels */}
         {[1, 2, 3, 4, 5].map((level) => (
           <polygon
@@ -178,7 +180,8 @@ function SkillRadarChart({ isInView }: { isInView: boolean }) {
               y={center + labelR * Math.sin(angle)}
               textAnchor="middle"
               dominantBaseline="middle"
-              className="text-[10px] fill-slate-400 radar-chart-label"
+              className="text-[11px] fill-slate-400 radar-chart-label"
+              style={{ fontSize: '11px' }}
             >
               {skill.name}
             </text>
