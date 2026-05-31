@@ -157,7 +157,7 @@ export default function BlogArticleModal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -167,7 +167,7 @@ export default function BlogArticleModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.96 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="fixed inset-0 z-[101] flex items-center justify-center p-2 sm:p-4 md:p-6 lg:p-8 pointer-events-none"
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-2 sm:p-4 md:p-6 lg:p-8 pointer-events-none"
           >
             <div
               className="relative w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl max-h-[92vh] sm:max-h-[94vh] md:max-h-[95vh] rounded-2xl overflow-hidden pointer-events-auto glass-card border border-white/10 shadow-2xl shadow-black/40 flex flex-col mx-auto"
