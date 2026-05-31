@@ -3,27 +3,47 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 
-const clients = [
+// Row 1 clients — unique set
+const row1Clients = [
   { name: 'TechStart Inc.', category: 'Tech' },
   { name: 'GreenLeaf Agency', category: 'Marketing' },
   { name: 'Bright Horizons', category: 'Business' },
   { name: 'Nexus Digital', category: 'Digital' },
-  { name: 'Urban Eats Co.', category: 'Food' },
+  { name: 'Urban Eats Co.', category: 'Food & Beverage' },
   { name: 'CloudNine Labs', category: 'SaaS' },
   { name: 'AquaFlow Corp', category: 'Industrial' },
   { name: 'PrimeWave Media', category: 'Media' },
   { name: 'SolarEdge Tech', category: 'Energy' },
-  { name: 'DataPulse AI', category: 'AI' },
+  { name: 'DataPulse AI', category: 'Artificial Intelligence' },
   { name: 'Zenith Studios', category: 'Design' },
   { name: 'Velocity Brands', category: 'E-commerce' },
+  { name: 'BluePeak Ventures', category: 'Finance' },
+  { name: 'EverGreen Solutions', category: 'Sustainability' },
+  { name: 'CoreStack Systems', category: 'Infrastructure' },
+];
+
+// Row 2 clients — different set, no duplicates with Row 1
+const row2Clients = [
+  { name: 'SilverBridge Co.', category: 'Consulting' },
+  { name: 'Horizon Health', category: 'Healthcare' },
+  { name: 'MapleTech Group', category: 'IT Services' },
+  { name: 'CrestView Realty', category: 'Real Estate' },
+  { name: 'PixelForge Studio', category: 'Creative Agency' },
+  { name: 'TidalWave Logistics', category: 'Supply Chain' },
+  { name: 'NovaSpark Edu', category: 'Education' },
+  { name: 'IronClad Security', category: 'Cybersecurity' },
+  { name: 'FreshHarvest Foods', category: 'Agriculture' },
+  { name: 'QuantumLeap Dev', category: 'Software' },
+  { name: 'Stellaris Finance', category: 'Fintech' },
+  { name: 'Arcline Architects', category: 'Architecture' },
+  { name: 'Redwood Dynamics', category: 'Engineering' },
+  { name: 'CrystalBay Hotels', category: 'Hospitality' },
+  { name: 'OpalNet Communications', category: 'Telecom' },
 ];
 
 export default function ClientsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-
-  // Duplicate for seamless loop
-  const doubled = [...clients, ...clients];
 
   return (
     <section id="clients" className="relative py-10 sm:py-16 overflow-hidden">
@@ -53,10 +73,10 @@ export default function ClientsSection() {
           </p>
         </motion.div>
 
-        {/* Row 1 - Left to Right */}
+        {/* Row 1 - Right to Left */}
         <div className="mb-4 sm:mb-6 overflow-hidden">
-          <div className="flex animate-[marquee_25s_linear_infinite] hover:[animation-play-state:paused]">
-            {doubled.map((client, index) => (
+          <div className="flex animate-[marquee_40s_linear_infinite] hover:[animation-play-state:paused]">
+            {[...row1Clients, ...row1Clients].map((client, index) => (
               <div
                 key={`r1-${client.name}-${index}`}
                 className="flex-shrink-0 mx-3 sm:mx-4"
@@ -80,8 +100,8 @@ export default function ClientsSection() {
 
         {/* Row 2 - Right to Left */}
         <div className="overflow-hidden">
-          <div className="flex animate-[marquee-reverse_30s_linear_infinite] hover:[animation-play-state:paused]">
-            {doubled.map((client, index) => (
+          <div className="flex animate-[marquee_45s_linear_infinite] hover:[animation-play-state:paused]">
+            {[...row2Clients, ...row2Clients].map((client, index) => (
               <div
                 key={`r2-${client.name}-${index}`}
                 className="flex-shrink-0 mx-3 sm:mx-4"
