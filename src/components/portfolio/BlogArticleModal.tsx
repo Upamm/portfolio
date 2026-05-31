@@ -2,14 +2,14 @@
 
 import { useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Calendar, Clock, ArrowRight, X, User, Lightbulb, TrendingUp, Code2 } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, X, User, Lightbulb, Code2 } from 'lucide-react';
+import Image from 'next/image';
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
   DialogClose,
-  DialogScrollContent,
 } from '@/components/ui/dialog';
 import type { BlogArticle, BlogContentBlock } from './BlogSection';
 
@@ -118,8 +118,7 @@ function ContentBlock({ block, index }: { block: BlogContentBlock; index: number
         transition={{ duration: 0.4, delay: index * 0.03 }}
         className="my-4 p-4 rounded-lg bg-black/40 border border-white/5 overflow-x-auto"
       >
-        <code className="text-sm text-teal-300 font-mono">
-          <Code2 className="w-3 h-3 inline mr-2 text-slate-500" />
+        <code className="text-sm text-teal-300 font-mono whitespace-pre-wrap">
           {block.text}
         </code>
       </motion.pre>
@@ -156,54 +155,54 @@ export default function BlogArticleModal({
               {article.excerpt}
             </DialogDescription>
 
-            {/* Gradient Header */}
-            <div className="relative h-44 sm:h-52 bg-gradient-to-br overflow-hidden flex-shrink-0">
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${article.gradient}`}
+            {/* Image Header */}
+            <div className="relative h-48 sm:h-56 md:h-64 bg-gradient-to-br overflow-hidden flex-shrink-0">
+              {/* Background image */}
+              <Image
+                src={article.image}
+                alt={article.title}
+                fill
+                className="object-cover opacity-70"
+                sizes="(max-width: 768px) 100vw, 768px"
+                priority
               />
-              {/* Decorative grid overlay */}
-              <div className="absolute inset-0 opacity-20">
-                <div
-                  className="absolute inset-0 bg-grid"
-                  style={{ backgroundSize: '30px 30px' }}
-                />
-              </div>
-              {/* Light sweep effect */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-white/5" />
+              {/* Gradient overlays */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/50 to-[#0a1628]/20" />
+              <div className={`absolute inset-0 bg-gradient-to-br ${article.gradient} opacity-30`} />
 
               {/* Category badge */}
-              <div className="absolute top-5 left-6">
-                <span className="px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm text-white text-xs font-medium">
+              <div className="absolute top-5 left-6 z-10">
+                <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-medium border border-white/10">
                   {article.category}
                 </span>
               </div>
 
               {/* Read time badge */}
-              <div className="absolute top-5 right-16">
-                <span className="px-2.5 py-1 rounded-full bg-black/30 backdrop-blur-sm text-white text-xs font-medium flex items-center gap-1">
+              <div className="absolute top-5 right-16 z-10">
+                <span className="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-medium flex items-center gap-1 border border-white/10">
                   <Clock className="w-3 h-3" />
                   {article.readTime}
                 </span>
               </div>
 
-              {/* Teal Close Button */}
+              {/* Close Button */}
               <DialogClose asChild>
                 <button
-                  className="absolute top-5 right-5 w-9 h-9 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center text-teal-300 hover:bg-teal-500/80 hover:text-white hover:border-teal-400 transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400/50 focus:ring-offset-2 focus:ring-offset-black/20"
+                  className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-teal-300 hover:bg-teal-500/80 hover:text-white hover:border-teal-400 transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400/50 focus:ring-offset-2 focus:ring-offset-black/20"
                   aria-label="Close article"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </DialogClose>
 
-              {/* Book icon decoration */}
+              {/* Decorative corner badge */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.15 }}
-                className="absolute bottom-6 right-6 w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center"
+                className="absolute bottom-5 right-6 z-10 w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center"
               >
-                <span className="text-2xl font-bold text-white/60">
+                <span className="text-xl font-bold text-white/70">
                   {article.category.charAt(0)}
                 </span>
               </motion.div>
@@ -249,6 +248,23 @@ export default function BlogArticleModal({
 
               {/* Divider */}
               <div className="w-full h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent mb-6" />
+
+              {/* Article illustration inline */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="relative w-full h-40 sm:h-48 rounded-xl overflow-hidden mb-8"
+              >
+                <Image
+                  src={article.image}
+                  alt={article.title}
+                  fill
+                  className="object-cover rounded-xl"
+                  sizes="(max-width: 768px) 100vw, 768px"
+                />
+                <div className={`absolute inset-0 bg-gradient-to-br ${article.gradient} opacity-20 rounded-xl`} />
+              </motion.div>
 
               {/* Full article content */}
               <div>
