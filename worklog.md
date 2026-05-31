@@ -2085,3 +2085,34 @@ Added `BlogPost` model to Prisma schema:
 - `bun run lint` passes with 0 errors
 - Database pushed successfully via `bun run db:push`
 - Frontend gracefully falls back to hardcoded articles if API fails
+
+---
+
+## Cron Jobs Recreated (Continuation Session)
+
+### Task
+User requested: Recreate blog post cron jobs (previous ones lost between sessions) + ensure English-only content + set up webDevReview cron.
+
+### Changes Made
+1. **Deleted old "Portfolio WebDev Review" job** (ID: 178517) — was using `agentTurn` kind, needed `webDevReview`
+2. **Created 3 new cron jobs**:
+
+| # | Name | Job ID | Schedule | Kind | Description |
+|---|------|--------|----------|------|-------------|
+| 1 | Portfolio WebDev Review (15min) | 178612 | Every 15 min (`0 */15 * * * ?`) | `webDevReview` | QA, bug fixes, styling improvements, feature development |
+| 2 | Freelancing Blog Post Generator (30min) | 178611 | Every 30 min (`0 */30 * * * ?`) | `agentTurn` | Blog posts about freelancing/getting clients, English only, SEO optimized, AI-generated images |
+| 3 | SEO Blog Post Generator - All Categories (15min) | 178610 | Every 15 min (`0 */15 * * * ?`) | `agentTurn` | Blog posts rotating through 7 categories, English only, SEO optimized, AI-generated images |
+
+### Blog Cron Job Details
+- **English Only**: All content and image prompts are strictly English — enforced in CRITICAL RULES section
+- **Categories (rotating)**: WordPress, E-Commerce, SEO, Lead Generation, Web Design, Business, Virtual Assistant
+- **Freelancing Category**: Always "Freelancing" with `from-amber-500 to-orange-500` gradient
+- **Image Generation**: Uses image-generation skill for copyright-free blog cover images (800x450px)
+- **Content Structure**: BlogContentBlock[] format with heading, paragraph, list, tip, stats blocks
+- **SEO Optimization**: Keywords, meta descriptions, compelling titles (max 70 chars), structured headings
+- **API**: Posts to `/api/blog` with all required fields, verifies 201 response
+- **Uniqueness**: 20+ freelancing topic ideas included, different category per run for category generator
+
+### User Rules Reminder
+- **NEVER add features without user permission — always suggest first, wait for approval**
+- **All blog content must be in English language only**
