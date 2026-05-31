@@ -2307,6 +2307,11 @@ const popularTopics = [
     category: 'Web Design',
     count: articles.filter((a) => a.category === 'Web Design').length,
   },
+  {
+    label: 'Freelancing Tips',
+    category: 'Freelancing',
+    count: articles.filter((a) => a.category === 'Freelancing').length,
+  },
 ];
 
 // Category to gradient mapping for DB posts
