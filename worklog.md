@@ -1944,3 +1944,19 @@ Stage Summary:
 - Light mode: Separate color palette (darker teal/emerald tones)
 - All animations GPU-accelerated via CSS transforms and opacity
 - Cron job created (ID: 178586) for 15-min auto QA cycles
+
+---
+Task ID: user-instruction-no-features-without-permission
+Agent: Main Agent
+Task: Record user instruction about not adding features without explicit permission
+
+Work Log:
+- User explicitly stated: "without my permission dont add any feature make a note on this you can suggest before impliment on the website"
+- This is now a CRITICAL RULE for all future development on this project
+- Cron job review tasks should ONLY fix bugs and suggest improvements (not implement them)
+
+Stage Summary:
+- RULE: Never add any new feature to the website without the user's explicit permission
+- SUGGEST: Can propose new features/ideas, but must wait for user approval before implementing
+- BUG FIXES: Still allowed to fix bugs without permission
+- Cron jobs (webDevReview) should suggest improvements in their reports, not implement them
