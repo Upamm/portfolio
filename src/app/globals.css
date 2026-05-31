@@ -8,6 +8,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-space-grotesk);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -1317,4 +1318,30 @@ body::before {
   background: rgba(6, 182, 212, 0.15);
   border-left: 3px solid #06b6d4;
   padding-left: 13px;
+}
+
+/* ==================== */
+/* PRICING DISPLAY FONT    */
+/* ==================== */
+.price-display {
+  font-family: var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.price-currency {
+  font-size: 0.45em;
+  vertical-align: super;
+  margin-right: 2px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.price-period {
+  font-size: 0.35em;
+  font-weight: 400;
+  opacity: 0.6;
+  margin-left: 4px;
+  letter-spacing: 0.05em;
 }

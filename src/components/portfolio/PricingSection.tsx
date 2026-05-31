@@ -1,14 +1,15 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Check, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Check, Sparkles, Zap, Shield, Crown } from 'lucide-react';
+import ContactFormModal from './ContactFormModal';
 
 const packages = [
   {
     name: 'Starter',
     price: 99,
+    period: 'one-time',
     description: 'Perfect for getting your WordPress site up and running quickly.',
     features: [
       'Basic WordPress setup',
@@ -16,7 +17,9 @@ const packages = [
       'Essential plugin setup',
       'Basic SEO configuration',
       '1 revision round',
+      '3-day delivery',
     ],
+    icon: Zap,
     gradient: 'from-slate-500/20 to-slate-600/20',
     borderGradient: 'from-slate-500/30 to-slate-600/30',
     featured: false,
@@ -24,6 +27,7 @@ const packages = [
   {
     name: 'Professional',
     price: 249,
+    period: 'one-time',
     description: 'Ideal for businesses wanting a polished, optimized web presence.',
     features: [
       'Custom theme customization',
@@ -32,7 +36,9 @@ const packages = [
       'Full SEO setup',
       '3 revision rounds',
       '30-day support',
+      'Priority delivery',
     ],
+    icon: Shield,
     gradient: 'from-teal-500/20 to-emerald-500/20',
     borderGradient: 'from-teal-500 to-emerald-500',
     featured: true,
@@ -40,6 +46,7 @@ const packages = [
   {
     name: 'Premium',
     price: 499,
+    period: 'one-time',
     description: 'For businesses that need a fully custom, high-performance solution.',
     features: [
       'Custom WordPress development from scratch',
@@ -48,7 +55,9 @@ const packages = [
       'Comprehensive SEO strategy',
       'Unlimited revisions',
       '90-day priority support',
+      'Dedicated project manager',
     ],
+    icon: Crown,
     gradient: 'from-slate-500/20 to-slate-600/20',
     borderGradient: 'from-slate-500/30 to-slate-600/30',
     featured: false,
@@ -59,11 +68,15 @@ function PricingCard({
   pkg,
   index,
   isInView,
+  onGetStarted,
 }: {
   pkg: (typeof packages)[0];
   index: number;
   isInView: boolean;
+  onGetStarted: (planName: string) => void;
 }) {
+  const IconComp = pkg.icon;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -97,34 +110,44 @@ function PricingCard({
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
         )}
 
-        {/* Package name */}
+        {/* Package name & icon */}
         <div className="relative z-10">
-          <h3
-            className={`text-lg font-bold mb-2 ${
-              pkg.featured ? 'text-teal-400' : 'text-slate-300'
-            }`}
-          >
-            {pkg.name}
-          </h3>
-
-          {/* Price */}
-          <div className="flex items-baseline gap-1 mb-4">
-            <span
-              className={`text-4xl sm:text-5xl font-bold ${
-                pkg.featured ? 'gradient-text' : 'text-white'
+          <div className="flex items-center gap-2.5 mb-3">
+            <div
+              className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                pkg.featured
+                  ? 'bg-teal-500/15 text-teal-400'
+                  : 'bg-slate-700/50 text-slate-400'
               }`}
             >
-              ${pkg.price}
-            </span>
+              <IconComp className="w-4.5 h-4.5" />
+            </div>
+            <h3
+              className={`text-lg font-bold ${
+                pkg.featured ? 'text-teal-400' : 'text-slate-300'
+              }`}
+            >
+              {pkg.name}
+            </h3>
           </div>
 
+          {/* Price with attractive display font */}
+          <div className="flex items-baseline gap-0 mb-1">
+            <span className={`price-display ${pkg.featured ? 'gradient-text' : 'text-white'}`}>
+              <span className="price-currency">$</span>
+              {pkg.price}
+              <span className="price-period">/{pkg.period}</span>
+            </span>
+          </div>
+          <div className="h-px bg-white/5 my-4" />
+
           {/* Description */}
-          <p className="text-slate-400 text-sm leading-relaxed mb-6">
+          <p className="text-slate-400 text-sm leading-relaxed mb-5">
             {pkg.description}
           </p>
 
           {/* Features list */}
-          <ul className="space-y-3 mb-8">
+          <ul className="space-y-3 mb-8 flex-1">
             {pkg.features.map((feature) => (
               <li key={feature} className="flex items-start gap-3">
                 <div
@@ -143,16 +166,16 @@ function PricingCard({
 
           {/* CTA Button */}
           <div className="mt-auto">
-            <Button
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className={`w-full py-3 rounded-xl font-medium transition-all duration-300 ${
+            <button
+              onClick={() => onGetStarted(pkg.name)}
+              className={`w-full py-3 rounded-xl font-medium text-sm transition-all duration-300 ${
                 pkg.featured
-                  ? 'bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-white shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 btn-shine'
-                  : 'bg-transparent border border-teal-500/30 text-teal-400 hover:bg-teal-500/10 hover:border-teal-500/50'
+                  ? 'bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-white shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 btn-shine hover:scale-[1.02] active:scale-[0.98]'
+                  : 'bg-transparent border border-teal-500/30 text-teal-400 hover:bg-teal-500/10 hover:border-teal-500/50 hover:scale-[1.02] active:scale-[0.98]'
               }`}
             >
               Get Started
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -163,6 +186,13 @@ function PricingCard({
 export default function PricingSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState('');
+
+  const handleGetStarted = (planName: string) => {
+    setSelectedPlan(planName);
+    setContactModalOpen(true);
+  };
 
   return (
     <section id="pricing" className="relative py-16 sm:py-32 overflow-x-hidden">
@@ -201,13 +231,31 @@ export default function PricingSection() {
               pkg={pkg}
               index={index}
               isInView={isInView}
+              onGetStarted={handleGetStarted}
             />
           ))}
         </div>
 
-        {/* Glow Separator - Skills/Pricing → Testimonials */}
+        {/* Bottom trust note */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="text-center text-xs text-slate-500 mt-8 sm:mt-12"
+        >
+          All plans include free consultation &bull; No hidden fees &bull; 100% satisfaction guarantee
+        </motion.p>
+
+        {/* Glow Separator */}
         <div className="glow-separator mt-16 sm:mt-32" />
       </div>
+
+      {/* Contact Form Modal */}
+      <ContactFormModal
+        isOpen={contactModalOpen}
+        onClose={() => setContactModalOpen(false)}
+        prefillSubject={`Inquiry about ${selectedPlan} Plan`}
+      />
     </section>
   );
 }

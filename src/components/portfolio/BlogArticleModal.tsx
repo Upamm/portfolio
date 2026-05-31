@@ -2,15 +2,8 @@
 
 import { useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Calendar, Clock, ArrowRight, X, User, Lightbulb, Code2 } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, X, User, Lightbulb } from 'lucide-react';
 import Image from 'next/image';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
 import type { BlogArticle, BlogContentBlock } from './BlogSection';
 
 export type ArticleModalProps = {
@@ -26,10 +19,10 @@ function ContentBlock({ block, index }: { block: BlogContentBlock; index: number
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.03 }}
-        className="text-lg sm:text-xl font-bold text-white mt-8 mb-3 flex items-center gap-2"
+        className="text-lg sm:text-xl font-bold text-white mt-8 mb-3 flex items-start gap-2"
       >
-        <span className="w-1 h-6 rounded-full bg-gradient-to-b from-teal-400 to-emerald-400 flex-shrink-0" />
-        {block.text}
+        <span className="w-1 h-6 rounded-full bg-gradient-to-b from-teal-400 to-emerald-400 flex-shrink-0 mt-0.5" />
+        <span>{block.text}</span>
       </motion.h3>
     );
   }
@@ -118,7 +111,7 @@ function ContentBlock({ block, index }: { block: BlogContentBlock; index: number
         transition={{ duration: 0.4, delay: index * 0.03 }}
         className="my-4 p-4 rounded-lg bg-black/40 border border-white/5 overflow-x-auto"
       >
-        <code className="text-sm text-teal-300 font-mono whitespace-pre-wrap">
+        <code className="text-sm text-teal-300 font-mono whitespace-pre-wrap break-words">
           {block.text}
         </code>
       </motion.pre>
@@ -142,157 +135,168 @@ export default function BlogArticleModal({
     }
   }, [isOpen, article?.id]);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <AnimatePresence>
-        {isOpen && article && (
-          <DialogContent
-            showCloseButton={false}
-            className="glass-card rounded-2xl max-w-3xl mx-4 p-0 overflow-hidden border-white/10 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-bottom-4 data-[state=closed]:slide-out-to-bottom-4 max-h-[90vh] flex flex-col"
+    <AnimatePresence>
+      {isOpen && article && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
+            onClick={onClose}
+          />
+
+          {/* Modal */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.96 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="fixed inset-0 z-[101] flex items-center justify-center p-3 sm:p-4 md:p-6 pointer-events-none"
           >
-            <DialogTitle className="sr-only">{article.title}</DialogTitle>
-            <DialogDescription className="sr-only">
-              {article.excerpt}
-            </DialogDescription>
-
-            {/* Image Header */}
-            <div className="relative h-48 sm:h-56 md:h-64 bg-gradient-to-br overflow-hidden flex-shrink-0">
-              {/* Background image */}
-              <Image
-                src={article.image}
-                alt={article.title}
-                fill
-                className="object-cover opacity-70"
-                sizes="(max-width: 768px) 100vw, 768px"
-                priority
-              />
-              {/* Gradient overlays */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/50 to-[#0a1628]/20" />
-              <div className={`absolute inset-0 bg-gradient-to-br ${article.gradient} opacity-30`} />
-
-              {/* Category badge */}
-              <div className="absolute top-5 left-6 z-10">
-                <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-medium border border-white/10">
-                  {article.category}
-                </span>
-              </div>
-
-              {/* Read time badge */}
-              <div className="absolute top-5 right-16 z-10">
-                <span className="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-medium flex items-center gap-1 border border-white/10">
-                  <Clock className="w-3 h-3" />
-                  {article.readTime}
-                </span>
-              </div>
-
-              {/* Close Button */}
-              <DialogClose asChild>
-                <button
-                  className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-teal-300 hover:bg-teal-500/80 hover:text-white hover:border-teal-400 transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400/50 focus:ring-offset-2 focus:ring-offset-black/20"
-                  aria-label="Close article"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </DialogClose>
-
-              {/* Decorative corner badge */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.15 }}
-                className="absolute bottom-5 right-6 z-10 w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center"
-              >
-                <span className="text-xl font-bold text-white/70">
-                  {article.category.charAt(0)}
-                </span>
-              </motion.div>
-            </div>
-
-            {/* Scrollable Content */}
             <div
-              ref={contentRef}
-              className="overflow-y-auto flex-1 p-6 sm:p-8"
+              className="relative w-full max-w-3xl max-h-[92vh] rounded-2xl overflow-hidden pointer-events-auto glass-card border border-white/10 shadow-2xl shadow-black/40 flex flex-col"
+              onClick={(e) => e.stopPropagation()}
             >
-              {/* Meta info */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-4">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-teal-400" />
-                  {article.date}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <User className="w-4 h-4 text-teal-400" />
-                  {article.author}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-teal-400" />
-                  {article.readTime}
-                </span>
-              </div>
-
-              {/* Full title */}
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight mb-5">
-                {article.title}
-              </h1>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {article.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs px-3 py-1.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 font-medium"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* Divider */}
-              <div className="w-full h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent mb-6" />
-
-              {/* Article illustration inline */}
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="relative w-full h-40 sm:h-48 rounded-xl overflow-hidden mb-8"
-              >
+              {/* Image Header */}
+              <div className="relative h-40 sm:h-48 md:h-56 bg-gradient-to-br flex-shrink-0">
+                {/* Background image */}
                 <Image
                   src={article.image}
                   alt={article.title}
                   fill
-                  className="object-cover rounded-xl"
+                  className="object-cover opacity-70"
                   sizes="(max-width: 768px) 100vw, 768px"
+                  priority
                 />
-                <div className={`absolute inset-0 bg-gradient-to-br ${article.gradient} opacity-20 rounded-xl`} />
-              </motion.div>
+                {/* Gradient overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/50 to-[#0a1628]/20" />
+                <div className={`absolute inset-0 bg-gradient-to-br ${article.gradient} opacity-30`} />
 
-              {/* Full article content */}
-              <div>
-                {article.content.map((block, idx) => (
-                  <ContentBlock key={idx} block={block} index={idx} />
-                ))}
+                {/* Category badge */}
+                <div className="absolute top-4 left-4 sm:top-5 sm:left-5 z-10">
+                  <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-medium border border-white/10">
+                    {article.category}
+                  </span>
+                </div>
+
+                {/* Read time badge */}
+                <div className="absolute top-4 right-12 sm:top-5 sm:right-14 z-10">
+                  <span className="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-medium flex items-center gap-1 border border-white/10">
+                    <Clock className="w-3 h-3" />
+                    {article.readTime}
+                  </span>
+                </div>
+
+                {/* Close Button */}
+                <button
+                  onClick={onClose}
+                  className="absolute top-4 right-4 sm:top-5 sm:right-5 z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-teal-300 hover:bg-teal-500/80 hover:text-white hover:border-teal-400 transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400/50"
+                  aria-label="Close article"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
 
-              {/* Bottom CTA */}
-              <div className="mt-8 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                <button
-                  onClick={() => onClose()}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/25"
+              {/* Scrollable Content */}
+              <div
+                ref={contentRef}
+                className="overflow-y-auto flex-1 p-4 sm:p-6 md:p-8"
+              >
+                {/* Meta info */}
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4">
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-teal-400" />
+                    {article.date}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-teal-400" />
+                    {article.author}
+                  </span>
+                </div>
+
+                {/* Full title */}
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-tight mb-4">
+                  {article.title}
+                </h1>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-5">
+                  {article.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[10px] sm:text-xs px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Divider */}
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent mb-5 sm:mb-6" />
+
+                {/* Article illustration inline */}
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="relative w-full h-36 sm:h-44 md:h-48 rounded-xl overflow-hidden mb-6 sm:mb-8"
                 >
-                  Back to Blog
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => onClose()}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium text-slate-300 border border-white/10 hover:border-teal-500/30 hover:text-teal-300 transition-all duration-300"
-                >
-                  Share This Article
-                </button>
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover rounded-xl"
+                    sizes="(max-width: 768px) 100vw, 672px"
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${article.gradient} opacity-20 rounded-xl`} />
+                </motion.div>
+
+                {/* Full article content */}
+                <div>
+                  {article.content.map((block, idx) => (
+                    <ContentBlock key={idx} block={block} index={idx} />
+                  ))}
+                </div>
+
+                {/* Bottom CTA */}
+                <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                  <button
+                    onClick={() => onClose()}
+                    className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/25"
+                  >
+                    Back to Blog
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      onClose();
+                    }}
+                    className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm font-medium text-slate-300 border border-white/10 hover:border-teal-500/30 hover:text-teal-300 transition-all duration-300"
+                  >
+                    Share This Article
+                  </button>
+                </div>
               </div>
             </div>
-          </DialogContent>
-        )}
-      </AnimatePresence>
-    </Dialog>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }

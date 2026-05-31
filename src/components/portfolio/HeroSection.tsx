@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
-import { ChevronDown, Briefcase, Users, FolderOpen, Award, Download, ArrowRight } from 'lucide-react';
+import { Briefcase, Users, FolderOpen, Award, Download, ArrowRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const FIVERR_IMAGE = 'https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_original/v1/attachments/profile/photo/c4f0de1b0c500594ed3b984332754e19-1551338465000/ade0268f-4643-49c9-804b-c301b683facb.jpg';
@@ -240,20 +240,33 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll Down */}
-      <motion.div
+      <motion.a
+        href="#about"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1"
+        onClick={(e) => {
+          e.preventDefault();
+          const nav = (window as unknown as Record<string, unknown>).__navigateTo as ((p: string) => void) | undefined;
+          nav?.('about');
+        }}
+        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group"
       >
-        <span className="text-[10px] text-slate-500 uppercase tracking-widest">Scroll</span>
+        <span className="text-[10px] sm:text-xs text-slate-500 uppercase tracking-[0.2em] font-medium group-hover:text-teal-400 transition-colors duration-300">
+          Explore More
+        </span>
         <motion.div
           animate={{ y: [0, 6, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+          className="w-6 h-9 rounded-full border-2 border-slate-600/50 group-hover:border-teal-500/40 flex items-start justify-center p-1.5 transition-colors duration-300"
         >
-          <ChevronDown className="w-4 h-4 text-teal-400" />
+          <motion.div
+            animate={{ y: [0, 8, 0], opacity: [1, 0.3, 1] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+            className="w-1.5 h-1.5 rounded-full bg-teal-400"
+          />
         </motion.div>
-      </motion.div>
+      </motion.a>
     </section>
   );
 }
