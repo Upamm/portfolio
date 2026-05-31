@@ -61,6 +61,7 @@ export default function ContactSection() {
     email: '',
     subject: '',
     message: '',
+    website: '', // Honeypot field - must remain empty
   });
   const { toast } = useToast();
 
@@ -82,7 +83,7 @@ export default function ContactSection() {
           title: 'Message sent!',
           description: "Thank you for reaching out. I'll get back to you within 24 hours.",
         });
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setFormData({ name: '', email: '', subject: '', message: '', website: '' });
       } else {
         toast({
           title: 'Error',
@@ -227,7 +228,7 @@ export default function ContactSection() {
           >
             <form
               onSubmit={handleSubmit}
-              className="glass-card rounded-2xl p-6 sm:p-8 space-y-5"
+              className="glass-card rounded-2xl p-6 sm:p-8 space-y-5 relative"
             >
               <div className="grid sm:grid-cols-2 gap-5">
                 <div className="space-y-2 contact-field-group">
@@ -296,6 +297,22 @@ export default function ContactSection() {
                     e.currentTarget.parentElement?.querySelector('label')?.classList.remove('text-teal-400');
                   }}
                   className="contact-input bg-[#0a1628]/50 border-teal-500/10 text-white placeholder:text-slate-500"
+                />
+              </div>
+
+              {/* Honeypot field - hidden from real users, bots fill it in */}
+              <div className="absolute left-[-9999px] top-[-9999px] opacity-0 pointer-events-none" aria-hidden="true" tabIndex={-1}>
+                <label htmlFor="website">Website</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={formData.website}
+                  onChange={(e) =>
+                    setFormData({ ...formData, website: e.target.value })
+                  }
                 />
               </div>
 

@@ -1655,3 +1655,92 @@ The original ScrollToTop button was nearly invisible — just a thin 3px stroke 
 ### Verification
 - `bun run lint` — 0 errors
 - Dev server compiled successfully
+
+---
+## Phase - Comprehensive Security Hardening
+
+### Task
+Full security audit and hardening of the website to prevent common attacks.
+
+### Security Audit Findings
+A thorough audit identified 15+ vulnerabilities across 10 areas of the application, including:
+- 🔴 No security headers (X-Frame-Options, CSP, HSTS all missing)
+- 🔴 No rate limiting on contact API
+- 🔴 No CSRF/honeypot protection on forms
+- 🔴 No bot/scanner blocking
+- 🟠 No Zod validation (installed but unused)
+- 🟠 No IP logging on contact submissions
+- 🟠 Cookies missing Secure flag
+- 🟠 robots.txt allows crawling of /api/
+- 🟡 Prisma schema has no field length constraints or indexes
+
+### Changes Made
+
+#### 1. Security Headers (`next.config.ts`)
+Added comprehensive security headers to ALL routes via `headers()` config:
+- `X-Frame-Options: DENY` — Prevents clickjacking / iframe embedding
+- `X-Content-Type-Options: nosniff` — Prevents MIME type sniffing
+- `Referrer-Policy: strict-origin-when-cross-origin` — Limits referrer leakage
+- `Permissions-Policy` — Blocks camera, microphone, geolocation, payment, USB, gyroscope
+- `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload` — Forces HTTPS (2 year)
+- `X-XSS-Protection: 1; mode=block` — Legacy XSS filter
+- `Content-Security-Policy` — Restricts scripts, styles, images, frames, forms, objects
+- API routes additionally get `Cache-Control: no-store` to prevent caching of submissions
+- Set `poweredByHeader: false` to hide Next.js identity
+
+#### 2. Middleware (`src/middleware.ts`) — NEW
+Created edge middleware for request-level security:
+- **Bot/scanner blocking**: Blocks 20+ known malicious user-agents (sqlmap, nikto, nmap, curl, wget, python-requests, masscan, zgrab, etc.)
+- **Path blocking**: Blocks 20+ dangerous paths (wp-admin, .env, .git, phpMyAdmin, shell, etc.) — returns 404
+- **HTTP method restriction**: Only allows GET, POST, HEAD, OPTIONS, PUT, DELETE, PATCH
+- **API rate limiting**: 30 requests per IP per minute across all /api/* routes
+- **Security headers**: Removes X-Powered-By, adds unique X-Request-ID
+
+#### 3. Contact API Hardening (`src/app/api/contact/route.ts`)
+Complete rewrite with defense-in-depth:
+- **Zod validation**: Replaced manual regex with strict Zod schema (min/max lengths, email format, trim, lowercase)
+- **Honeypot**: Hidden "website" field check — bots that fill it get a fake success response
+- **Content-Type check**: Only accepts `application/json`
+- **Per-IP rate limiting**: 3 submissions per minute + 10 per day per IP
+- **IP address logging**: Every submission stores the sender's IP in the database
+- **HTML sanitization**: Strips all HTML tags from inputs before storage
+- **GET method blocked**: Returns 405 for GET requests to the contact endpoint
+- **Generic error messages**: No internal details leaked on errors
+
+#### 4. Contact Form Honeypot (`ContactSection.tsx`)
+Added invisible honeypot field:
+- Hidden input positioned off-screen (`left-[-9999px] top-[-9999px]`)
+- `aria-hidden="true"`, `tabIndex={-1}`, `autoComplete="off"` — invisible to screen readers and autofill
+- Real users never see it; bots that auto-fill all fields will populate it
+- Server silently accepts honeypot-failed submissions (doesn't alert bots)
+
+#### 5. Cookie Security (`src/lib/cookies.ts`)
+- Added `Secure` flag (only set when on HTTPS)
+- Documented security properties in JSDoc
+
+#### 6. Database Schema (`prisma/schema.prisma`)
+- Added `ipAddress` field to `ContactMessage` model (default: "unknown")
+- Added `@@index([createdAt])` for efficient time-based queries
+- Added `@@index([ipAddress])` for efficient IP-based abuse investigation
+- Pushed schema and regenerated Prisma client
+
+#### 7. robots.txt (`public/robots.txt`)
+- Added `Disallow: /api/` for all user agents (Googlebot, Bingbot, *)
+- Added `Crawl-delay: 10` for unknown bots to reduce scraping
+
+### Files Created
+- `src/middleware.ts` — NEW: Edge middleware for bot blocking + rate limiting
+
+### Files Modified
+- `next.config.ts` — Security headers, poweredByHeader: false
+- `src/app/api/contact/route.ts` — Complete rewrite with Zod + rate limiting + honeypot + IP logging
+- `src/components/portfolio/ContactSection.tsx` — Honeypot field added
+- `src/lib/cookies.ts` — Secure flag
+- `prisma/schema.prisma` — ipAddress field + indexes
+- `public/robots.txt` — Disallow /api/ paths
+
+### Verification
+- `bun run lint` — 0 errors
+- `bun run db:push` — Schema synced successfully
+- Dev server compiled and running
+- All security headers active on responses

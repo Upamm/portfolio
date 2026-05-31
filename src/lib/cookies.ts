@@ -1,6 +1,8 @@
 /**
  * Cookie utility for client-side and server-side cookie management.
  * Used for persisting user preferences (theme, last page, consent).
+ *
+ * Security: Uses Lax SameSite, Secure flag (when HTTPS), and proper encoding.
  */
 
 const COOKIE_OPTIONS = {
@@ -8,6 +10,7 @@ const COOKIE_OPTIONS = {
   // 1 year expiry for preferences
   maxAge: 365 * 24 * 60 * 60,
   sameSite: 'Lax' as const,
+  secure: typeof window !== 'undefined' && window.location.protocol === 'https:',
 };
 
 /**
@@ -24,6 +27,9 @@ export function setCookie(name: string, value: string, options?: Partial<typeof 
   }
   if (opts.sameSite) {
     parts.push(`samesite=${opts.sameSite}`);
+  }
+  if (opts.secure) {
+    parts.push('secure');
   }
 
   document.cookie = parts.join('; ');

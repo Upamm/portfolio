@@ -34,7 +34,11 @@ model ContactMessage {
   email     String
   subject   String
   message   String
+  ipAddress String   @default("unknown")
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@index([ipAddress])
 }
