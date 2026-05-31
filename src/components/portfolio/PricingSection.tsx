@@ -429,10 +429,11 @@ function PricingFaqItem({
       initial={{ opacity: 0, y: 15 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: 0.05 + index * 0.06 }}
+      className="h-full"
     >
       <button
         onClick={onToggle}
-        className="w-full glass-card rounded-xl p-4 sm:p-5 text-left hover-glow transition-all duration-300 cursor-pointer"
+        className="w-full h-full glass-card rounded-xl p-4 sm:p-5 text-left hover-glow transition-all duration-300 cursor-pointer"
       >
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-teal-500/10 flex items-center justify-center shrink-0 mt-0.5">
