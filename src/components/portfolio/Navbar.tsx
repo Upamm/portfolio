@@ -21,11 +21,11 @@ const navLinks: NavLinkItem[] = [
     key: 'services',
     children: [
       { label: 'All Services', key: 'services' },
+      { label: 'Pricing', key: 'pricing' },
       { label: 'FAQ', key: 'faq' },
     ],
   },
   { label: 'Portfolio', key: 'portfolio' },
-  { label: 'Pricing', key: 'pricing' },
   { label: 'Blog', key: 'blog' },
   { label: 'Contact', key: 'contact' },
 ];
@@ -80,7 +80,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
     }, 150);
   };
 
-  const isServicesActive = currentPage === 'services' || currentPage === 'faq';
+  const isServicesActive = currentPage === 'services' || currentPage === 'faq' || currentPage === 'pricing';
 
   return (
     <nav
@@ -178,6 +178,11 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                               {child.key === 'faq' && (
                                 <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">
                                   FAQ
+                                </span>
+                              )}
+                              {child.key === 'pricing' && (
+                                <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">
+                                  $$$
                                 </span>
                               )}
                             </button>
