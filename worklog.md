@@ -1744,3 +1744,130 @@ Added invisible honeypot field:
 - `bun run db:push` — Schema synced successfully
 - Dev server compiled and running
 - All security headers active on responses
+
+---
+
+## Phase - Comprehensive Security Hardening
+
+### Current Project Status Assessment
+- **Overall**: Production-quality portfolio with 25+ components, 2 API routes, 1 DB model
+- **Build**: Zero lint errors, zero compilation errors
+- **Security**: Comprehensive security layer added across all layers (headers, middleware, API, frontend)
+
+### Security Measures Implemented
+
+#### 1. Security Utility Library (`src/lib/security.ts`) — NEW
+- **CSRF Token Management**: In-memory token storage with HMAC-like hashing, 1-hour expiry, IP + UserAgent binding, single-use tokens, auto-cleanup of expired tokens
+- **Deep Input Sanitization**: Strips HTML tags, encoded entities, javascript:/vbscript:/data: protocols, CSS expression(), on* event handlers, normalizes whitespace
+- **Email Validation**: Format check + suspicious pattern detection (double dots, multiple @, backslashes, curly braces)
+- **URL Sanitization**: Blocks javascript:, data:, vbscript:, blob: protocol injection
+- **Security Event Logging**: In-memory circular buffer (max 1000 entries) with timestamped event records for all blocked/flagged requests
+- **IP Violation Tracking**: Counts recent violations per IP (5-minute window) for auto-blocking decisions
+
+#### 2. Enhanced Middleware (`src/middleware.ts`) — REWRITTEN
+- **Malicious UA Blocklist**: sqlmap, nikto, acunetix, nessus, nmap, masscan, metasploit, burpsuite, dirbuster, gobuster, wfuzz, hydra, mj12bot, dotbot, shellshock/log4j patterns, path traversal probes, libwww
+- **Blocked Paths**: 25+ paths (wp-admin, wp-login, .env, .git, .svn, phpmyadmin, admin, config, backup, shell, actuator, graphql, console, debug, trace, server-status, etc.)
+- **HTTP Method Restriction**: Only GET, POST, HEAD, OPTIONS allowed
+- **SQL Injection Detection**: 12 patterns checking path + query string (union, select, insert, update, delete, drop, exec, xp_, encoded variants)
+- **XSS Detection**: 10 patterns checking query string (script tags, event handlers, javascript: protocol, iframe, object, embed, CSS expression)
+- **Path Traversal Detection**: 8 patterns (../, ..\\, %2e%2e variants)
+- **Sliding Window Rate Limiting**: 30 req/min for API, 120 req/min for pages (timestamp-based sliding window, not fixed window)
+- **IP Auto-Blocking**: IPs with >5 violations in 5 minutes auto-blocked for 1 hour
+- **Suspicious Header Detection**: Blocks x-original-url, x-rewrite-url, x-forwarded-host (host header injection vectors)
+- **Payload Size Limit**: POST requests limited to 1MB
+- **CORS Headers for API**: Origin-restricted CORS with proper preflight handling
+- **Request ID**: Unique crypto.randomUUID() request ID on every response
+
+#### 3. CSRF Token API (`src/app/api/csrf/route.ts`) — NEW
+- GET endpoint generating cryptographic CSRF tokens (UUID-based)
+- Rate limited: 5 tokens per 10 seconds per IP
+- Auto-block check via IP violation count
+- Cache-Control: no-store for tokens
+
+#### 4. Enhanced Contact API (`src/app/api/contact/route.ts`) — UPDATED
+- **CSRF Validation**: Requires X-CSRF-Token header, validates against stored tokens with IP/UserAgent binding
+- **Auto-Block Integration**: Uses IP violation count to auto-deny repeat offenders
+- **Deep Sanitization**: All text fields sanitized through security.ts deep sanitizer (not just HTML tag stripping)
+- **Enhanced Email Validation**: Additional security.ts email validation for suspicious patterns
+- **Comprehensive Security Logging**: All events logged (rate limit hits, CSRF failures, honeypot triggers, validation failures, successes)
+- **Security Error Messages**: Generic messages that don't reveal implementation details
+
+#### 5. Enhanced Security Headers (`next.config.ts`) — UPDATED
+- **X-Frame-Options: DENY** — Clickjacking protection
+- **X-Content-Type-Options: nosniff** — MIME sniffing prevention
+- **Referrer-Policy: strict-origin-when-cross-origin**
+- **Permissions-Policy** — Restricts 11 device features (accelerometer, camera, geolocation, etc.)
+- **Strict-Transport-Security** — 2-year HSTS with includeSubDomains and preload
+- **X-XSS-Protection: 0** — Disabled in favor of CSP (modern browsers ignore this)
+- **Content-Security-Policy** — Enhanced with worker-src, media-src, font-src for Google Fonts
+- **Cross-Origin-Opener-Policy: same-origin** — NEW: Prevents cross-origin popups from accessing window.opener
+- **Cross-Origin-Resource-Policy: same-origin** — NEW: Prevents cross-origin resource loading
+- **Cross-Origin-Embedder-Policy: credentialless** — NEW: Requires CORP/COEP for cross-origin resources
+- **API Cache-Control: no-store, no-cache, must-revalidate, Pragma: no-cache** — Prevents sensitive API responses from caching
+- **Unsplash images** — Added to remote image patterns for blog/hero images
+
+#### 6. Contact Form CSRF Integration (`src/components/portfolio/ContactSection.tsx`) — UPDATED
+- Fetches CSRF token on component mount from /api/csrf
+- Includes X-CSRF-Token header in all form submissions
+- Auto-refreshes CSRF token after each submission (single-use tokens)
+- Security error handling with user-friendly messages
+- useCallback optimization for stable form handler
+
+#### 7. Generic API Route (`src/app/api/route.ts`) — SECURED
+- Health check endpoint only (status, timestamp, version)
+- All other methods (POST, PUT, DELETE, PATCH) explicitly return 405
+- Cache-Control: no-store, X-Content-Type-Options: nosniff
+
+#### 8. robots.txt (`public/robots.txt`) — NEW
+- Allows all crawlers on main site
+- Disallows /api/ directory (prevents indexing of endpoints)
+- Blocks known aggressive SEO bots (AhrefsBot, SemrushBot, MJ12bot, DotBot, BLEXBot)
+- Sitemap reference
+- Crawl-delay: 1 for polite bots
+
+#### 9. security.txt (`public/security.txt`) — NEW
+- Contact information via Fiverr
+- Preferred language
+- Canonical URL
+- Complete list of implemented security measures documented
+
+### Security Architecture Summary
+
+**Defense in Depth Layers:**
+1. **Network Layer**: CORS headers, COOP/COEP/COEP policies
+2. **Transport Layer**: HSTS (2-year preload)
+3. **Application Layer**: CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
+4. **Middleware Layer**: UA blocking, path blocking, SQLi/XSS/path traversal detection, IP auto-blocking, rate limiting
+5. **API Layer**: CSRF tokens, Zod validation, deep sanitization, honeypot, per-minute + daily rate limits, content-type validation
+6. **Frontend Layer**: CSRF token auto-fetch/refresh, secure cookie handling, rel="noopener noreferrer" on external links
+7. **Monitoring Layer**: In-memory security event logging with IP violation tracking
+
+### Files Created
+- `src/lib/security.ts` — NEW: Security utility library (CSRF, sanitization, logging)
+- `src/app/api/csrf/route.ts` — NEW: CSRF token generation endpoint
+- `public/robots.txt` — NEW: Crawler directives
+- `public/security.txt` — NEW: Security disclosure information
+
+### Files Modified
+- `src/middleware.ts` — Complete rewrite with comprehensive security protections
+- `src/app/api/contact/route.ts` — CSRF validation, enhanced sanitization, security logging
+- `src/app/api/route.ts` — Secured health check, method restrictions
+- `src/components/portfolio/ContactSection.tsx` — CSRF token integration
+- `next.config.ts` — Enhanced security headers (COOP, CORP, COEP), Pragma header, Unsplash images
+
+### Technical Notes
+- `bun run lint` passes with 0 errors
+- Dev server compiles successfully with zero errors
+- All security measures are in-memory (no external dependencies)
+- CSRF tokens are single-use and expire after 1 hour
+- Rate limiting uses sliding window algorithm for accurate throttling
+- IP auto-blocking lasts 1 hour per violation threshold
+- Security logging uses circular buffer to prevent memory leaks
+- Cron job ID 178476 set up for webDevReview every 15 minutes
+
+### Priority Recommendations for Next Phase
+1. **Medium**: Add CAPTCHA (reCAPTCHA/hCaptcha) to contact form for additional bot protection
+2. **Medium**: Add rate limiting headers to responses (X-RateLimit-Remaining, X-RateLimit-Reset)
+3. **Low**: Persist security logs to database for long-term analysis
+4. **Low**: Add IP whitelist for admin access if admin panel is ever created
+5. **Low**: Integrate CDN-level WAF (Cloudflare, AWS WAF) for additional protection

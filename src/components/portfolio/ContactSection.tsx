@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
 import {
   Clock,
@@ -56,6 +56,7 @@ export default function ContactSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [csrfToken, setCsrfToken] = useState<string>('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -65,14 +66,50 @@ export default function ContactSection() {
   });
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Fetch CSRF token on mount
+  useEffect(() => {
+    fetch('/api/csrf')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.csrfToken) setCsrfToken(data.csrfToken);
+      })
+      .catch(() => {
+        // Silently fail - will get CSRF error on submit
+      });
+  }, []);
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
+      // Refresh CSRF token for each submission attempt
+      let token = csrfToken;
+      if (!token) {
+        const tokenRes = await fetch('/api/csrf');
+        const tokenData = await tokenRes.json();
+        if (tokenData.csrfToken) {
+          setCsrfToken(tokenData.csrfToken);
+          token = tokenData.csrfToken;
+        }
+      }
+
+      if (!token) {
+        toast({
+          title: 'Security Error',
+          description: 'Could not verify security token. Please refresh the page.',
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
       const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': token,
+        },
         body: JSON.stringify(formData),
       });
 
@@ -99,8 +136,15 @@ export default function ContactSection() {
       });
     } finally {
       setIsSubmitting(false);
+      // Refresh CSRF token after each submission
+      fetch('/api/csrf')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.csrfToken) setCsrfToken(data.csrfToken);
+        })
+        .catch(() => {});
     }
-  };
+  }, [csrfToken, formData, toast]);
 
   return (
     <section id="contact" className="relative py-10 sm:py-16 overflow-hidden">

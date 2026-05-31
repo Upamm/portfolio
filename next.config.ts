@@ -15,7 +15,7 @@ const securityHeaders = [
   },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=()',
+    value: 'accelerometer=(), autoplay=(), camera=(), clipboard-read=(), clipboard-write=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), picture-in-picture=(), usb=()',
   },
   {
     key: 'X-DNS-Prefetch-Control',
@@ -27,7 +27,7 @@ const securityHeaders = [
   },
   {
     key: 'X-XSS-Protection',
-    value: '1; mode=block',
+    value: '0', // Disabled in favor of CSP - modern browsers ignore this header
   },
   {
     key: 'Content-Security-Policy',
@@ -36,13 +36,27 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://fiverr-res.cloudinary.com https://images.unsplash.com",
-      "font-src 'self' data:",
+      "font-src 'self' data: https://fonts.gstatic.com",
       "connect-src 'self' https://fonts.googleapis.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
       "object-src 'none'",
+      "media-src 'self' blob:",
+      "worker-src 'self' blob:",
     ].join('; '),
+  },
+  {
+    key: 'Cross-Origin-Opener-Policy',
+    value: 'same-origin',
+  },
+  {
+    key: 'Cross-Origin-Resource-Policy',
+    value: 'same-origin',
+  },
+  {
+    key: 'Cross-Origin-Embedder-Policy',
+    value: 'credentialless',
   },
 ];
 
@@ -57,6 +71,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'fiverr-res.cloudinary.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
         pathname: '/**',
       },
     ],
@@ -74,6 +93,10 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'no-store, no-cache, must-revalidate',
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
           },
         ],
       },

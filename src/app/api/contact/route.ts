@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/db';
+import { validateCSRFToken, sanitizeInput, validateEmail, logSecurityEvent, getIPViolationCount } from '@/lib/security';
 
 // ───────────────────────────────────────────────────────────────
 // Zod Validation Schema
@@ -63,6 +64,12 @@ const contactDailyMap = new Map<string, { count: number; resetAt: number }>();
 function checkContactRateLimit(ip: string): { allowed: boolean; reason?: string } {
   const now = Date.now();
 
+  // Check for auto-block
+  const violations = getIPViolationCount(ip);
+  if (violations > 10) {
+    return { allowed: false, reason: 'Access denied.' };
+  }
+
   // Cleanup old entries periodically
   if (Math.random() < 0.1) {
     cleanupEntries();
@@ -120,25 +127,38 @@ function getClientIP(request: NextRequest): string {
 }
 
 // ───────────────────────────────────────────────────────────────
-// Helper to sanitize input (strip HTML tags)
-// ───────────────────────────────────────────────────────────────
-function sanitize(str: string): string {
-  return str.replace(/<[^>]*>/g, '').trim();
-}
-
-// ───────────────────────────────────────────────────────────────
 // POST handler
 // ───────────────────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
   try {
     const ip = getClientIP(request);
+    const userAgent = request.headers.get('user-agent') || '';
 
     // Rate limiting
     const rateCheck = checkContactRateLimit(ip);
     if (!rateCheck.allowed) {
+      logSecurityEvent('CONTACT_RATE_LIMITED', ip, '/api/contact', userAgent, rateCheck.reason);
       return NextResponse.json(
         { success: false, error: rateCheck.reason || 'Rate limit exceeded.' },
         { status: 429, headers: { 'Retry-After': '60' } }
+      );
+    }
+
+    // CSRF token validation
+    const csrfToken = request.headers.get('x-csrf-token') || '';
+    if (!csrfToken) {
+      logSecurityEvent('CSRF_MISSING', ip, '/api/contact', userAgent, 'No CSRF token provided');
+      return NextResponse.json(
+        { success: false, error: 'Security validation failed. Please refresh the page and try again.' },
+        { status: 403 }
+      );
+    }
+
+    if (!validateCSRFToken(csrfToken, ip, userAgent)) {
+      logSecurityEvent('CSRF_INVALID', ip, '/api/contact', userAgent, 'Invalid CSRF token');
+      return NextResponse.json(
+        { success: false, error: 'Security validation failed. Please refresh the page and try again.' },
+        { status: 403 }
       );
     }
 
@@ -147,6 +167,7 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json();
     } catch {
+      logSecurityEvent('CONTACT_INVALID_BODY', ip, '/api/contact', userAgent, 'Failed to parse JSON');
       return NextResponse.json(
         { success: false, error: 'Invalid request body.' },
         { status: 400 }
@@ -155,6 +176,7 @@ export async function POST(request: NextRequest) {
 
     // Honeypot check — if "website" field has any value, it's a bot
     if (body.website && (body.website as string).length > 0) {
+      logSecurityEvent('HONEYPOT_TRIGGERED', ip, '/api/contact', userAgent, 'Honeypot field filled');
       // Silently accept (don't tell bots we caught them)
       return NextResponse.json({
         success: true,
@@ -165,6 +187,7 @@ export async function POST(request: NextRequest) {
     // Check Content-Type
     const contentType = request.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
+      logSecurityEvent('CONTACT_INVALID_CT', ip, '/api/contact', userAgent, `CT: ${contentType}`);
       return NextResponse.json(
         { success: false, error: 'Invalid content type.' },
         { status: 415 }
@@ -175,6 +198,7 @@ export async function POST(request: NextRequest) {
     const parseResult = contactSchema.safeParse(body);
     if (!parseResult.success) {
       const firstError = parseResult.error.errors[0];
+      logSecurityEvent('CONTACT_VALIDATION_FAIL', ip, '/api/contact', userAgent, firstError?.message);
       return NextResponse.json(
         { success: false, error: firstError?.message || 'Validation failed.' },
         { status: 400 }
@@ -183,12 +207,21 @@ export async function POST(request: NextRequest) {
 
     const data: ContactInput = parseResult.data;
 
-    // Sanitize all text fields
+    // Additional email validation
+    if (!validateEmail(data.email)) {
+      logSecurityEvent('CONTACT_INVALID_EMAIL', ip, '/api/contact', userAgent, `Email: ${data.email}`);
+      return NextResponse.json(
+        { success: false, error: 'Please provide a valid email address.' },
+        { status: 400 }
+      );
+    }
+
+    // Deep sanitize all text fields
     const sanitizedData = {
-      name: sanitize(data.name),
-      email: sanitize(data.email),
-      subject: sanitize(data.subject),
-      message: sanitize(data.message),
+      name: sanitizeInput(data.name),
+      email: sanitizeInput(data.email).toLowerCase(),
+      subject: sanitizeInput(data.subject),
+      message: sanitizeInput(data.message),
     };
 
     // Store message in database with IP
@@ -201,6 +234,8 @@ export async function POST(request: NextRequest) {
         ipAddress: ip,
       },
     });
+
+    logSecurityEvent('CONTACT_SUCCESS', ip, '/api/contact', userAgent, `Name: ${sanitizedData.name}`);
 
     return NextResponse.json({
       success: true,

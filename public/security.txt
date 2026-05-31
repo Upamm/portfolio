@@ -1,0 +1,25 @@
+Contact: https://www.fiverr.com/upam1721
+Preferred-Languages: English
+Canonical: https://upam1721.com
+
+# This website uses automated security monitoring.
+# All unauthorized access attempts are logged and reported.
+
+# Security Measures Implemented:
+# - Content Security Policy (CSP)
+# - CSRF Protection with token validation
+# - Rate Limiting (per-IP, sliding window)
+# - SQL Injection Detection & Blocking
+# - XSS Detection & Prevention
+# - Path Traversal Protection
+# - Malicious User-Agent Filtering
+# - Input Sanitization (deep HTML/entity/script stripping)
+# - Honeypot fields for bot detection
+# - IP Auto-Blocking for repeat offenders
+# - Strict Transport Security (HSTS)
+# - Frame Deny (clickjacking protection)
+# - MIME Type Sniffing Prevention
+# - Referrer Policy Enforcement
+# - Permissions Policy Restriction
+# - Request Size Limits
+# - Suspicious Header Detection
