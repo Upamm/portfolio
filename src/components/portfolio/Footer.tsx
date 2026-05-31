@@ -4,7 +4,6 @@ import { ArrowRight } from 'lucide-react';
 import type { PageKey } from './PortfolioApp';
 
 const footerLinks: { label: string; key: PageKey }[] = [
-  { label: 'Home', key: 'home' },
   { label: 'About', key: 'about' },
   { label: 'Services', key: 'services' },
   { label: 'Portfolio', key: 'portfolio' },
