@@ -87,7 +87,7 @@ export default function HeroSection() {
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass mb-3 sm:mb-5"
           >
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-xs sm:text-sm text-slate-300 font-medium">Available for freelance work</span>
+            <span className="text-xs sm:text-sm text-slate-300 font-medium">Available for remote task</span>
           </motion.div>
 
           {/* Profile Image + Main Heading */}
