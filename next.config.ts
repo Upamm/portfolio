@@ -2,10 +2,6 @@ import type { NextConfig } from "next";
 
 const securityHeaders = [
   {
-    key: 'X-Frame-Options',
-    value: 'SAMEORIGIN', // Allow embedding from same origin (preview panels)
-  },
-  {
     key: 'X-Content-Type-Options',
     value: 'nosniff',
   },
@@ -27,7 +23,7 @@ const securityHeaders = [
   },
   {
     key: 'X-XSS-Protection',
-    value: '0', // Disabled in favor of CSP - modern browsers ignore this header
+    value: '0',
   },
   {
     key: 'Content-Security-Policy',
@@ -37,22 +33,14 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://fiverr-res.cloudinary.com https://images.unsplash.com",
       "font-src 'self' data: https://fonts.gstatic.com",
-      "connect-src 'self' https://fonts.googleapis.com",
-      "frame-ancestors 'self' https://*.space-z.ai", // Allow preview panel iframe
+      "connect-src 'self' https://fonts.googleapis.com https://*.space-z.ai",
+      "frame-ancestors *",
       "base-uri 'self'",
       "form-action 'self'",
       "object-src 'none'",
       "media-src 'self' blob:",
       "worker-src 'self' blob:",
     ].join('; '),
-  },
-  {
-    key: 'Cross-Origin-Opener-Policy',
-    value: 'same-origin',
-  },
-  {
-    key: 'Cross-Origin-Resource-Policy',
-    value: 'cross-origin', // Allow preview panels and cross-origin access
   },
 ];
 

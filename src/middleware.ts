@@ -374,9 +374,6 @@ export function middleware(request: NextRequest) {
   // Prevent MIME type sniffing
   response.headers.set('X-Content-Type-Options', 'nosniff');
 
-  // Prevent clickjacking (allow embedding from same origin for preview)
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
-
   // Referrer policy
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
