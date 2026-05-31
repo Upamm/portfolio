@@ -78,12 +78,10 @@ export default function ClientsSection() {
           </div>
         </div>
 
-        {/* Row 2 - Right to Left (reverse) */}
+        {/* Row 2 - Left to Right (same direction, offset items) */}
         <div className="overflow-hidden">
-          <div
-            className="flex animate-[marquee-reverse_30s_linear_infinite] hover:[animation-play-state:paused]"
-          >
-            {[...doubled].reverse().map((client, index) => (
+          <div className="flex animate-[marquee_30s_linear_infinite] hover:[animation-play-state:paused]">
+            {[...clients.slice(6), ...clients.slice(0, 6), ...clients.slice(6), ...clients.slice(0, 6)].map((client, index) => (
               <div
                 key={`r2-${client.name}-${index}`}
                 className="flex-shrink-0 mx-3 sm:mx-4"
