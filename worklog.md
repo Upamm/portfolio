@@ -2031,3 +2031,57 @@ User requested: "remove floating hire me and whatsapp and mail button"
 
 ### Important User Rule
 - **NEVER add features without user permission — always suggest first, wait for approval**
+
+---
+
+## Blog Auto-Generation System Setup
+
+### Task
+User requested automated blog post generation with:
+1. Freelancing/getting clients blog posts every 30 minutes
+2. SEO-optimized blog posts on rotating categories every 15 minutes
+3. Unique copyright-free images for each post
+4. Google SEO optimization
+
+### Database Schema
+Added `BlogPost` model to Prisma schema:
+- Fields: id, title, slug (unique), excerpt, content (JSON), category, tags (JSON), readTime, author, image, gradient, published, createdAt, updatedAt
+- Indexes on category and createdAt
+
+### API Endpoints Created
+- **GET /api/blog** — Fetch published posts with optional category filter, pagination
+  - Query params: `?category=WordPress&limit=20&page=1`
+  - Returns: `{ posts, total, page, totalPages }`
+- **POST /api/blog** — Create new blog post
+  - Body: title, slug, excerpt, content, category, tags, readTime, author, image, gradient
+  - Returns: `{ post }` (201)
+
+### Frontend Update (BlogSection.tsx)
+- Added `useEffect` to fetch blog posts from `/api/blog` on mount
+- DB posts appear FIRST (newest), hardcoded fallback articles after
+- Added category-to-gradient mapping for auto-styling DB posts
+- All component references updated from `articles` to `allArticles`
+- Lint passes with 0 errors
+
+### Cron Jobs Created
+1. **"Freelancing Blog Post Generator (30min)"** — Job ID: 178603
+   - Schedule: Every 30 minutes (`0 */30 * * * ?`)
+   - Category: Freelancing (always)
+   - Actions: Generate content via LLM, generate image via Image Gen, save via POST /api/blog
+
+2. **"SEO Blog Post Generator - All Categories (15min)"** — Job ID: 178605
+   - Schedule: Every 15 minutes (`0 */15 * * * ?`)
+   - Categories (rotating): WordPress, E-Commerce, SEO, Lead Generation, Web Design, Business, Virtual Assistant
+   - Actions: Same as above but picks random category each run
+
+### Files Created
+- `src/app/api/blog/route.ts` — GET/POST blog posts API
+
+### Files Modified
+- `prisma/schema.prisma` — Added BlogPost model
+- `src/components/portfolio/BlogSection.tsx` — Added DB fetching, merged articles
+
+### Technical Notes
+- `bun run lint` passes with 0 errors
+- Database pushed successfully via `bun run db:push`
+- Frontend gracefully falls back to hardcoded articles if API fails

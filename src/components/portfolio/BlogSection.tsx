@@ -2309,32 +2309,82 @@ const popularTopics = [
   },
 ];
 
+// Category to gradient mapping for DB posts
+const categoryGradients: Record<string, string> = {
+  'Freelancing': 'from-amber-500 to-orange-500',
+  'WordPress': 'from-teal-500 to-cyan-500',
+  'E-Commerce': 'from-emerald-500 to-cyan-500',
+  'SEO': 'from-purple-500 to-pink-500',
+  'Lead Generation': 'from-rose-500 to-orange-500',
+  'Web Design': 'from-sky-500 to-teal-500',
+  'Business': 'from-indigo-500 to-purple-500',
+  'Virtual Assistant': 'from-cyan-500 to-blue-500',
+};
+
 export default function BlogSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [openArticleIndex, setOpenArticleIndex] = useState<number | null>(null);
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
+  const [dbArticles, setDbArticles] = useState<BlogArticle[]>([]);
+
+  // Fetch blog posts from database on mount
+  useEffect(() => {
+    fetch('/api/blog?limit=100')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.posts && Array.isArray(data.posts)) {
+          const mapped: BlogArticle[] = data.posts.map((post: Record<string, unknown>) => ({
+            id: post.id as string,
+            title: post.title as string,
+            excerpt: post.excerpt as string,
+            category: post.category as string,
+            readTime: post.readTime as string,
+            date: new Date(post.createdAt as string).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            }),
+            image: (post.image as string) || '/blog/default.png',
+            gradient: (post.gradient as string) || categoryGradients[post.category as string] || 'from-teal-500 to-cyan-500',
+            tags: typeof post.tags === 'string' ? JSON.parse(post.tags) : (post.tags as string[] || []),
+            author: (post.author as string) || 'Upam',
+            content: typeof post.content === 'string' ? JSON.parse(post.content) : (post.content as BlogContentBlock[] || []),
+            relatedPosts: [],
+          }));
+          setDbArticles(mapped);
+        }
+      })
+      .catch(() => {
+        // Silently fail — hardcoded articles will be used as fallback
+      });
+  }, []);
+
+  // Merge: DB articles first (newest), then hardcoded
+  const allArticles = [...dbArticles, ...articles];
 
   const openArticle =
-    openArticleIndex !== null ? articles[openArticleIndex] : null;
+    openArticleIndex !== null ? allArticles[openArticleIndex] : null;
 
-  const visibleArticles = articles.slice(0, visibleCount);
-  const hasMore = visibleCount < articles.length;
+  const visibleArticles = allArticles.slice(0, visibleCount);
+  const hasMore = visibleCount < allArticles.length;
 
   const handleLoadMore = () => {
-    setVisibleCount((prev) => Math.min(prev + POSTS_PER_PAGE, articles.length));
+    setVisibleCount((prev) => Math.min(prev + POSTS_PER_PAGE, allArticles.length));
   };
 
   // Listen for blog-navigate events from internal links in article modal
   const handleBlogNavigate = useCallback((e: Event) => {
     const detail = (e as CustomEvent).detail as string;
     if (detail) {
-      const idx = articles.findIndex((a) => a.id === detail);
+      const idx = dbArticles.length > 0
+        ? [...dbArticles, ...articles].findIndex((a) => a.id === detail)
+        : articles.findIndex((a) => a.id === detail);
       if (idx !== -1) {
         setOpenArticleIndex(idx);
       }
     }
-  }, []);
+  }, [dbArticles]);
 
   useEffect(() => {
     window.addEventListener('blog-navigate', handleBlogNavigate);
@@ -2342,7 +2392,7 @@ export default function BlogSection() {
   }, [handleBlogNavigate]);
 
   const handleTopicClick = (category: string) => {
-    const matchIdx = articles.findIndex((a) => a.category === category);
+    const matchIdx = allArticles.findIndex((a) => a.category === category);
     if (matchIdx !== -1) setOpenArticleIndex(matchIdx);
   };
 
@@ -2383,7 +2433,7 @@ export default function BlogSection() {
               article={article}
               index={index}
               isInView={isInView}
-              onClick={() => setOpenArticleIndex(articles.indexOf(article))}
+              onClick={() => setOpenArticleIndex(allArticles.indexOf(article))}
             />
           ))}
         </div>
@@ -2403,7 +2453,7 @@ export default function BlogSection() {
               Load More Articles
               <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
               <span className="text-xs text-slate-500">
-                ({articles.length - visibleCount} remaining)
+                ({allArticles.length - visibleCount} remaining)
               </span>
             </button>
           </motion.div>
