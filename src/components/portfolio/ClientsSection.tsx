@@ -75,7 +75,7 @@ export default function ClientsSection() {
 
         {/* Row 1 - Right to Left */}
         <div className="mb-4 sm:mb-6 overflow-hidden">
-          <div className="flex animate-[marquee_40s_linear_infinite] hover:[animation-play-state:paused]">
+          <div className="flex animate-[marquee_25s_linear_infinite] hover:[animation-play-state:paused]">
             {[...row1Clients, ...row1Clients].map((client, index) => (
               <div
                 key={`r1-${client.name}-${index}`}
@@ -100,7 +100,7 @@ export default function ClientsSection() {
 
         {/* Row 2 - Left to Right (opposite of Row 1) */}
         <div className="overflow-hidden">
-          <div className="flex animate-[marquee-reverse_45s_linear_infinite] hover:[animation-play-state:paused]">
+          <div className="flex animate-[marquee-reverse_30s_linear_infinite] hover:[animation-play-state:paused]">
             {[...row2Clients, ...row2Clients].map((client, index) => (
               <div
                 key={`r2-${client.name}-${index}`}
