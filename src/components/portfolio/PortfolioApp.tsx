@@ -71,6 +71,7 @@ function AboutPage() {
       <AboutSection />
       <ExperienceSection />
       <ValuesSection />
+      <ToolsGrid />
     </>
   );
 }
