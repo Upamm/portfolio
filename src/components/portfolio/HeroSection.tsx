@@ -120,7 +120,7 @@ export default function HeroSection() {
           <div className="h-8 sm:h-12 flex items-center justify-center mb-3 sm:mb-5">
             <p className="text-lg sm:text-xl md:text-2xl text-slate-300 font-light">
               {displayedText}
-              <span className="inline-block w-[2px] md:w-[2.5px] h-[1.15em] bg-teal-400 ml-0.5 animate-pulse align-middle rounded-full" />
+              <span className="inline-block w-[2px] md:w-[2.5px] h-[1.15em] bg-teal-400 ml-0.5 cursor-blink align-middle rounded-full" />
             </p>
           </div>
 

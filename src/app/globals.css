@@ -2209,9 +2209,94 @@ button:hover .logo-text-group {
   border-color: rgba(8, 145, 178, 0.15) !important;
 }
 
-/* ScrollToTop button */
+/* ScrollToTop button - light mode background */
+.light [style*="rgba(6, 20, 40, 0.85)"] {
+  background: rgba(224, 242, 248, 0.9) !important;
+  border-color: rgba(8, 145, 178, 0.2) !important;
+}
+
 .light .shadow-lg.shadow-teal-500\/10 {
   box-shadow: 0 10px 30px rgba(6, 182, 212, 0.15);
+}
+
+/* ScrollToTop progress gradient in light mode */
+.light [stroke*="url(#scrollGrad)"] {
+  stroke: url(#scrollGrad);
+}
+
+/* ==================== */
+/* PAGE TRANSITION OVERLAY */
+/* ==================== */
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(16, 185, 129, 0.03));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-transition-overlay.active {
+  opacity: 1;
+}
+
+/* ==================== */
+/* SMOOTH CARD ENTRANCE     */
+/* ==================== */
+@keyframes card-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-entrance {
+  animation: card-entrance 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  opacity: 0;
+}
+
+/* ==================== */
+/* FOOTER LINK HOVER EFFECT  */
+/* ==================== */
+.footer-link {
+  position: relative;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #06b6d4, #10b981);
+  transition: width 0.3s ease;
+  border-radius: 1px;
+}
+
+.footer-link:hover::after {
+  width: 100%;
+}
+
+/* ==================== */
+/* RESPONSIVE FOOTER GRID  */
+/* ==================== */
+@media (max-width: 639px) {
+  .footer-cta-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .footer-cta-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* FloatingHireFAB gradient text stays */

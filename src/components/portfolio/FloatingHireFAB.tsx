@@ -42,7 +42,7 @@ export default function FloatingHireFAB() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.8 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="fixed bottom-6 left-6 z-50 flex items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white text-sm font-medium shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40 hover:scale-105 transition-all duration-300 group"
+          className="hidden sm:flex fixed bottom-6 left-6 z-50 items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white text-sm font-medium shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40 hover:scale-105 transition-all duration-300 group"
           aria-label="Hire me on Fiverr"
         >
           <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

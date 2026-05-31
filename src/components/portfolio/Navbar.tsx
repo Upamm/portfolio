@@ -42,14 +42,14 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
         scrolled
-          ? 'bg-[#0a1628]/95 backdrop-blur-lg border-b border-teal-500/10 shadow-lg shadow-black/10'
-          : 'bg-transparent'
+          ? 'nav-scrolled-enhanced py-0'
+          : 'bg-transparent py-1'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14 sm:h-16">
+        <div className="flex items-center justify-between h-14 sm:h-16 transition-all duration-500">
           {/* Logo */}
           <Logo size="sm" onClick={() => handleClick('home')} />
 

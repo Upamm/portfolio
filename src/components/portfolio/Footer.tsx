@@ -64,9 +64,9 @@ export default function Footer({ onNavigate }: FooterProps) {
 
       {/* Footer Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 text-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 text-center">
           {/* Brand */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="lg:col-span-1">
             <div className="flex justify-center">
               <Logo size="sm" onClick={() => onNavigate('home')} />
             </div>
@@ -92,12 +92,12 @@ export default function Footer({ onNavigate }: FooterProps) {
             </div>
           </div>
 
-          {/* Quick Links - hidden on mobile */}
-          <div className="hidden sm:block sm:col-span-2 lg:col-span-1">
+          {/* Quick Links - hidden on mobile & tablet */}
+          <div className="hidden lg:block lg:col-span-1">
             <h4 className="text-white font-semibold mb-3 text-sm">Quick Links</h4>
-            <ul className="grid grid-cols-2 sm:grid-cols-1 gap-x-4 gap-y-2">
+            <ul className="space-y-2">
               {footerLinks.map((link) => (
-                <li key={link.key} className="flex justify-center sm:justify-start lg:justify-center">
+                <li key={link.key} className="flex justify-center">
                   <button
                     onClick={() => onNavigate(link.key)}
                     className="text-slate-400 text-sm hover:text-teal-400 transition-colors duration-200"
@@ -121,7 +121,7 @@ export default function Footer({ onNavigate }: FooterProps) {
         </div>
 
         {/* Bottom */}
-        <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center">
+        <div className="border-t border-white/5 pt-6 flex flex-col lg:flex-row items-center justify-between gap-3 text-center">
           <p className="text-slate-500 text-xs">&copy; {new Date().getFullYear()} Upam. All Rights Reserved.</p>
           <p className="text-slate-600 text-xs">WordPress Virtual Assistant & Web Designer</p>
         </div>
