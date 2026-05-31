@@ -1488,3 +1488,15 @@ Stage Summary:
 - Email references in Footer.tsx and WhatsAppFAB.tsx were intentionally preserved (not on about/contact pages)
 - Contact form email input field preserved (it's the user's email field, not personal email display)
 - All broad `.light` CSS text overrides already handle most cookie consent text colors
+
+---
+## Quick Fix - Pricing Button Center Alignment
+
+### Work Log:
+- Added `text-center` class to the CTA button wrapper `<div>` in `PricingCard` component (`PricingSection.tsx` line 311)
+- The "Get Started" button uses `inline-flex` which requires a centering parent; `text-center` on the wrapper div centers the button horizontally
+
+### Stage Summary:
+- Fixed: Pricing plan cards "Get Started" buttons now center-aligned within each card
+- File modified: `src/components/portfolio/PricingSection.tsx`
+- Cron job created (ID: 178430) — WebDevReview every 15 minutes

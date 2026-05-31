@@ -308,7 +308,7 @@ function PricingCard({
           </ul>
 
           {/* CTA Button */}
-          <div className="mt-auto">
+          <div className="mt-auto text-center">
             <button
               onClick={() => onGetStarted(pkg.name)}
               className={`inline-flex items-center justify-center px-8 py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 cursor-pointer ${
