@@ -1250,3 +1250,33 @@ All glass cards, nav, modals, hero gradient, card fades, marquee fade, about fad
 ### Verification
 - `bun run lint` — Zero errors
 - Dev server compiles successfully
+
+---
+## Phase N - Pricing Text Colors & Comparison Table Width Fix
+
+### Task
+Fix pricing page text colors on the pricing table and price text in light mode. Make Quick Plan Comparison table width narrower with no extra space on both modes.
+
+### Changes Made
+
+**1. Pricing Section Light Mode Text Color Fixes (`src/app/globals.css`)**
+
+Added pricing-specific text overrides for better contrast in light mode:
+- `.light #pricing .text-slate-400` → `#475569` (was `#5a8fa0` which had ~3.8:1 contrast, too low for AA)
+  - Affects: "$" sign on prices, comparison table "Feature" header, section subtitles, description text
+- `.light #pricing .text-slate-500` → `#64748b` (was `#7bafc0` which had ~2.4:1 contrast, far too low)
+  - Affects: "/one-time" period text, "best for" labels, muted labels
+- `.light #pricing [class*="text-slate-600"]` → `#64748b` (was `#94a3b8` which had ~2.4:1 contrast)
+  - Affects: comparison table "—" dash marks for unavailable features
+- `.light #pricing .text-slate-500.uppercase` → `#64748b` (was `#94a3b8`)
+  - Affects: Process step "Step" labels
+
+**2. Quick Plan Comparison Table Width (`src/components/portfolio/PricingSection.tsx`)**
+- Added `max-w-4xl mx-auto` to the comparison table glass-card container
+- Changed table `min-w` from `540px` to `520px` to fit the narrower container
+- Table is now centered with proper width on both light and dark modes
+
+### Verification
+- `bun run lint` — Zero errors
+- Dev server compiles successfully, all 200 OK responses
+

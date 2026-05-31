@@ -2353,12 +2353,22 @@ body::before {
   box-shadow: 0 6px 20px rgba(5, 150, 105, 0.12);
 }
 
-/* Comparison table text - ensure readability */
+/* Pricing section text-slate-400 - "$" sign, subtitles, descriptions - better contrast */
+.light #pricing .text-slate-400 {
+  color: #475569 !important;
+}
+
+/* Pricing section text-slate-500 - period text, "best for", labels - better contrast */
+.light #pricing .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* Comparison table text - dashes and unavailable items - better contrast */
 .light #pricing [class*="text-slate-600"] {
-  color: #94a3b8 !important;
+  color: #64748b !important;
 }
 
 /* Process step "Step" label - readable */
 .light #pricing .text-slate-500.uppercase {
-  color: #94a3b8 !important;
+  color: #64748b !important;
 }
