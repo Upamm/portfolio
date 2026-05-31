@@ -2272,3 +2272,27 @@ Stage Summary:
 - Contact page social section now shows only Fiverr + Twitter (X) icons
 - WhatsApp, Email (mailto), and LinkedIn completely removed from all social sections
 - WebDevReview cron job created (ID: 178654, every 15min)
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Audit blog images for Chinese text, optimize internal linking, add related post suggestions
+
+Work Log:
+- Used VLM to scan all 15 blog images in /public/blog/ for Chinese characters
+- Found 3 images with Chinese text: category-post-1.png, speed.png, webdesign.png
+- Regenerated all 3 with explicit "English text only, NO Chinese" prompts
+- Verified all regenerated images pass VLM Chinese text check
+- Fixed BlogArticleModal to accept allArticles prop (merged DB + hardcoded)
+- Updated ContentBlock to receive articleList for related-reading link resolution
+- Updated RelatedPosts component to use full article pool instead of hardcoded only
+- Enhanced RelatedPosts algorithm: same-category first (up to 2), then cross-category by tag overlap (up to 3 total)
+- Added shared tag indicators (#tag) on cross-category related post cards
+- Passed allArticles from BlogSection to BlogArticleModal
+
+Stage Summary:
+- All blog images are now Chinese-text-free (verified via VLM)
+- Internal linking (related-reading blocks) now resolves against all articles (DB + hardcoded)
+- Related posts suggestions now show: same-category + cross-category with tag overlap
+- DB articles can now find related posts from both DB and hardcoded article pools
+- Lint passed, dev server compiled successfully

@@ -2469,6 +2469,7 @@ export default function BlogSection() {
           article={openArticle}
           isOpen={openArticleIndex !== null}
           onClose={() => setOpenArticleIndex(null)}
+          allArticles={allArticles}
         />
 
         {/* Popular Topics */}

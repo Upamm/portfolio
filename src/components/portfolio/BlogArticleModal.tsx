@@ -34,6 +34,7 @@ export type ArticleModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onNavigate?: (articleId: string) => void;
+  allArticles?: BlogArticle[];
 };
 
 /* ------------------------------------------------------------------ */
@@ -53,7 +54,7 @@ function openShareWindow(url: string) {
 /*  Content Block renderer (unchanged)                                 */
 /* ------------------------------------------------------------------ */
 
-function ContentBlock({ block, index }: { block: BlogContentBlock; index: number }) {
+function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; index: number; articleList?: BlogArticle[] }) {
   if (block.type === 'heading') {
     return (
       <motion.h3
@@ -173,7 +174,9 @@ function ContentBlock({ block, index }: { block: BlogContentBlock; index: number
         </div>
         <div className="space-y-3">
           {block.links.map((link) => {
-            const relatedArticle = articles.find((a) => a.id === link.articleId);
+            const relatedArticle = articleList
+              ? articleList.find((a) => a.id === link.articleId)
+              : articles.find((a) => a.id === link.articleId);
             return (
               <a
                 key={link.articleId}
@@ -396,17 +399,44 @@ function ShareBar({
 function RelatedPosts({
   article,
   onNavigate,
+  allArticles: articleList,
 }: {
   article: BlogArticle;
   onNavigate?: (articleId: string) => void;
+  allArticles?: BlogArticle[];
 }) {
-  const related = useMemo(() => {
-    return articles
-      .filter((a) => a.category === article.category && a.id !== article.id)
-      .slice(0, 3);
-  }, [article.id, article.category]);
+  const { sameCategory, crossCategory } = useMemo(() => {
+    const pool = articleList && articleList.length > 0 ? articleList : articles;
+    const candidates = pool.filter((a) => a.id !== article.id);
 
-  if (related.length === 0) return null;
+    // 1. Same category (priority)
+    const same = candidates
+      .filter((a) => a.category === article.category)
+      .slice(0, 2);
+
+    // 2. Cross-category by overlapping tags
+    const articleTags = new Set((article.tags || []).map((t) => t.toLowerCase()));
+    const scored = candidates
+      .filter((a) => a.category !== article.category)
+      .map((a) => {
+        const overlap = (a.tags || []).filter((t) => articleTags.has(t.toLowerCase())).length;
+        return { article: a, overlap };
+      })
+      .filter((s) => s.overlap > 0)
+      .sort((a, b) => b.overlap - a.overlap)
+      .slice(0, 3);
+
+    return {
+      sameCategory: same,
+      crossCategory: scored.map((s) => s.article),
+    };
+  }, [article.id, article.category, article.tags, articleList]);
+
+  const allRelated = [...sameCategory, ...crossCategory].slice(0, 3);
+
+  if (allRelated.length === 0) return null;
+
+  const hasCrossCategory = crossCategory.length > 0 && sameCategory.length < 3;
 
   return (
     <motion.div
@@ -421,7 +451,7 @@ function RelatedPosts({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        {related.map((relatedArticle, idx) => (
+        {allRelated.map((relatedArticle, idx) => (
           <motion.button
             key={relatedArticle.id}
             initial={{ opacity: 0, y: 12 }}
@@ -452,6 +482,22 @@ function RelatedPosts({
               {relatedArticle.title}
             </h4>
 
+            {/* Shared tags indicator for cross-category */}
+            {relatedArticle.category !== article.category && (() => {
+              const sharedTags = (relatedArticle.tags || []).filter(
+                (t) => (article.tags || []).some((at) => at.toLowerCase() === t.toLowerCase())
+              );
+              return sharedTags.length > 0 ? (
+                <div className="flex flex-wrap gap-1 mb-1.5">
+                  {sharedTags.slice(0, 2).map((tag) => (
+                    <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-slate-500">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              ) : null;
+            })()}
+
             {/* Read Time */}
             <div className="flex items-center gap-1.5 text-xs text-slate-500">
               <Clock className="w-3 h-3" />
@@ -473,6 +519,7 @@ export default function BlogArticleModal({
   isOpen,
   onClose,
   onNavigate,
+  allArticles: articleList,
 }: ArticleModalProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const mounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
@@ -714,12 +761,12 @@ export default function BlogArticleModal({
                 {/* Full article content */}
                 <div>
                   {article.content.map((block, idx) => (
-                    <ContentBlock key={idx} block={block} index={idx} />
+                    <ContentBlock key={idx} block={block} index={idx} articleList={articleList} />
                   ))}
                 </div>
 
                 {/* Related Posts */}
-                <RelatedPosts article={article} onNavigate={handleNavigate} />
+                <RelatedPosts article={article} onNavigate={handleNavigate} allArticles={articleList} />
 
                 {/* Share Bar */}
                 <div className="mt-8 sm:mt-10 pt-6 border-t border-white/5">
