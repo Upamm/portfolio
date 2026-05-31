@@ -62,7 +62,7 @@ function ProgressBar({
           {skill.percentage}%
         </motion.span>
       </div>
-      <div className="h-2.5 rounded-full bg-slate-700/50 overflow-hidden">
+      <div className="h-2.5 rounded-full skill-bar-track overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={isInView ? { width: `${skill.percentage}%` } : {}}
@@ -126,7 +126,7 @@ function SkillRadarChart({ isInView }: { isInView: boolean }) {
             key={level}
             points={gridPoints(level)}
             fill="none"
-            stroke="rgba(6, 182, 212, 0.1)"
+            className="stroke-teal-500/10"
             strokeWidth="1"
           />
         ))}
@@ -140,7 +140,7 @@ function SkillRadarChart({ isInView }: { isInView: boolean }) {
               y1={center}
               x2={center + radius * Math.cos(angle)}
               y2={center + radius * Math.sin(angle)}
-              stroke="rgba(6, 182, 212, 0.1)"
+              className="stroke-teal-500/10"
               strokeWidth="1"
             />
           );
@@ -151,8 +151,7 @@ function SkillRadarChart({ isInView }: { isInView: boolean }) {
           animate={isInView ? { opacity: 0.25 } : {}}
           transition={{ duration: 1, delay: 1.2 }}
           points={dataPoints.map((p) => `${p.x},${p.y}`).join(' ')}
-          fill="rgba(6, 182, 212, 0.25)"
-          stroke="rgba(6, 182, 212, 0.6)"
+          className="fill-teal-500/25 stroke-teal-500/60"
           strokeWidth="2"
         />
         {/* Data points */}
@@ -164,8 +163,7 @@ function SkillRadarChart({ isInView }: { isInView: boolean }) {
             transition={{ duration: 0.3, delay: 1.4 + i * 0.1 }}
             cx={p.x}
             cy={p.y}
-            fill="#06b6d4"
-            stroke="#0a1628"
+            className="fill-teal-500 radar-chart-dot"
             strokeWidth="2"
           />
         ))}
@@ -180,7 +178,7 @@ function SkillRadarChart({ isInView }: { isInView: boolean }) {
               y={center + labelR * Math.sin(angle)}
               textAnchor="middle"
               dominantBaseline="middle"
-              className="text-[10px] fill-slate-400"
+              className="text-[10px] fill-slate-400 radar-chart-label"
             >
               {skill.name}
             </text>

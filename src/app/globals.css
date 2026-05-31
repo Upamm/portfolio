@@ -2372,3 +2372,44 @@ body::before {
 .light #pricing .text-slate-500.uppercase {
   color: #64748b !important;
 }
+
+/* ============================== */
+/* LIGHT MODE - SVG/GRAPH & SKILL BAR */
+/* ============================== */
+
+/* Skill progress bar track - dark slate in dark, light teal-gray in light */
+.skill-bar-track {
+  background: rgba(51, 65, 85, 0.5);
+}
+
+.light .skill-bar-track {
+  background: rgba(8, 145, 178, 0.12) !important;
+}
+
+/* SVG radar chart labels - dark enough in light mode */
+.light .radar-chart-label {
+  fill: #475569 !important;
+}
+
+/* SVG radar chart data point dots - visible stroke in light mode */
+.radar-chart-dot {
+  stroke: #0a1628;
+}
+
+.light .radar-chart-dot {
+  stroke: #f0fafb !important;
+}
+
+/* SVG radar chart grid lines - slightly more visible in light */
+.light svg .stroke-teal-500\/10 {
+  stroke: rgba(8, 145, 178, 0.18) !important;
+}
+
+/* SVG radar chart data area */
+.light svg .fill-teal-500\/25 {
+  fill: rgba(8, 145, 178, 0.15) !important;
+}
+
+.light svg .stroke-teal-500\/60 {
+  stroke: rgba(8, 145, 178, 0.5) !important;
+}

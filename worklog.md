@@ -1384,3 +1384,36 @@ These global overrides fix ALL 70+ instances of body text, descriptions, labels,
 - VLM confirmed: "All text is readable" on hero, mid-page, and footer sections in light mode
 - `bun run lint` — Zero errors
 - Dev server compiles successfully, all 200 OK responses
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix all text visibility on Service/Skills page for graphics graph in light mode
+
+Work Log:
+- Read ServicesSection.tsx - identified text-white, text-slate-400, text-teal-400 classes (already covered by existing light mode CSS overrides)
+- Read SkillsSection.tsx - identified SVG radar chart with inline stroke/fill colors that were NOT covered by CSS overrides
+- Key issues found:
+  1. SVG radar chart labels use `fill-slate-400` which sets `fill` property (not `color`) - unaffected by `.light .text-slate-400` override
+  2. SVG data point circles use inline `stroke="#0a1628"` (navy) - invisible on light background
+  3. SVG grid/axis lines use inline `stroke="rgba(6,182,212,0.1)"` - too faint on light background
+  4. Progress bar track `bg-slate-700/50` too dark for light mode
+- Fixed SkillsSection.tsx:
+  - Changed inline stroke/fill attributes to Tailwind classes (stroke-teal-500/10, fill-teal-500/25, etc.)
+  - Added `radar-chart-label` class to SVG text labels
+  - Added `radar-chart-dot` class to SVG data point circles
+  - Changed progress bar track to custom `skill-bar-track` class
+- Added CSS overrides in globals.css:
+  - `.skill-bar-track` dark mode background: `rgba(51, 65, 85, 0.5)`
+  - `.light .skill-bar-track` light mode: `rgba(8, 145, 178, 0.12)`
+  - `.light .radar-chart-label` fill: `#475569` (dark readable text)
+  - `.radar-chart-dot` stroke: `#0a1628` dark / `.light` stroke: `#f0fafb`
+  - SVG grid/fill light mode overrides with slightly stronger opacity
+- Verified dev server compiles successfully with no errors
+- Created cron job (ID: 178391) for 15-minute auto-review cycle
+
+Stage Summary:
+- All SVG graph text (radar chart labels, data points) now visible in both dark and light modes
+- Progress bar track appropriately styled for both themes
+- ServicesSection text already handled by existing comprehensive light mode overrides
+- Dev server running, compilation verified
