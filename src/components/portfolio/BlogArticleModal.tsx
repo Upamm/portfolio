@@ -109,9 +109,9 @@ function ContentBlock({ block, index }: { block: BlogContentBlock; index: number
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.03 }}
-        className="my-4 p-4 rounded-lg bg-black/40 border border-white/5 overflow-x-auto"
+        className="my-4 p-4 rounded-lg bg-black/40 border border-white/5 overflow-x-auto max-w-full"
       >
-        <code className="text-sm text-teal-300 font-mono whitespace-pre-wrap break-words">
+        <code className="text-sm text-teal-300 font-mono whitespace-pre-wrap break-all">
           {block.text}
         </code>
       </motion.pre>
@@ -170,7 +170,7 @@ export default function BlogArticleModal({
             className="fixed inset-0 z-[101] flex items-center justify-center p-3 sm:p-4 md:p-6 pointer-events-none"
           >
             <div
-              className="relative w-full max-w-3xl max-h-[92vh] rounded-2xl overflow-hidden pointer-events-auto glass-card border border-white/10 shadow-2xl shadow-black/40 flex flex-col"
+              className="relative w-full max-w-3xl max-h-[90vh] sm:max-h-[92vh] rounded-2xl overflow-hidden pointer-events-auto glass-card border border-white/10 shadow-2xl shadow-black/40 flex flex-col mx-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Image Header */}
@@ -216,7 +216,7 @@ export default function BlogArticleModal({
               {/* Scrollable Content */}
               <div
                 ref={contentRef}
-                className="overflow-y-auto flex-1 p-4 sm:p-6 md:p-8"
+                className="overflow-y-auto overflow-x-hidden flex-1 p-4 sm:p-6 md:p-8"
               >
                 {/* Meta info */}
                 <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4">

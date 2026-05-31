@@ -131,12 +131,12 @@ function PricingCard({
             </h3>
           </div>
 
-          {/* Price with attractive display font */}
+          {/* Price with code-based font */}
           <div className="flex items-baseline gap-0 mb-1">
-            <span className={`price-display ${pkg.featured ? 'gradient-text' : 'text-white'}`}>
-              <span className="price-currency">$</span>
+            <span className={`price-code ${pkg.featured ? 'gradient-text' : 'text-white'}`}>
+              <span className="price-currency-code">$</span>
               {pkg.price}
-              <span className="price-period">/{pkg.period}</span>
+              <span className="price-period-code">/{pkg.period}</span>
             </span>
           </div>
           <div className="h-px bg-white/5 my-4" />
@@ -168,7 +168,7 @@ function PricingCard({
           <div className="mt-auto">
             <button
               onClick={() => onGetStarted(pkg.name)}
-              className={`w-full py-3 rounded-xl font-medium text-sm transition-all duration-300 ${
+              className={`w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
                 pkg.featured
                   ? 'bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-white shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 btn-shine hover:scale-[1.02] active:scale-[0.98]'
                   : 'bg-transparent border border-teal-500/30 text-teal-400 hover:bg-teal-500/10 hover:border-teal-500/50 hover:scale-[1.02] active:scale-[0.98]'
