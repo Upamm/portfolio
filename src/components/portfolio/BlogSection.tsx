@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
 import {
   Calendar,
@@ -29,34 +29,37 @@ export interface BlogArticle {
   tags: string[];
   author: string;
   content: BlogContentBlock[];
+  relatedPosts: string[];
 }
 
 export interface BlogContentBlock {
-  type: 'paragraph' | 'heading' | 'list' | 'tip' | 'stats' | 'code';
+  type: 'paragraph' | 'heading' | 'list' | 'tip' | 'stats' | 'code' | 'related-reading';
   text?: string;
   items?: string[];
   stats?: { label: string; value: string }[];
+  links?: { title: string; articleId: string; description: string }[];
 }
 
 /* ------------------------------------------------------------------ */
 /*  20 Blog Articles                                                   */
 /* ------------------------------------------------------------------ */
 
-const articles: BlogArticle[] = [
+export const articles: BlogArticle[] = [
   /* ──────────────── WordPress (5) ──────────────── */
 
   {
     id: 'wp-speed-optimization',
     title: '10 Essential WordPress Speed Optimization Tips for 2025',
     excerpt:
-      'Learn the top strategies to make your WordPress site lightning-fast, from caching to image optimization and code minification techniques.',
+      'As an affordable WordPress developer specializing in WordPress speed optimization services, I share proven strategies to make your site lightning-fast — from caching to image optimization and code minification techniques.',
     category: 'WordPress',
     readTime: '8 min read',
     date: 'May 15, 2025',
     image: '/blog/wordpress-dev.png',
     gradient: 'from-teal-500 to-cyan-500',
-    tags: ['Speed', 'Performance', 'WordPress', 'Core Web Vitals'],
+    tags: ['Speed', 'Performance', 'WordPress', 'Core Web Vitals', 'WordPress Developer', 'Professional WordPress'],
     author: 'Upam',
+    relatedPosts: ['website-performance-optimization', 'wordpress-security-guide', 'ui-ux-best-practices'],
     content: [
       {
         type: 'heading',
@@ -152,6 +155,21 @@ const articles: BlogArticle[] = [
         text: 'Speed optimization is an ongoing process, not a one-time task. Set up regular monitoring with tools like Google Search Console, GTmetrix, or Pingdom. Track your Core Web Vitals (LCP, FID/INP, CLS) over time. After every plugin update, theme change, or content addition, re-test your site to catch performance regressions early.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Website Performance Optimization: A Complete Technical Guide',
+            articleId: 'website-performance-optimization',
+            description: 'Dive deeper into advanced performance techniques including Core Web Vitals and server tuning.',
+          },
+          {
+            title: 'The Complete WordPress Security Guide: Protect Your Site in 2025',
+            articleId: 'wordpress-security-guide',
+            description: 'A secure WordPress site is a fast WordPress site — learn essential security hardening steps.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Avg Speed Improvement', value: '65%' },
@@ -171,14 +189,15 @@ const articles: BlogArticle[] = [
     id: 'wp-theme-customization',
     title: 'WordPress Theme Customization: From Starter to Stunning',
     excerpt:
-      'A complete walkthrough on customizing WordPress themes with child themes, custom CSS, template overrides, and advanced hooks for unique designs.',
+      'Hire a professional WordPress developer for expert theme customization — from child themes to custom CSS, template overrides, and advanced hooks for unique professional WordPress website design.',
     category: 'WordPress',
     readTime: '10 min read',
     date: 'May 2, 2025',
     image: '/blog/wordpress-dev.png',
     gradient: 'from-cyan-500 to-teal-500',
-    tags: ['Themes', 'Customization', 'CSS', 'Child Theme'],
+    tags: ['Themes', 'Customization', 'CSS', 'Child Theme', 'WordPress Developer', 'Professional WordPress'],
     author: 'Upam',
+    relatedPosts: ['responsive-design-guide', 'ui-ux-best-practices', 'wp-speed-optimization'],
     content: [
       {
         type: 'heading',
@@ -253,6 +272,21 @@ Version: 1.0.0
         text: 'Customization can introduce bloat if you\'re not careful. Avoid loading CSS or JavaScript on every page when it\'s only needed on specific templates. Use conditional tags (is_page(), is_single(), is_front_page()) to enqueue assets selectively. Minify custom CSS and keep JavaScript minimal. Test your customized theme with Google PageSpeed Insights after each major change to ensure you haven\'t introduced performance regressions.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Responsive Web Design: The Complete Developer Guide for 2025',
+            articleId: 'responsive-design-guide',
+            description: 'Build fluid, adaptable WordPress themes that look perfect on every screen size.',
+          },
+          {
+            title: 'UI/UX Best Practices: Design Websites That Users Love',
+            articleId: 'ui-ux-best-practices',
+            description: 'Create intuitive, beautiful website experiences with essential design principles.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Dev Time Saved', value: '60-70%' },
@@ -263,7 +297,7 @@ Version: 1.0.0
       },
       {
         type: 'tip',
-        text: 'Pro Tip: Use a theme that follows WordPress coding standards and uses action hooks extensively (like GeneratePress or Astra). These "hook-friendly" themes make customization dramatically easier because you can add, remove, or reorder elements without touching template files.',
+        text: 'Pro Tip: Use a theme that follows WordPress coding standards and uses action hooks extensively (like GeneratePress or Astra). These \"hook-friendly\" themes make customization dramatically easier because you can add, remove, or reorder elements without touching template files.',
       },
     ],
   },
@@ -272,14 +306,15 @@ Version: 1.0.0
     id: 'wp-plugin-development',
     title: 'Building Your First WordPress Plugin: A Developer\'s Guide',
     excerpt:
-      'Step-by-step guide to creating a custom WordPress plugin from scratch, including hooks, shortcodes, admin pages, and best practices.',
+      'WordPress developer for hire shares a step-by-step guide to creating custom WordPress plugins from scratch — including hooks, shortcodes, admin pages, and best practices.',
     category: 'WordPress',
     readTime: '11 min read',
     date: 'April 18, 2025',
     image: '/blog/wordpress-dev.png',
     gradient: 'from-teal-600 to-cyan-500',
-    tags: ['Plugins', 'Development', 'PHP', 'Hooks'],
+    tags: ['Plugins', 'Development', 'PHP', 'Hooks', 'WordPress Developer', 'Freelance WordPress'],
     author: 'Upam',
+    relatedPosts: ['wp-rest-api-guide', 'wordpress-security-guide', 'wp-multisite-setup'],
     content: [
       {
         type: 'heading',
@@ -359,6 +394,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'Security is paramount in plugin development. Always sanitize input (sanitize_text_field, sanitize_email), escape output (esc_html, esc_attr, esc_url), check user capabilities before performing actions (current_user_can), verify nonces on form submissions, and prefix all functions, classes, and database tables to avoid conflicts with other plugins.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'The Complete WordPress REST API Guide for Developers',
+            articleId: 'wp-rest-api-guide',
+            description: 'Extend your plugin capabilities with REST API endpoints for headless WordPress setups.',
+          },
+          {
+            title: 'The Complete WordPress Security Guide: Protect Your Site in 2025',
+            articleId: 'wordpress-security-guide',
+            description: 'Security best practices every WordPress plugin developer must follow.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Plugins in Directory', value: '60,000+' },
@@ -378,14 +428,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'wp-multisite-setup',
     title: 'WordPress Multisite Setup: Managing Multiple Sites from One Dashboard',
     excerpt:
-      'Learn how to set up and configure WordPress Multisite to run multiple websites from a single WordPress installation efficiently.',
+      'WordPress maintenance services made easy — learn how to set up WordPress Multisite to run multiple websites from a single installation, perfect for agencies and businesses managing several brands.',
     category: 'WordPress',
     readTime: '9 min read',
     date: 'March 28, 2025',
     image: '/blog/wordpress-dev.png',
     gradient: 'from-emerald-500 to-teal-500',
-    tags: ['Multisite', 'Network', 'Administration', 'Hosting'],
+    tags: ['Multisite', 'Network', 'Administration', 'Hosting', 'WordPress Maintenance', 'WordPress Developer'],
     author: 'Upam',
+    relatedPosts: ['wp-plugin-development', 'wp-rest-api-guide', 'seo-fundamentals-2025'],
     content: [
       {
         type: 'heading',
@@ -444,6 +495,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'As your multisite network grows, performance becomes critical. Use object caching (Redis or Memcached) shared across the network. Consider separating each site\'s uploads directory for easier management. For large networks (50+ sites), use a managed hosting solution optimized for multisite like Kinsta or WP Engine. Monitor server resources closely — a single high-traffic site can affect all others on the same installation.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Building Your First WordPress Plugin: A Developer\'s Guide',
+            articleId: 'wp-plugin-development',
+            description: 'Custom plugins are essential for WordPress Multisite networks with unique per-site needs.',
+          },
+          {
+            title: 'SEO Fundamentals Every Website Owner Must Know in 2025',
+            articleId: 'seo-fundamentals-2025',
+            description: 'SEO strategies that work across multisite networks for maximum organic visibility.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'WP Sites Using Multisite', value: '8%' },
@@ -463,14 +529,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'wp-rest-api-guide',
     title: 'The Complete WordPress REST API Guide for Developers',
     excerpt:
-      'Master the WordPress REST API to create headless WordPress sites, mobile apps, and integrate with third-party services.',
+      'As a Fiverr WordPress expert, I break down the WordPress REST API for building headless sites, mobile apps, and third-party integrations with practical developer examples.',
     category: 'WordPress',
     readTime: '10 min read',
     date: 'March 10, 2025',
     image: '/blog/wordpress-dev.png',
     gradient: 'from-cyan-600 to-emerald-500',
-    tags: ['REST API', 'Headless', 'JSON', 'Integration'],
+    tags: ['REST API', 'Headless', 'JSON', 'Integration', 'WordPress Developer', 'Fiverr Expert'],
     author: 'Upam',
+    relatedPosts: ['wp-plugin-development', 'wp-multisite-setup', 'woocommerce-setup-guide'],
     content: [
       {
         type: 'heading',
@@ -528,6 +595,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'REST API requests go through the full WordPress bootstrap process, which can be slow. Cache API responses using transient API or a Redis-backed object cache. Enable server-level caching for /wp-json/ routes. Use the _fields parameter to request only the data you need (e.g., ?_fields=id,title,excerpt,link). Increase per_page limit for bulk requests. Batch multiple requests using the Batch API endpoint (wp-json/batch/v1).',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Building Your First WordPress Plugin: A Developer\'s Guide',
+            articleId: 'wp-plugin-development',
+            description: 'Build custom REST endpoints within your own WordPress plugins.',
+          },
+          {
+            title: 'WooCommerce Setup Guide: Launch Your Online Store Like a Pro',
+            articleId: 'woocommerce-setup-guide',
+            description: 'Use the REST API to build custom WooCommerce storefronts and integrations.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Core Endpoints', value: '50+' },
@@ -549,14 +631,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'woocommerce-setup-guide',
     title: 'WooCommerce Setup Guide: Launch Your Online Store Like a Pro',
     excerpt:
-      'Step-by-step guide to setting up a high-converting WooCommerce store, from product listings to payment gateways and shipping configuration.',
+      'Expert WooCommerce setup guide from an experienced WooCommerce expert — launch your e-commerce WordPress store with professional product listings, payment gateways, and shipping configuration.',
     category: 'E-Commerce',
     readTime: '11 min read',
     date: 'May 8, 2025',
     image: '/blog/ecommerce.png',
     gradient: 'from-emerald-500 to-cyan-500',
-    tags: ['WooCommerce', 'E-Commerce', 'Setup', 'Online Store'],
+    tags: ['WooCommerce', 'E-Commerce', 'Setup', 'Online Store', 'WooCommerce Expert', 'E-Commerce Development'],
     author: 'Upam',
+    relatedPosts: ['payment-gateway-setup', 'product-photography-tips', 'local-seo-guide'],
     content: [
       {
         type: 'heading',
@@ -615,6 +698,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'Enhance your store with these must-have plugins: WooCommerce Subscriptions for recurring revenue, YITH WooCommerce Wishlist for customer engagement, MailChimp for WooCommerce for email marketing, Google Analytics for WooCommerce for tracking, and WPForms or Gravity Forms for custom checkout fields. Keep plugin count reasonable to maintain speed.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Payment Gateway Setup: Secure and Seamless Checkout Experiences',
+            articleId: 'payment-gateway-setup',
+            description: 'Configure Stripe, PayPal, and emerging payment methods for your WooCommerce store.',
+          },
+          {
+            title: 'Product Photography Tips That Boost E-Commerce Sales',
+            articleId: 'product-photography-tips',
+            description: 'Stunning product photos can increase your WooCommerce store conversions by up to 40%.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Active WooCommerce Stores', value: '5M+' },
@@ -634,14 +732,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'product-photography-tips',
     title: 'Product Photography Tips That Boost E-Commerce Sales',
     excerpt:
-      'Learn how to take stunning product photos that build trust, reduce returns, and dramatically increase your online store conversion rates.',
+      'Professional WordPress website design starts with great visuals — learn product photography tips that build trust, reduce returns, and boost your e-commerce WordPress development conversions.',
     category: 'E-Commerce',
     readTime: '7 min read',
     date: 'April 22, 2025',
     image: '/blog/ecommerce.png',
     gradient: 'from-teal-500 to-emerald-600',
-    tags: ['Photography', 'E-Commerce', 'Conversion', 'Visual'],
+    tags: ['Photography', 'E-Commerce', 'Conversion', 'Visual', 'WooCommerce Expert', 'E-Commerce Development'],
     author: 'Upam',
+    relatedPosts: ['woocommerce-setup-guide', 'ui-ux-best-practices', 'responsive-design-guide'],
     content: [
       {
         type: 'heading',
@@ -698,6 +797,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'Beyond studio shots on white backgrounds, lifestyle photography shows products in real-world context. A kitchen appliance on a countertop with ingredients. A backpack on a hiking trail. Jewelry styled on a model. These shots help customers visualize ownership and increase emotional connection. Studies show that adding lifestyle images increases add-to-cart rates by 30% compared to studio-only photography.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'WooCommerce Setup Guide: Launch Your Online Store Like a Pro',
+            articleId: 'woocommerce-setup-guide',
+            description: 'Combine great photos with a professional WooCommerce store setup for maximum sales.',
+          },
+          {
+            title: 'UI/UX Best Practices: Design Websites That Users Love',
+            articleId: 'ui-ux-best-practices',
+            description: 'Apply visual hierarchy and design principles to showcase your product photos effectively.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Shoppers Relying on Photos', value: '75%' },
@@ -717,14 +831,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'payment-gateway-setup',
     title: 'Payment Gateway Setup: Secure and Seamless Checkout Experiences',
     excerpt:
-      'A comprehensive guide to configuring payment gateways for your WooCommerce store, including Stripe, PayPal, and emerging payment methods.',
+      'Comprehensive payment gateway setup for your WooCommerce store — an essential part of e-commerce WordPress development, including Stripe, PayPal, and emerging payment methods.',
     category: 'E-Commerce',
     readTime: '8 min read',
     date: 'March 15, 2025',
     image: '/blog/ecommerce.png',
     gradient: 'from-cyan-500 to-teal-600',
-    tags: ['Payments', 'Stripe', 'PayPal', 'Checkout'],
+    tags: ['Payments', 'Stripe', 'PayPal', 'Checkout', 'WooCommerce Expert', 'E-Commerce Development'],
     author: 'Upam',
+    relatedPosts: ['woocommerce-setup-guide', 'local-seo-guide', 'wordpress-security-guide'],
     content: [
       {
         type: 'heading',
@@ -782,6 +897,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'Payment security is non-negotiable. Use SSL/TLS encryption on your entire site (HTTPS everywhere). Choose gateways that tokenize card data so sensitive information never touches your server. Enable 3D Secure (3DS2) authentication for an extra layer of fraud protection. Regularly audit your checkout flow for vulnerabilities. Keep your WooCommerce and payment gateway plugins updated to the latest versions for security patches.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'WooCommerce Setup Guide: Launch Your Online Store Like a Pro',
+            articleId: 'woocommerce-setup-guide',
+            description: 'The complete WooCommerce setup walkthrough to pair with your payment gateway configuration.',
+          },
+          {
+            title: 'The Complete WordPress Security Guide: Protect Your Site in 2025',
+            articleId: 'wordpress-security-guide',
+            description: 'Payment security starts with overall WordPress security — protect your checkout and customer data.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Cart Abandonment Rate', value: '70%' },
@@ -803,14 +933,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'seo-fundamentals-2025',
     title: 'SEO Fundamentals Every Website Owner Must Know in 2025',
     excerpt:
-      'Master the core SEO strategies that drive organic traffic, from on-page optimization to technical SEO and link building best practices.',
+      'Professional WordPress SEO services explained — master on-page optimization, technical SEO, and link building to drive organic traffic and grow your WordPress website management results.',
     category: 'SEO',
     readTime: '9 min read',
     date: 'May 5, 2025',
     image: '/blog/seo.png',
     gradient: 'from-cyan-500 to-teal-600',
-    tags: ['SEO', 'Google', 'Organic Traffic', 'Rankings'],
+    tags: ['SEO', 'Google', 'Organic Traffic', 'Rankings', 'WordPress SEO', 'Professional WordPress'],
     author: 'Upam',
+    relatedPosts: ['local-seo-guide', 'technical-seo-audit', 'wp-speed-optimization'],
     content: [
       {
         type: 'heading',
@@ -865,6 +996,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: "Backlinks remain one of Google's top ranking factors, but the quality matters far more than quantity. Focus on earning links naturally through: creating link-worthy content (original research, comprehensive guides, infographics), digital PR and outreach to industry publications, guest posting on reputable sites in your niche, broken link building on relevant websites, and strategic partnerships and collaborations.",
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Local SEO Strategies: Dominate Your Local Search Results',
+            articleId: 'local-seo-guide',
+            description: 'Combine organic SEO with local search strategies for maximum visibility in your area.',
+          },
+          {
+            title: '10 Essential WordPress Speed Optimization Tips for 2025',
+            articleId: 'wp-speed-optimization',
+            description: 'Speed is a critical SEO ranking factor — optimize your WordPress site for search engines.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Organic Click Share', value: '53%' },
@@ -884,14 +1030,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'local-seo-guide',
     title: 'Local SEO Strategies: Dominate Your Local Search Results',
     excerpt:
-      'Learn how to optimize your business for local search to attract more customers from your area and rank in Google Maps results.',
+      'WordPress SEO services for local businesses — learn how a WordPress virtual assistant can optimize your site for local search and dominate Google Maps results in your area.',
     category: 'SEO',
     readTime: '8 min read',
     date: 'April 5, 2025',
     image: '/blog/seo.png',
     gradient: 'from-teal-500 to-emerald-500',
-    tags: ['Local SEO', 'Google Maps', 'Business', 'Local Search'],
+    tags: ['Local SEO', 'Google Maps', 'Business', 'Local Search', 'WordPress SEO', 'WordPress Virtual Assistant'],
     author: 'Upam',
+    relatedPosts: ['seo-fundamentals-2025', 'technical-seo-audit', 'woocommerce-setup-guide'],
     content: [
       {
         type: 'heading',
@@ -949,6 +1096,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'Build authority through local-focused backlinks. Sponsor local events, charities, or sports teams that link back to your site. Partner with complementary local businesses for cross-promotion. Get listed in local business directories and industry association websites. Create locally focused content (neighborhood guides, local event coverage, community stories) that naturally attracts local links and social shares.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'SEO Fundamentals Every Website Owner Must Know in 2025',
+            articleId: 'seo-fundamentals-2025',
+            description: 'Build a strong organic SEO foundation before focusing on local search optimization.',
+          },
+          {
+            title: 'Technical SEO Audit: A Step-by-Step Checklist for 2025',
+            articleId: 'technical-seo-audit',
+            description: 'Ensure your technical SEO is solid so local search signals can work effectively.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: '"Near Me" Search Growth', value: '500%' },
@@ -968,14 +1130,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'technical-seo-audit',
     title: 'Technical SEO Audit: A Step-by-Step Checklist for 2025',
     excerpt:
-      'Run a comprehensive technical SEO audit to identify and fix crawl errors, indexing issues, and performance bottlenecks holding back your rankings.',
+      'Professional WordPress SEO services include thorough technical audits — identify crawl errors, indexing issues, and performance bottlenecks holding back your WordPress site rankings.',
     category: 'SEO',
     readTime: '12 min read',
     date: 'February 25, 2025',
     image: '/blog/seo.png',
     gradient: 'from-emerald-600 to-teal-500',
-    tags: ['Technical SEO', 'Audit', 'Crawling', 'Indexing'],
+    tags: ['Technical SEO', 'Audit', 'Crawling', 'Indexing', 'WordPress SEO', 'WordPress Maintenance'],
     author: 'Upam',
+    relatedPosts: ['seo-fundamentals-2025', 'local-seo-guide', 'website-performance-optimization'],
     content: [
       {
         type: 'heading',
@@ -1041,6 +1204,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'HTTPS is a ranking signal and essential for user trust. Ensure your entire site redirects HTTP to HTTPS. Fix mixed content warnings (loading HTTP resources on HTTPS pages). Check SSL certificate validity and renewal. Implement HSTS (HTTP Strict Transport Security) headers. Verify security headers are properly configured: X-Frame-Options, X-Content-Type-Options, and Content-Security-Policy.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'SEO Fundamentals Every Website Owner Must Know in 2025',
+            articleId: 'seo-fundamentals-2025',
+            description: 'Pair your technical audit with solid on-page and off-page SEO fundamentals.',
+          },
+          {
+            title: 'Website Performance Optimization: A Complete Technical Guide',
+            articleId: 'website-performance-optimization',
+            description: 'Performance optimization is a key part of any technical SEO audit — learn the techniques.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Sites with Crawl Errors', value: '60%' },
@@ -1062,14 +1240,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'b2b-lead-generation',
     title: 'How B2B Lead Generation Can Transform Your Business Growth',
     excerpt:
-      'Discover proven lead generation strategies that help businesses find qualified prospects and build a sustainable sales pipeline.',
+      'B2B lead generation WordPress strategies that actually work — discover how a WordPress virtual assistant can help build a sustainable sales pipeline with proven techniques.',
     category: 'Lead Generation',
     readTime: '10 min read',
     date: 'April 28, 2025',
     image: '/blog/leadgen.png',
     gradient: 'from-emerald-500 to-teal-500',
-    tags: ['B2B', 'Lead Gen', 'Growth', 'Sales Pipeline'],
+    tags: ['B2B', 'Lead Gen', 'Growth', 'Sales Pipeline', 'B2B Lead Generation', 'WordPress Virtual Assistant'],
     author: 'Upam',
+    relatedPosts: ['linkedin-lead-gen-strategies', 'virtual-assistant-2025', 'freelancing-tips'],
     content: [
       {
         type: 'heading',
@@ -1139,6 +1318,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'Search engine optimization is the most sustainable lead generation channel. Target long-tail keywords that indicate buying intent (e.g., "best CRM for small manufacturing companies"). Create comprehensive content that answers specific questions your prospects are searching for. Build topical authority by covering your niche thoroughly. Earn backlinks through original research, partnerships, and digital PR.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'LinkedIn Lead Gen Strategies That Actually Work in 2025',
+            articleId: 'linkedin-lead-gen-strategies',
+            description: 'LinkedIn is the #1 B2B lead generation platform — master it for maximum results.',
+          },
+          {
+            title: 'Why Every Business Needs a Virtual Assistant in 2025',
+            articleId: 'virtual-assistant-2025',
+            description: 'A virtual assistant can handle your lead generation tasks while you focus on closing deals.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Lead Increase (Avg)', value: '3.5x' },
@@ -1158,14 +1352,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'linkedin-lead-gen-strategies',
     title: 'LinkedIn Lead Gen Strategies That Actually Work in 2025',
     excerpt:
-      'Master LinkedIn lead generation with proven tactics for Sales Navigator, InMail outreach, content marketing, and advertising.',
+      'As a WordPress virtual assistant specializing in B2B lead generation WordPress strategies, I share proven LinkedIn tactics for Sales Navigator, InMail outreach, and content marketing.',
     category: 'Lead Generation',
     readTime: '8 min read',
     date: 'March 20, 2025',
     image: '/blog/leadgen.png',
     gradient: 'from-teal-500 to-cyan-600',
-    tags: ['LinkedIn', 'Social Selling', 'B2B', 'Networking'],
+    tags: ['LinkedIn', 'Social Selling', 'B2B', 'Networking', 'B2B Lead Generation', 'Fiverr Expert'],
     author: 'Upam',
+    relatedPosts: ['b2b-lead-generation', 'virtual-assistant-2025', 'freelancing-tips'],
     content: [
       {
         type: 'heading',
@@ -1222,6 +1417,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'LinkedIn Ads offer the most precise B2B targeting available. Lead Gen Forms auto-fill with LinkedIn profile data, boosting conversion rates by 3-5x compared to landing pages. Use Sponsored Content for awareness, Message Ads for direct outreach, and Dynamic Ads for retargeting. Start with a $50/day budget, A/B test ad creatives and audiences, and scale what works. Matched Audiences let you retarget website visitors and upload email lists.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'How B2B Lead Generation Can Transform Your Business Growth',
+            articleId: 'b2b-lead-generation',
+            description: 'Combine LinkedIn strategies with a comprehensive B2B lead generation framework.',
+          },
+          {
+            title: 'Why Every Business Needs a Virtual Assistant in 2025',
+            articleId: 'virtual-assistant-2025',
+            description: 'Delegate LinkedIn outreach and lead gen tasks to a skilled virtual assistant.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'LinkedIn Decision-Makers', value: '65M+' },
@@ -1243,14 +1453,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'virtual-assistant-2025',
     title: 'Why Every Business Needs a Virtual Assistant in 2025',
     excerpt:
-      'Explore how virtual assistants can save time, reduce costs, and help business owners focus on what matters most — growing their company.',
+      'As a WordPress virtual assistant with 8+ years of experience, I share how VAs save time, reduce costs, and help business owners focus on growth — including WordPress website management.',
     category: 'Business',
     readTime: '7 min read',
     date: 'May 12, 2025',
     image: '/blog/virtual-assistant.png',
     gradient: 'from-cyan-500 to-emerald-500',
-    tags: ['VA', 'Productivity', 'Business', 'Remote Work'],
+    tags: ['VA', 'Productivity', 'Business', 'Remote Work', 'WordPress Virtual Assistant', 'Fiverr Expert'],
     author: 'Upam',
+    relatedPosts: ['remote-work-productivity', 'freelancing-tips', 'b2b-lead-generation'],
     content: [
       {
         type: 'heading',
@@ -1306,6 +1517,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'The key to a successful VA relationship is clear communication and proper onboarding. Document your processes with SOPs (Standard Operating Procedures). Use project management tools to assign and track tasks. Schedule regular check-ins (daily or weekly). Start with smaller tasks and gradually increase responsibility. Provide constructive feedback and recognize good work.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Remote Work Productivity: Systems That Actually Work',
+            articleId: 'remote-work-productivity',
+            description: 'Maximize your virtual assistant\'s productivity with proven remote work systems.',
+          },
+          {
+            title: 'Freelancing Tips: From Side Hustle to Six-Figure Business',
+            articleId: 'freelancing-tips',
+            description: 'Whether hiring or working as a VA, these freelancing tips are essential for success.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Time Saved Per Week', value: '15-20hrs' },
@@ -1325,14 +1551,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'remote-work-productivity',
     title: 'Remote Work Productivity: Systems That Actually Work',
     excerpt:
-      'Build a productivity system for remote work that eliminates distractions, maintains focus, and delivers consistent results every day.',
+      'WordPress maintenance services and web design services require focused remote work — build a productivity system that eliminates distractions and delivers consistent results every day.',
     category: 'Business',
     readTime: '7 min read',
     date: 'April 12, 2025',
     image: '/blog/virtual-assistant.png',
     gradient: 'from-teal-500 to-emerald-600',
-    tags: ['Productivity', 'Remote Work', 'Focus', 'Time Management'],
+    tags: ['Productivity', 'Remote Work', 'Focus', 'Time Management', 'WordPress Virtual Assistant', 'Affordable Web Design'],
     author: 'Upam',
+    relatedPosts: ['virtual-assistant-2025', 'freelancing-tips', 'wordpress-security-guide'],
     content: [
       {
         type: 'heading',
@@ -1390,6 +1617,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'Your energy levels fluctuate throughout the day, and working with (not against) these rhythms makes a huge difference. Most people peak in cognitive performance 2-4 hours after waking. Schedule your most demanding tasks during this window. Use mid-afternoon energy dips for routine tasks. Take real breaks away from screens — walking, stretching, or meditating restores mental energy far better than scrolling social media.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Why Every Business Needs a Virtual Assistant in 2025',
+            articleId: 'virtual-assistant-2025',
+            description: 'Pair productivity systems with a skilled virtual assistant for maximum output.',
+          },
+          {
+            title: 'Freelancing Tips: From Side Hustle to Six-Figure Business',
+            articleId: 'freelancing-tips',
+            description: 'Productivity systems are the foundation of a successful freelance WordPress career.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Remote Workers Struggling', value: '67%' },
@@ -1409,14 +1651,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'freelancing-tips',
     title: 'Freelancing Tips: From Side Hustle to Six-Figure Business',
     excerpt:
-      'Proven strategies for freelancers to find clients, set rates, manage projects, and scale from part-time gig to full-time business.',
+      'Fiverr WordPress expert shares proven freelancing tips — find clients, set rates, manage projects, and scale your freelance WordPress business from side hustle to full-time income.',
     category: 'Business',
     readTime: '10 min read',
     date: 'January 22, 2025',
     image: '/blog/virtual-assistant.png',
     gradient: 'from-emerald-500 to-cyan-600',
-    tags: ['Freelancing', 'Business', 'Fiverr', 'Client Management'],
+    tags: ['Freelancing', 'Business', 'Fiverr', 'Client Management', 'Fiverr Expert', 'Freelance WordPress'],
     author: 'Upam',
+    relatedPosts: ['virtual-assistant-2025', 'b2b-lead-generation', 'linkedin-lead-gen-strategies'],
     content: [
       {
         type: 'heading',
@@ -1473,6 +1716,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'To go from solo freelancer to six-figure business, you need systems that allow growth without proportional effort increase. Create templates for proposals, contracts, and common deliverables. Develop SOPs for recurring client processes. Consider hiring subcontractors for lower-value tasks while you focus on client-facing work and strategy. Build automated lead nurturing with email sequences. Track financial metrics: revenue per client, project profitability, and utilization rate.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Why Every Business Needs a Virtual Assistant in 2025',
+            articleId: 'virtual-assistant-2025',
+            description: 'Virtual assistance is one of the most profitable freelance niches — here\'s why.',
+          },
+          {
+            title: 'How B2B Lead Generation Can Transform Your Business Growth',
+            articleId: 'b2b-lead-generation',
+            description: 'Lead generation skills make you invaluable as a freelance WordPress professional.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'US Freelancers', value: '70M+' },
@@ -1494,14 +1752,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'wordpress-security-guide',
     title: 'The Complete WordPress Security Guide: Protect Your Site in 2025',
     excerpt:
-      'A comprehensive guide to securing your WordPress website from hackers, malware, and common vulnerabilities with practical steps.',
+      'WordPress maintenance services must include robust security — as a WordPress developer for hire, I share practical steps to protect your site from hackers and malware.',
     category: 'Security',
     readTime: '9 min read',
     date: 'March 22, 2025',
     image: '/blog/security.png',
     gradient: 'from-teal-600 to-cyan-500',
-    tags: ['Security', 'WordPress', 'Hacking', 'SSL'],
+    tags: ['Security', 'WordPress', 'Hacking', 'SSL', 'WordPress Maintenance', 'WordPress Developer'],
     author: 'Upam',
+    relatedPosts: ['website-performance-optimization', 'wp-speed-optimization', 'wp-plugin-development'],
     content: [
       {
         type: 'heading',
@@ -1545,6 +1804,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: "Don't panic, but act quickly. Take your site offline temporarily to prevent further damage. Restore from your most recent clean backup. Change all passwords immediately — WordPress admin, FTP, database, hosting. Scan thoroughly for malware and backdoors. Review user accounts for unauthorized additions. Check your Google Search Console for security warnings. Submit a review to Google once the site is cleaned.",
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Website Performance Optimization: A Complete Technical Guide',
+            articleId: 'website-performance-optimization',
+            description: 'Security and performance go hand-in-hand — optimize your secure WordPress site for speed.',
+          },
+          {
+            title: '10 Essential WordPress Speed Optimization Tips for 2025',
+            articleId: 'wp-speed-optimization',
+            description: 'A fast, secure WordPress site ranks higher and converts better.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Daily WP Attacks', value: '90,000+' },
@@ -1566,14 +1840,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'website-performance-optimization',
     title: 'Website Performance Optimization: A Complete Technical Guide',
     excerpt:
-      'Dive deep into website performance optimization with advanced techniques for reducing load times, improving Core Web Vitals, and scaling efficiently.',
+      'Affordable WordPress developer shares advanced WordPress speed optimization service techniques — reduce load times, improve Core Web Vitals, and scale your WordPress site efficiently.',
     category: 'Speed',
     readTime: '11 min read',
     date: 'April 30, 2025',
     image: '/blog/speed.png',
     gradient: 'from-cyan-500 to-emerald-500',
-    tags: ['Performance', 'Core Web Vitals', 'Optimization', 'CDN'],
+    tags: ['Performance', 'Core Web Vitals', 'Optimization', 'CDN', 'Professional WordPress', 'Affordable Web Design'],
     author: 'Upam',
+    relatedPosts: ['wp-speed-optimization', 'technical-seo-audit', 'ui-ux-best-practices'],
     content: [
       {
         type: 'heading',
@@ -1638,6 +1913,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'Web fonts can cause layout shifts and slow rendering. Use font-display: swap to show fallback text immediately while the custom font loads. Preload critical fonts with <link rel="preload">. Subset fonts to include only the characters you actually need (use tools like glyphhanger or fonttools). Consider system font stacks for body text — they render instantly and look native on every platform. Limit your site to 2-3 font weights to reduce download size.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: '10 Essential WordPress Speed Optimization Tips for 2025',
+            articleId: 'wp-speed-optimization',
+            description: 'Start with these essential WordPress-specific speed tips before diving into advanced optimization.',
+          },
+          {
+            title: 'Technical SEO Audit: A Step-by-Step Checklist for 2025',
+            articleId: 'technical-seo-audit',
+            description: 'Performance is a core part of technical SEO — audit and fix both together.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'Revenue Impact (100ms)', value: '-1% Sales' },
@@ -1659,14 +1949,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'ui-ux-best-practices',
     title: 'UI/UX Best Practices: Design Websites That Users Love',
     excerpt:
-      'Master the essential UI/UX design principles that create intuitive, beautiful, and high-converting website experiences for any audience.',
+      'Professional WordPress website design requires solid UI/UX fundamentals — master the design principles that create intuitive, beautiful, and high-converting web design services experiences.',
     category: 'Web Design',
     readTime: '9 min read',
     date: 'May 20, 2025',
     image: '/blog/webdesign.png',
     gradient: 'from-emerald-500 to-teal-500',
-    tags: ['UI/UX', 'Design', 'Usability', 'Conversion'],
+    tags: ['UI/UX', 'Design', 'Usability', 'Conversion', 'Web Design Services', 'Professional WordPress'],
     author: 'Upam',
+    relatedPosts: ['responsive-design-guide', 'wp-theme-customization', 'product-photography-tips'],
     content: [
       {
         type: 'heading',
@@ -1724,6 +2015,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
         text: 'Good design serves business goals. Every page should have a clear primary call-to-action (CTA) that stands out visually. Use action-oriented button text ("Get Your Free Quote" vs "Submit"). Reduce form friction: ask for minimal information, use inline validation, and show progress for multi-step forms. Leverage social proof strategically — place testimonials and trust indicators near decision points. Use urgency and scarcity carefully and honestly to motivate action.',
       },
       {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'Responsive Web Design: The Complete Developer Guide for 2025',
+            articleId: 'responsive-design-guide',
+            description: 'Responsive design is the foundation of modern UI/UX — ensure your site adapts to every screen.',
+          },
+          {
+            title: 'WordPress Theme Customization: From Starter to Stunning',
+            articleId: 'wp-theme-customization',
+            description: 'Apply UI/UX principles when customizing your WordPress theme for best results.',
+          },
+        ],
+      },
+      {
         type: 'stats',
         stats: [
           { label: 'First Impressions (Design)', value: '94%' },
@@ -1743,14 +2049,15 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
     id: 'responsive-design-guide',
     title: 'Responsive Web Design: The Complete Developer Guide for 2025',
     excerpt:
-      'Build fluid, adaptable websites that look perfect on every screen size with modern CSS techniques, responsive images, and mobile-first strategies.',
+      'Affordable WordPress web design services must include responsive design — build fluid, adaptable websites with modern CSS techniques, responsive images, and mobile-first strategies.',
     category: 'Web Design',
     readTime: '10 min read',
     date: 'February 10, 2025',
     image: '/blog/webdesign.png',
     gradient: 'from-teal-500 to-cyan-600',
-    tags: ['Responsive', 'CSS', 'Mobile-First', 'Breakpoints'],
+    tags: ['Responsive', 'CSS', 'Mobile-First', 'Breakpoints', 'Web Design Services', 'Affordable Web Design'],
     author: 'Upam',
+    relatedPosts: ['ui-ux-best-practices', 'wp-theme-customization', 'wp-speed-optimization'],
     content: [
       {
         type: 'heading',
@@ -1817,6 +2124,21 @@ define('MY_PLUGIN_URL', plugin_dir_url(__FILE__));
       {
         type: 'paragraph',
         text: 'Browser DevTools responsive mode is a start, but test on real devices whenever possible. Check for common responsive issues: text overflowing containers, horizontal scroll bars, tap targets too small on mobile, images not scaling properly, broken layouts at intermediate widths, and content hidden on small screens. Use services like BrowserStack or LambdaTest for cross-device testing. Validate with real users on mobile devices — they interact differently than desktop users.',
+      },
+      {
+        type: 'related-reading',
+        links: [
+          {
+            title: 'UI/UX Best Practices: Design Websites That Users Love',
+            articleId: 'ui-ux-best-practices',
+            description: 'Combine responsive design with solid UI/UX principles for the best user experience.',
+          },
+          {
+            title: 'WordPress Theme Customization: From Starter to Stunning',
+            articleId: 'wp-theme-customization',
+            description: 'Apply responsive design techniques when customizing WordPress themes.',
+          },
+        ],
       },
       {
         type: 'stats',
@@ -2002,6 +2324,22 @@ export default function BlogSection() {
   const handleLoadMore = () => {
     setVisibleCount((prev) => Math.min(prev + POSTS_PER_PAGE, articles.length));
   };
+
+  // Listen for blog-navigate events from internal links in article modal
+  const handleBlogNavigate = useCallback((e: Event) => {
+    const detail = (e as CustomEvent).detail as string;
+    if (detail) {
+      const idx = articles.findIndex((a) => a.id === detail);
+      if (idx !== -1) {
+        setOpenArticleIndex(idx);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('blog-navigate', handleBlogNavigate);
+    return () => window.removeEventListener('blog-navigate', handleBlogNavigate);
+  }, [handleBlogNavigate]);
 
   const handleTopicClick = (category: string) => {
     const matchIdx = articles.findIndex((a) => a.category === category);
