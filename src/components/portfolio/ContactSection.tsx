@@ -3,8 +3,6 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import {
-  Mail,
-  MapPin,
   Clock,
   Send,
   Loader2,
@@ -16,18 +14,6 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 const contactInfo = [
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'mailupamm@gmail.com',
-    href: 'mailto:mailupamm@gmail.com',
-  },
-  {
-    icon: MapPin,
-    label: 'Location',
-    value: 'Bangladesh',
-    href: null,
-  },
   {
     icon: Clock,
     label: 'Response Time',

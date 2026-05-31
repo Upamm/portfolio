@@ -1455,3 +1455,36 @@ Stage Summary:
 - Pricing page no longer has glow separators between sections
 - Comparison table now has a continuously rotating conic-gradient border glow + pulsing box-shadow
 - Both dark and light modes have properly styled animated glow effects
+
+---
+
+## Phase - Location/Email Removal & Cookie Light Mode Optimization
+
+### Current Project Status
+- **Overall**: Stable portfolio website, continuing refinement
+- **Build**: Zero lint errors, zero compilation errors
+- **Changes**: Removed personal location and email from About and Contact pages, optimized Cookie Consent for light mode
+
+### Completed Modifications
+
+1. **About Page - Removed Location** — Removed `MapPin` import and the "Location: Bangladesh" entry from `quickInfo` array in `AboutSection.tsx`. Quick info now shows 3 items: Experience (8+ Years), Availability (Full Time), Languages (English).
+
+2. **Contact Page - Removed Email & Location** — Removed `Mail` and `MapPin` imports from `ContactSection.tsx`. Removed the Email (`mailupamm@gmail.com`) and Location (`Bangladesh`) info cards from `contactInfo` array. Only "Response Time: Within 24 hours" remains in the contact info sidebar.
+
+3. **Cookie Consent Light Mode Optimization** — Added targeted CSS overrides in `globals.css` for the cookie consent banner in light mode:
+   - Close button hover background: `hover:bg-white/5` → `rgba(19, 78, 111, 0.08)` for visible hover state
+   - Decline button border: `border-slate-600/30` → `rgba(8, 145, 178, 0.2)` matching light theme palette
+   - Decline button hover border: `rgba(8, 145, 178, 0.4)` for clear hover feedback
+   - Icon container background: Adjusted gradient to lighter teal/emerald for better visibility on light card
+
+4. **WebDevReview Cron Job** — Created recurring cron job (ID: 178426) triggering every 15 minutes to automatically review, QA test, and continue development.
+
+### Files Modified
+- `src/components/portfolio/AboutSection.tsx` — Removed MapPin import and Location quick info entry
+- `src/components/portfolio/ContactSection.tsx` — Removed Mail/MapPin imports, Email and Location contact info entries
+- `src/app/globals.css` — Added 4 cookie consent light mode CSS overrides
+
+### Notes
+- Email references in Footer.tsx and WhatsAppFAB.tsx were intentionally preserved (not on about/contact pages)
+- Contact form email input field preserved (it's the user's email field, not personal email display)
+- All broad `.light` CSS text overrides already handle most cookie consent text colors

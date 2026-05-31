@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import {
-  MapPin,
   Clock,
   Globe,
   MessageCircle,
@@ -21,7 +20,6 @@ import { useToast } from '@/hooks/use-toast';
 const ABOUT_IMAGE = '/about-portrait.png';
 
 const quickInfo = [
-  { icon: MapPin, label: 'Location', value: 'Bangladesh' },
   { icon: Clock, label: 'Experience', value: '8+ Years' },
   { icon: Globe, label: 'Availability', value: 'Full Time' },
   { icon: MessageCircle, label: 'Languages', value: 'English' },
