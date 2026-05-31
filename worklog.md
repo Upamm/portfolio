@@ -1033,3 +1033,43 @@ Stage Summary:
 - Theme toggle properly syncs state between mobile and desktop instances
 - CSS approach uses attribute selectors to avoid modifying 30+ component files
 - White text is preserved on gradient buttons/badges through specific override rules
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Fix theme toggle switching, light mode text/bg colors, and add smooth theme transitions
+
+Work Log:
+- **Fixed ThemeToggle not switching back to dark mode:**
+  - Root cause: Previous `useSyncExternalStore` with `emptySubscribe` and `getCookie` in snapshot was unreliable — `document.cookie` may not be immediately readable after `setCookie`, and the subscribe callback never fired
+  - Rewrote ThemeToggle with module-level state (`currentTheme` variable) + proper listener pattern (`listeners` Set)
+  - `subscribe` function now properly registers/unregisters callbacks
+  - `setTheme` updates module-level state, sets cookie, and calls all listeners
+  - `initThemeFromCookie` reads cookie once on mount
+  - Toggle now uses `currentTheme` directly (instant read) instead of `getCookie` (async read)
+  - Added `AnimatePresence` for smooth icon transition (moon/sun rotate in/out with scale/opacity animation)
+
+- **Fixed CSS text/background colors in light mode:**
+  - Fixed `border-outline` → `border-border` (invalid Tailwind class causing 500 error)
+  - All existing light mode overrides verified and working
+
+- **Added smooth theme transition:**
+  - Added `.transitioning` CSS class on `<html>` element during theme switch
+  - `html.transitioning *` applies 0.4s background-color, 0.3s color/border-color/box-shadow transitions
+  - Transitioning class auto-removed after 500ms via setTimeout
+  - ThemeToggle icon uses AnimatePresence with rotate + scale + opacity animation
+
+- **Verified:**
+  - Toggle works both dark→light and light→dark
+  - Rapid toggling (4x in 2s) is stable
+  - All sections visible in light mode (Hero, Services, Portfolio, Pricing, FAQ, Contact)
+  - Contact form fields visible (Name, Email, Subject, Message, Send)
+  - Mobile viewport (390x844) shows theme toggle correctly
+  - Lint passes with 0 errors
+  - Build compiles with GET / 200
+
+Stage Summary:
+- Theme toggle is 100% reliable with module-level state management
+- Smooth CSS transitions (0.3-0.4s) when switching themes
+- Moon/Sun icon animation with rotate/scale/opacity
+- All text and backgrounds properly colored in light mode across all sections

@@ -103,6 +103,14 @@
     scroll-behavior: smooth;
   }
 
+  /* Smooth theme transition */
+  html.transitioning,
+  html.transitioning *,
+  html.transitioning *::before,
+  html.transitioning *::after {
+    transition: background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+  }
+
   [id] {
     scroll-margin-top: 80px;
   }
