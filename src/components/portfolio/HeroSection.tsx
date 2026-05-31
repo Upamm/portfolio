@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
-import { Briefcase, Users, FolderOpen, Award, Download, ArrowRight, ChevronDown } from 'lucide-react';
+import { Briefcase, Users, FolderOpen, Award, Download, ArrowRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const FIVERR_IMAGE = 'https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_original/v1/attachments/profile/photo/c4f0de1b0c500594ed3b984332754e19-1551338465000/ade0268f-4643-49c9-804b-c301b683facb.jpg';
@@ -101,7 +101,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-grid opacity-20" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-4 sm:py-8 lg:py-12">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-4 sm:py-8 lg:py-12 pb-20 sm:pb-24 lg:pb-28">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -239,7 +239,7 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Scroll Down */}
+      {/* Scroll Down Indicator */}
       <motion.a
         href="#about"
         initial={{ opacity: 0 }}
@@ -250,31 +250,23 @@ export default function HeroSection() {
           const nav = (window as unknown as Record<string, unknown>).__navigateTo as ((p: string) => void) | undefined;
           nav?.('about');
         }}
-        className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5 cursor-pointer group z-10"
+        className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group z-10"
       >
-        <span className="text-[10px] sm:text-xs text-slate-500 uppercase tracking-[0.25em] font-medium group-hover:text-teal-400 transition-colors duration-300">
-          Scroll Down
-        </span>
         {/* Mouse icon with animated dot */}
         <motion.div
-          animate={{ y: [0, 4, 0] }}
+          animate={{ y: [0, 3, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-          className="relative w-7 h-11 rounded-full border-2 border-slate-600/40 group-hover:border-teal-500/50 flex items-start justify-center pt-2 transition-colors duration-300"
+          className="relative w-6 h-10 sm:w-7 sm:h-11 rounded-full border-2 border-slate-600/40 group-hover:border-teal-500/50 flex items-start justify-center pt-2 transition-colors duration-300"
         >
           <motion.div
-            animate={{ y: [0, 10, 0], opacity: [1, 0.2, 1] }}
+            animate={{ y: [0, 8, 0], opacity: [1, 0.2, 1] }}
             transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
             className="w-1 h-1.5 rounded-full bg-teal-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]"
           />
         </motion.div>
-        {/* Chevron arrow below mouse */}
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut', delay: 0.3 }}
-          className="group-hover:text-teal-400 text-slate-600/50 transition-colors duration-300"
-        >
-          <ChevronDown className="w-5 h-5" />
-        </motion.div>
+        <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase tracking-[0.2em] font-medium group-hover:text-teal-400 transition-colors duration-300">
+          Scroll
+        </span>
       </motion.a>
     </section>
   );

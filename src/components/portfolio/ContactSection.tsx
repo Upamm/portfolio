@@ -191,7 +191,7 @@ export default function ContactSection() {
               <h4 className="text-sm font-medium text-slate-400 mb-3">
                 Find me on
               </h4>
-              <div className="flex gap-3">
+              <div className="flex gap-3 justify-center lg:justify-start">
                 {socialLinks.map((link) => (
                   <a
                     key={link.name}
@@ -215,7 +215,7 @@ export default function ContactSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.6 }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-green-500 text-white font-medium text-sm hover:from-green-500 hover:to-green-400 transition-all duration-300 shadow-lg shadow-green-500/20 hover:shadow-green-500/30 hover:scale-105"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-green-500 text-white font-medium text-sm hover:from-green-500 hover:to-green-400 transition-all duration-300 shadow-lg shadow-green-500/20 hover:shadow-green-500/30 hover:scale-105"
             >
               <ExternalLink className="w-4 h-4" />
               Hire Me on Fiverr

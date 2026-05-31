@@ -275,10 +275,10 @@ export default function BlogArticleModal({
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-4">
                   <button
                     onClick={() => onClose()}
-                    className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/25"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/25"
                   >
                     Back to Blog
                     <ArrowRight className="w-4 h-4" />
@@ -287,7 +287,7 @@ export default function BlogArticleModal({
                     onClick={() => {
                       onClose();
                     }}
-                    className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm font-medium text-slate-300 border border-white/10 hover:border-teal-500/30 hover:text-teal-300 transition-all duration-300"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm font-medium text-slate-300 border border-white/10 hover:border-teal-500/30 hover:text-teal-300 transition-all duration-300"
                   >
                     Share This Article
                   </button>
