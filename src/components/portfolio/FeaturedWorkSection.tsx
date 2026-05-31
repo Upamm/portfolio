@@ -1,8 +1,24 @@
 'use client';
 
 import { useRef, useCallback, useState } from 'react';
+import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
-import { ArrowRight, ExternalLink } from 'lucide-react';
+import {
+  ArrowRight,
+  ExternalLink,
+  ShoppingCart,
+  Heart,
+  Building2,
+  UtensilsCrossed,
+  GraduationCap,
+  Dumbbell,
+  Plane,
+  Scale,
+  Cpu,
+  Sun,
+  Shirt,
+  PawPrint,
+} from 'lucide-react';
 
 interface FeaturedWorkSectionProps {
   onNavigate?: (page: string) => void;
@@ -14,24 +30,108 @@ const featuredProjects = [
     tag: 'eCommerce',
     description:
       'Full WooCommerce build with 5,000+ products, custom checkout flow, and 95+ PageSpeed score. Generated $2M+ in annual revenue.',
-    gradient: 'from-teal-500 to-cyan-500',
-    geometricShape: 'circle',
+    image: '/featured-ecommerce.png',
+    icon: ShoppingCart,
+    accent: 'from-teal-500 to-cyan-500',
   },
   {
     title: 'MedCare Health Portal',
     tag: 'Healthcare',
     description:
-      'HIPAA-compliant patient portal with appointment booking, telemedicine integration, and medical records management system.',
-    gradient: 'from-emerald-500 to-teal-500',
-    geometricShape: 'square',
+      'HIPAA-compliant patient portal with appointment booking, telemedicine integration, and medical records management.',
+    image: '/featured-healthcare.png',
+    icon: Heart,
+    accent: 'from-emerald-500 to-teal-500',
   },
   {
     title: 'PropTech Real Estate',
     tag: 'Real Estate',
     description:
       'Property listing platform with MLS/IDX integration, virtual tours, and mortgage calculator. 300% increase in leads.',
-    gradient: 'from-cyan-500 to-emerald-500',
-    geometricShape: 'circle',
+    image: '/featured-realestate.png',
+    icon: Building2,
+    accent: 'from-cyan-500 to-emerald-500',
+  },
+  {
+    title: 'FreshBite Restaurant',
+    tag: 'Restaurant',
+    description:
+      'Online ordering system with real-time menu, table reservations, and delivery tracking. 45% increase in online orders.',
+    image: '/featured-restaurant.png',
+    icon: UtensilsCrossed,
+    accent: 'from-teal-500 to-emerald-500',
+  },
+  {
+    title: 'EduLearn Academy',
+    tag: 'Education',
+    description:
+      'Learning management system with video courses, quizzes, certificates, and student progress tracking for 10,000+ students.',
+    image: '/featured-education.png',
+    icon: GraduationCap,
+    accent: 'from-emerald-500 to-cyan-500',
+  },
+  {
+    title: 'FitLife Gym & Fitness',
+    tag: 'Fitness',
+    description:
+      'Fitness center website with class scheduling, membership management, trainer profiles, and workout tracking integration.',
+    image: '/featured-fitness.png',
+    icon: Dumbbell,
+    accent: 'from-cyan-500 to-teal-500',
+  },
+  {
+    title: 'TravelVista Agency',
+    tag: 'Travel',
+    description:
+      'Travel booking platform with destination guides, hotel search, itinerary builder, and real-time availability checker.',
+    image: '/featured-travel.png',
+    icon: Plane,
+    accent: 'from-teal-500 to-cyan-500',
+  },
+  {
+    title: 'LegalEdge Law Firm',
+    tag: 'Legal',
+    description:
+      'Professional law firm website with attorney profiles, practice areas, case results, and online consultation booking.',
+    image: '/featured-legal.png',
+    icon: Scale,
+    accent: 'from-emerald-500 to-teal-500',
+  },
+  {
+    title: 'TechStart SaaS Hub',
+    tag: 'SaaS',
+    description:
+      'Startup landing page with feature showcases, pricing tables, API documentation, and analytics dashboard integration.',
+    image: '/featured-startup.png',
+    icon: Cpu,
+    accent: 'from-cyan-500 to-emerald-500',
+  },
+  {
+    title: 'GreenSolar Energy',
+    tag: 'Energy',
+    description:
+      'Solar energy company website with energy calculator, service area map, project gallery, and quote request system.',
+    image: '/featured-energy.png',
+    icon: Sun,
+    accent: 'from-teal-500 to-emerald-500',
+  },
+  {
+    title: 'FashionNova Boutique',
+    tag: 'Fashion',
+    description:
+      'Luxury fashion online store with lookbook gallery, size guide, wishlist, and seamless checkout experience.',
+    image: '/featured-fashion.png',
+    icon: Shirt,
+    accent: 'from-emerald-500 to-cyan-500',
+  },
+  {
+    title: 'PetCare Veterinary Clinic',
+    tag: 'Veterinary',
+    description:
+      'Veterinary clinic website with appointment booking, pet health records, service catalog, and emergency contact system.',
+    image: '/featured-veterinary.png',
+    icon: PawPrint,
+    accent: 'from-cyan-500 to-teal-500',
   },
 ];
 
@@ -45,6 +145,8 @@ function FeaturedCard({
   isInView: boolean;
 }) {
   const [shinePosition, setShinePosition] = useState({ x: 50, y: 50 });
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const IconComp = project.icon;
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -77,12 +179,12 @@ function FeaturedCard({
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: 0.1 * index }}
+      transition={{ duration: 0.5, delay: 0.08 + index * 0.06 }}
       className="glass-card card-spotlight rounded-2xl overflow-hidden group cursor-pointer hover-glow transition-transform duration-300 hover:-translate-y-1 relative"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Spotlight radial glow following mouse */}
+      {/* Spotlight radial glow */}
       <div
         className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl z-10"
         style={{
@@ -90,71 +192,59 @@ function FeaturedCard({
         }}
       />
 
-      {/* Gradient Placeholder Image Area */}
-      <div
-        className={`relative h-48 sm:h-56 lg:h-64 bg-gradient-to-br ${project.gradient} overflow-hidden`}
-      >
-        {/* Grid overlay pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.08]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
-          }}
-        />
-        {/* Dot overlay pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.12]"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-          }}
+      {/* Image Area */}
+      <div className="relative h-44 sm:h-52 lg:h-56 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
+        {/* AI-generated image */}
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          className={`object-cover transition-all duration-700 group-hover:scale-105 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          onLoad={() => setImgLoaded(true)}
         />
 
-        {/* Floating geometric shape */}
-        {project.geometricShape === 'circle' ? (
-          <div
-            className={`absolute top-6 right-6 sm:top-10 sm:right-10 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br ${project.gradient} opacity-20 blur-[1px] group-hover:opacity-30 transition-opacity duration-500 group-hover:scale-110 transform`}
-          />
-        ) : (
-          <div
-            className={`absolute bottom-6 left-6 sm:bottom-10 sm:left-10 w-14 h-14 sm:w-18 sm:h-18 rounded-lg bg-gradient-to-br ${project.gradient} opacity-20 blur-[1px] rotate-12 group-hover:opacity-30 transition-opacity duration-500 group-hover:scale-110 transform`}
-          />
-        )}
+        {/* Fallback: illustration icon while image loads */}
+        <div
+          className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${imgLoaded ? 'opacity-0' : 'opacity-100'}`}
+        >
+          <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${project.accent} flex items-center justify-center shadow-xl opacity-30`}>
+            <IconComp className="w-8 h-8 sm:w-10 sm:h-10 text-white" strokeWidth={1.5} />
+          </div>
+        </div>
 
         {/* Tag Badge */}
-        <div className="absolute top-4 left-4 z-10">
-          <span className="inline-flex items-center text-xs font-medium px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm text-teal-300 border border-white/5">
+        <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-10">
+          <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-medium px-2.5 sm:px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-teal-300 border border-white/10">
+            <IconComp className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             {project.tag}
           </span>
         </div>
 
         {/* External link icon on hover */}
-        <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
-          <div className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <ExternalLink className="w-4 h-4 text-white/80" />
+        <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10">
+            <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
           </div>
         </div>
 
-        {/* Bottom gradient fade into card */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0f1f38]/80 to-transparent" />
+        {/* Bottom gradient fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#0a1628] to-transparent" />
       </div>
 
       {/* Content Area */}
-      <div className="p-5 sm:p-6">
-        <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-teal-300 transition-colors duration-300">
+      <div className="p-4 sm:p-5 lg:p-6">
+        <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white group-hover:text-teal-300 transition-colors duration-300 line-clamp-1">
           {project.title}
         </h3>
-        <p className="text-slate-400 text-sm leading-relaxed mt-2">
+        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mt-2 line-clamp-2">
           {project.description}
         </p>
 
         {/* View Details Link */}
-        <div className="mt-4 flex items-center gap-1.5 text-teal-400 hover:text-teal-300 transition-colors duration-200 group/link cursor-pointer">
-          <span className="text-sm font-medium">View Details</span>
-          <ArrowRight className="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform duration-200" />
+        <div className="mt-3 sm:mt-4 flex items-center gap-1.5 text-teal-400 hover:text-teal-300 transition-colors duration-200 group/link cursor-pointer">
+          <span className="text-xs sm:text-sm font-medium">View Details</span>
+          <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/link:translate-x-0.5 transition-transform duration-200" />
         </div>
       </div>
 
@@ -166,14 +256,13 @@ function FeaturedCard({
 
 export default function FeaturedWorkSection({ onNavigate }: FeaturedWorkSectionProps) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
     <section id="featured-work" className="relative py-16 sm:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-dots opacity-20" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
-      {/* Decorative gradient blobs */}
       <div className="absolute top-1/4 left-0 w-80 h-80 bg-teal-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-0 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/[0.03] rounded-full blur-3xl" />
@@ -194,12 +283,12 @@ export default function FeaturedWorkSection({ onNavigate }: FeaturedWorkSectionP
           </h2>
           <span className="section-heading-line" />
           <p className="text-slate-400 mt-6 max-w-2xl mx-auto">
-            A selection of my best recent work
+            A selection of my best recent work across diverse industries
           </p>
         </motion.div>
 
-        {/* Featured Cards — stacked on mobile, 3-col grid on desktop */}
-        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* Featured Cards Grid — 1 col mobile, 2 col sm/md, 3 col lg, 4 col xl */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-6">
           {featuredProjects.map((project, index) => (
             <FeaturedCard
               key={project.title}
@@ -214,7 +303,7 @@ export default function FeaturedWorkSection({ onNavigate }: FeaturedWorkSectionP
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
           className="flex justify-center mt-10 sm:mt-16"
         >
           <button
