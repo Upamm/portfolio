@@ -1916,3 +1916,31 @@ Added invisible honeypot field:
 
 ### Priority Recommendations for Next Phase
 1. Continue style and feature improvements via cron review cycle
+
+---
+Task ID: scroll-top-fix-animate
+Agent: Main Agent
+Task: Fix position of "go to top" button on right side and add animated background
+
+Work Log:
+- Read current ScrollToTop.tsx component (fixed bottom-40 right-6, 3-layer framer-motion glow)
+- Read WhatsAppFAB.tsx and FloatingHireFAB.tsx to understand button layout on screen
+- Added comprehensive CSS keyframes in globals.css for scroll-to-top button:
+  - scroll-top-bg-cycle: 3-color gradient cycle (teal→emerald→cyan) for dark mode
+  - scroll-top-bg-cycle-hover: Intensified version for hover state
+  - scroll-top-glow-pulse / scroll-top-glow-mid: Outer and mid glow ring animations
+  - scroll-top-icon-cycle: Arrow icon color cycling
+  - Full light mode variants: scroll-top-bg-cycle-light, scroll-top-icon-cycle-light, etc.
+- Rewrote ScrollToTop.tsx to use CSS classes instead of framer-motion for animations (more performant)
+- Position fixed at right-6 bottom-44 (proper spacing above WhatsApp/Email FABs)
+- Removed isHovered state (now handled purely by CSS :hover)
+- Removed framer-motion animate props for background (using CSS animations instead)
+- Verified in browser via agent-browser + VLM: button visible with animated gradient background
+
+Stage Summary:
+- Scroll-to-top button position: fixed right-6 bottom-44 (above WhatsApp group)
+- Background animation: CSS keyframe 4s cycle through teal→emerald→cyan gradients
+- Hover state: Faster 2s cycle with intensified colors and glow
+- Light mode: Separate color palette (darker teal/emerald tones)
+- All animations GPU-accelerated via CSS transforms and opacity
+- Cron job created (ID: 178586) for 15-min auto QA cycles
