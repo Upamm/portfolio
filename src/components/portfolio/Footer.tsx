@@ -24,13 +24,13 @@ export default function Footer({ onNavigate }: FooterProps) {
       {/* Wave Divider */}
       <div className="wave-divider">
         <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z" fill="rgba(6, 182, 212, 0.04)" />
-          <path d="M0,55 C240,20 480,70 720,40 C960,10 1200,60 1440,55 L1440,80 L0,80 Z" fill="rgba(6, 15, 29, 1)" />
+          <path className="wave-accent" d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z" />
+          <path className="wave-body" d="M0,55 C240,20 480,70 720,40 C960,10 1200,60 1440,55 L1440,80 L0,80 Z" />
         </svg>
       </div>
 
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#060f1d] to-[#040b16]" style={{ top: '60px' }} />
+      <div className="absolute inset-0 footer-bg" style={{ top: '60px' }} />
 
       {/* CTA Banner */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
