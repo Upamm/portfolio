@@ -19,8 +19,8 @@ const contactInfo = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'Contact via form',
-    href: '#contact-form',
+    value: 'mailupamm@gmail.com',
+    href: 'mailto:mailupamm@gmail.com',
   },
   {
     icon: MapPin,
@@ -176,12 +176,21 @@ export default function ContactSection() {
                   <div className="w-11 h-11 rounded-lg bg-teal-500/10 flex items-center justify-center shrink-0">
                     <info.icon className="w-5 h-5 text-teal-400" />
                   </div>
-                  <div>
-                    <p className="text-xs text-slate-500">{info.label}</p>
-                    <p className="text-sm font-medium text-white">
-                      {info.value}
-                    </p>
-                  </div>
+                  {info.href ? (
+                    <a
+                      href={info.href}
+                      className="hover:text-teal-400 transition-colors"
+                      {...(info.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      <p className="text-xs text-slate-500">{info.label}</p>
+                      <p className="text-sm font-medium text-white">{info.value}</p>
+                    </a>
+                  ) : (
+                    <div>
+                      <p className="text-xs text-slate-500">{info.label}</p>
+                      <p className="text-sm font-medium text-white">{info.value}</p>
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>

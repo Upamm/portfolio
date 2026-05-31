@@ -19,7 +19,7 @@ function ContentBlock({ block, index }: { block: BlogContentBlock; index: number
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.03 }}
-        className="text-lg sm:text-xl font-bold text-white mt-8 mb-3 flex items-start gap-2"
+        className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white mt-8 lg:mt-10 mb-3 lg:mb-4 flex items-start gap-2"
       >
         <span className="w-1 h-6 rounded-full bg-gradient-to-b from-teal-400 to-emerald-400 flex-shrink-0 mt-0.5" />
         <span>{block.text}</span>
@@ -33,7 +33,7 @@ function ContentBlock({ block, index }: { block: BlogContentBlock; index: number
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.03 }}
-        className="text-slate-400 leading-relaxed text-sm sm:text-base mb-4"
+        className="text-slate-400 leading-relaxed text-sm sm:text-base lg:text-[17px] mb-4 lg:mb-5"
       >
         {block.text}
       </motion.p>
@@ -51,7 +51,7 @@ function ContentBlock({ block, index }: { block: BlogContentBlock; index: number
         {block.items?.map((item, i) => (
           <li
             key={i}
-            className="flex items-start gap-3 text-sm sm:text-base text-slate-400"
+            className="flex items-start gap-3 text-sm sm:text-base lg:text-[17px] text-slate-400"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-2 flex-shrink-0" />
             <span className="leading-relaxed">{item}</span>
@@ -167,10 +167,10 @@ export default function BlogArticleModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.96 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="fixed inset-0 z-[101] flex items-center justify-center p-3 sm:p-4 md:p-6 pointer-events-none"
+            className="fixed inset-0 z-[101] flex items-center justify-center p-2 sm:p-4 md:p-6 lg:p-8 pointer-events-none"
           >
             <div
-              className="relative w-full max-w-3xl max-h-[90vh] sm:max-h-[92vh] rounded-2xl overflow-hidden pointer-events-auto glass-card border border-white/10 shadow-2xl shadow-black/40 flex flex-col mx-auto"
+              className="relative w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl max-h-[92vh] sm:max-h-[94vh] md:max-h-[95vh] rounded-2xl overflow-hidden pointer-events-auto glass-card border border-white/10 shadow-2xl shadow-black/40 flex flex-col mx-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Image Header */}
@@ -216,7 +216,7 @@ export default function BlogArticleModal({
               {/* Scrollable Content */}
               <div
                 ref={contentRef}
-                className="overflow-y-auto overflow-x-hidden flex-1 p-4 sm:p-6 md:p-8"
+                className="overflow-y-auto overflow-x-hidden flex-1 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 scroll-smooth"
               >
                 {/* Meta info */}
                 <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4">
@@ -231,7 +231,7 @@ export default function BlogArticleModal({
                 </div>
 
                 {/* Full title */}
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-tight mb-4">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4 lg:mb-5">
                   {article.title}
                 </h1>
 
@@ -255,7 +255,7 @@ export default function BlogArticleModal({
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="relative w-full h-36 sm:h-44 md:h-48 rounded-xl overflow-hidden mb-6 sm:mb-8"
+                  className="relative w-full h-40 sm:h-52 md:h-60 lg:h-72 rounded-xl overflow-hidden mb-6 sm:mb-8 lg:mb-10"
                 >
                   <Image
                     src={article.image}
@@ -275,7 +275,7 @@ export default function BlogArticleModal({
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-4">
+                <div className="mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-4 pb-2">
                   <button
                     onClick={() => onClose()}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/25"

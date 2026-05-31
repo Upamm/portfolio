@@ -60,6 +60,20 @@ export default function HeroSection() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+
+  // Hide scroll indicator when user scrolls
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 60) {
+        setShowScrollIndicator(false);
+      } else {
+        setShowScrollIndicator(true);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Typing animation
   useEffect(() => {
@@ -239,18 +253,18 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Scroll Down Indicator */}
+      {/* Scroll Down Indicator - hides on scroll */}
       <motion.a
         href="#about"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
+        animate={{ opacity: showScrollIndicator ? 1 : 0, y: showScrollIndicator ? 0 : 10 }}
+        transition={{ delay: 1.5, duration: 0.3 }}
         onClick={(e) => {
           e.preventDefault();
           const nav = (window as unknown as Record<string, unknown>).__navigateTo as ((p: string) => void) | undefined;
           nav?.('about');
         }}
-        className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group z-10"
+        className="absolute bottom-10 sm:bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group z-10 pointer-events-none"
       >
         {/* Mouse icon with animated dot */}
         <motion.div

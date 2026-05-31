@@ -9,6 +9,7 @@ import {
   Headphones,
   Database,
   Shield,
+  ArrowRight,
 } from 'lucide-react';
 
 const services = [
@@ -18,6 +19,7 @@ const services = [
     description:
       'Complete WordPress site management including custom theme customization, responsive design implementation, and plugin configuration for optimal functionality.',
     gradient: 'from-teal-500 to-cyan-500',
+    fiverrGig: 'https://www.fiverr.com/upam1721',
   },
   {
     icon: Zap,
@@ -25,6 +27,7 @@ const services = [
     description:
       'Performance tuning with advanced caching strategies, image optimization, code minification, and server-side improvements for lightning-fast load times.',
     gradient: 'from-emerald-500 to-teal-500',
+    fiverrGig: 'https://www.fiverr.com/upam1721',
   },
   {
     icon: Target,
@@ -32,6 +35,7 @@ const services = [
     description:
       'Targeted prospect list building, company research, decision-maker identification, and verified contact information for your outreach campaigns.',
     gradient: 'from-cyan-500 to-teal-500',
+    fiverrGig: 'https://www.fiverr.com/upam1721',
   },
   {
     icon: Headphones,
@@ -39,6 +43,7 @@ const services = [
     description:
       'Comprehensive admin support including email management, calendar scheduling, data entry, CRM management, and daily operational tasks.',
     gradient: 'from-teal-500 to-emerald-500',
+    fiverrGig: 'https://www.fiverr.com/upam1721',
   },
   {
     icon: Database,
@@ -46,6 +51,7 @@ const services = [
     description:
       'Accurate web research, data scraping, LinkedIn contact extraction, email hunting, and organized data compilation in your preferred format.',
     gradient: 'from-emerald-500 to-cyan-500',
+    fiverrGig: 'https://www.fiverr.com/upam1721',
   },
   {
     icon: Shield,
@@ -53,6 +59,7 @@ const services = [
     description:
       'Regular updates, security monitoring, automated backups, malware scanning, uptime monitoring, and performance checks for peace of mind.',
     gradient: 'from-cyan-500 to-teal-500',
+    fiverrGig: 'https://www.fiverr.com/upam1721',
   },
 ];
 
@@ -137,8 +144,20 @@ function TiltCard({
         {service.description}
       </p>
 
-      {/* Bottom accent */}
-      <div className="mt-6 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full transition-all duration-500" />
+      {/* Bottom accent + Get Started link */}
+      <div className="mt-6 flex items-center gap-3">
+        <div className="h-0.5 flex-1 group-hover:w-full bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full transition-all duration-500" />
+        <a
+          href={service.fiverrGig}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-400 hover:text-teal-300 transition-colors duration-200 shrink-0 group-hover:gap-2.5"
+          onClick={(e) => e.stopPropagation()}
+        >
+          Get Started
+          <ArrowRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
     </motion.div>
   );
 }
