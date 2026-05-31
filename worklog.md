@@ -2004,3 +2004,30 @@ Stage Summary:
 3. **Low**: Accessibility audit (ARIA labels, keyboard navigation, screen reader compatibility)
 4. **Low**: SEO meta tags verification (Open Graph, Twitter Cards, structured data)
 5. **Low**: Add real blog article content pages (currently shows 20 articles with modal popups)
+
+---
+
+## FAB Removal (User Request)
+
+### Task
+User requested: "remove floating hire me and whatsapp and mail button"
+
+### Changes Made
+1. **Removed FloatingHireFAB.tsx** — Deleted the "Hire Me" FAB button component (bottom-left, linked to Fiverr)
+2. **Removed WhatsAppFAB.tsx** — Deleted the component containing both WhatsApp and Email FAB buttons (bottom-right)
+3. **Updated PortfolioApp.tsx** — Removed imports and JSX rendering of FloatingHireFAB and WhatsAppFAB
+4. **Updated ScrollToTop.tsx** — Changed position from `bottom-44` to `bottom-6` since FAB buttons no longer occupy the bottom-right area
+
+### Files Deleted
+- `src/components/portfolio/FloatingHireFAB.tsx`
+- `src/components/portfolio/WhatsAppFAB.tsx`
+
+### Files Modified
+- `src/components/portfolio/PortfolioApp.tsx` — Removed FAB imports and JSX
+- `src/components/portfolio/ScrollToTop.tsx` — Repositioned from bottom-44 to bottom-6
+
+### Verification
+- `bun run lint` passes with 0 errors
+
+### Important User Rule
+- **NEVER add features without user permission — always suggest first, wait for approval**

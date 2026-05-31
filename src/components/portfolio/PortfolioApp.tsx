@@ -30,8 +30,6 @@ const FAQSection = dynamic(() => import('./FAQSection'), { ssr: false });
 const ContactSection = dynamic(() => import('./ContactSection'), { ssr: false });
 
 // Global components (always loaded)
-import FloatingHireFAB from './FloatingHireFAB';
-import WhatsAppFAB from './WhatsAppFAB';
 import CookieConsent from './CookieConsent';
 import ScrollToTop from './ScrollToTop';
 
@@ -250,8 +248,6 @@ export default function PortfolioApp() {
       </main>
 
       <Footer onNavigate={navigateTo} />
-      <FloatingHireFAB />
-      <WhatsAppFAB />
       <ScrollToTop />
       <CookieConsent />
     </>
