@@ -726,3 +726,67 @@ Comprehensive layout fixes across all 25 portfolio components, global consistenc
 
 ### Cron Job Created
 - 15-minute webDevReview cron job (ID: 177497)
+
+---
+
+## Phase 10 - Blog Enhancement & UI Cleanup Round (2026-06-01)
+
+### Current Project Status Assessment
+- **Overall**: Production-quality portfolio with 23 components, 1 API route, 1 DB model
+- **Build**: Zero lint errors, zero compilation errors, all 200 OK responses
+- **Console**: Zero runtime errors
+
+### Changes Made
+
+1. **Removed ScrollToTop Progress Circle** — Removed the `ScrollToTop.tsx` circular progress button from the right side of the screen (was fixed at `bottom-8 right-8`). The component file is retained but no longer imported or rendered in `PortfolioApp.tsx`. The top scroll progress bar (`ScrollProgress.tsx`) remains active.
+
+2. **Blog Section Major Enhancement** — Completely rewrote `BlogSection.tsx` with:
+   - **6 articles** (up from 3), covering: WordPress Speed Optimization, B2B Lead Generation, Virtual Assistant, WordPress Security, WooCommerce Setup, SEO Fundamentals
+   - Each article has: unique `id`, `author` field, 4 tags (up from 3), longer excerpts
+   - **Full article content** added to each article as structured `BlogContentBlock[]` arrays with types: `heading`, `paragraph`, `list`, `tip`, `stats`, `code`
+   - Blog cards now show: read time badge on gradient header, author name in meta, tag overflow counter (+N)
+   - "Read Full Article" link text updated on cards
+
+3. **BlogArticleModal Major Enhancement** — Completely rewrote `BlogArticleModal.tsx`:
+   - **Scrollable content area** with `overflow-y-auto` and `max-h-[90vh]` for long articles
+   - **Full article content rendering** with `ContentBlock` component supporting:
+     - Headings with teal accent bar
+     - Paragraphs with proper spacing
+     - Bullet lists with teal dot markers
+     - Pro Tip blocks with teal border and Lightbulb icon
+     - Stats grids (2x2 mobile, 4-col desktop) with gradient values
+     - Code blocks with Code2 icon
+   - Added `User` icon for author metadata
+   - Added gradient divider between meta and content
+   - Bottom CTA with "Back to Blog" and "Share This Article" buttons
+   - Scroll position resets on article change
+   - Removed unused `DialogScrollContent` import (using regular DialogContent with scrollable inner div)
+
+4. **Popular Topics Section** — Added below blog grid in BlogSection:
+   - 6 clickable topic buttons: WordPress Development, E-Commerce & WooCommerce, SEO & Marketing, Lead Generation, Business & Productivity, Website Security
+   - Each shows article count
+   - Clicking opens the first matching article modal
+   - Glass morphism cards with hover border highlight
+
+### Files Modified
+- `src/components/portfolio/PortfolioApp.tsx` — Removed ScrollToTop import and rendering
+- `src/components/portfolio/BlogSection.tsx` — Complete rewrite with 6 articles, full content, Popular Topics section
+- `src/components/portfolio/BlogArticleModal.tsx` — Complete rewrite with scrollable full-content rendering
+
+### Technical Notes
+- `bun run lint` passes with 0 errors
+- Dev server compiles successfully with zero errors
+- Blog content is comprehensive (each article 500-1500 words)
+- No blue/indigo colors used — dark navy/teal/emerald theme preserved
+
+### Priority Recommendations for Next Phase
+1. **High**: Add blog article images/illustrations for each article
+2. **High**: Add blog category filtering (filter by WordPress, SEO, Business, etc.)
+3. **Medium**: Add "Share This Article" functionality (Twitter, LinkedIn, copy link)
+4. **Medium**: Add estimated read progress indicator in modal
+5. **Medium**: Implement dark/light theme toggle for accessibility
+6. **Low**: Add blog search functionality
+7. **Low**: Performance optimization (image lazy loading, code splitting)
+
+### Cron Job Created
+- 15-minute webDevReview cron job (ID: 177524)

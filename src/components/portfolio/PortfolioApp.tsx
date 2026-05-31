@@ -30,7 +30,6 @@ const ContactSection = dynamic(() => import('./ContactSection'), { ssr: false })
 import FloatingHireFAB from './FloatingHireFAB';
 import WhatsAppFAB from './WhatsAppFAB';
 import ScrollProgress from './ScrollProgress';
-import ScrollToTop from './ScrollToTop';
 import CookieConsent from './CookieConsent';
 
 export type PageKey = 'home' | 'about' | 'services' | 'portfolio' | 'pricing' | 'blog' | 'faq' | 'contact';
@@ -181,7 +180,6 @@ export default function PortfolioApp() {
       <Footer onNavigate={navigateTo} />
       <FloatingHireFAB />
       <WhatsAppFAB />
-      <ScrollToTop />
       <CookieConsent />
     </>
   );

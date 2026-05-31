@@ -1,41 +1,155 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Calendar, Clock, ArrowRight, X } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, X, User, Lightbulb, TrendingUp, Code2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
   DialogClose,
+  DialogScrollContent,
 } from '@/components/ui/dialog';
+import type { BlogArticle, BlogContentBlock } from './BlogSection';
 
 export type ArticleModalProps = {
-  article: {
-    title: string;
-    excerpt: string;
-    category: string;
-    readTime: string;
-    date: string;
-    gradient: string;
-    tags: string[];
-  } | null;
+  article: BlogArticle | null;
   isOpen: boolean;
   onClose: () => void;
 };
+
+function ContentBlock({ block, index }: { block: BlogContentBlock; index: number }) {
+  if (block.type === 'heading') {
+    return (
+      <motion.h3
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.03 }}
+        className="text-lg sm:text-xl font-bold text-white mt-8 mb-3 flex items-center gap-2"
+      >
+        <span className="w-1 h-6 rounded-full bg-gradient-to-b from-teal-400 to-emerald-400 flex-shrink-0" />
+        {block.text}
+      </motion.h3>
+    );
+  }
+
+  if (block.type === 'paragraph') {
+    return (
+      <motion.p
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.03 }}
+        className="text-slate-400 leading-relaxed text-sm sm:text-base mb-4"
+      >
+        {block.text}
+      </motion.p>
+    );
+  }
+
+  if (block.type === 'list') {
+    return (
+      <motion.ul
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.03 }}
+        className="space-y-2.5 mb-6"
+      >
+        {block.items?.map((item, i) => (
+          <li
+            key={i}
+            className="flex items-start gap-3 text-sm sm:text-base text-slate-400"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-2 flex-shrink-0" />
+            <span className="leading-relaxed">{item}</span>
+          </li>
+        ))}
+      </motion.ul>
+    );
+  }
+
+  if (block.type === 'tip') {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.03 }}
+        className="my-6 p-4 sm:p-5 rounded-xl bg-teal-500/5 border border-teal-500/20"
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <Lightbulb className="w-4 h-4 text-teal-400" />
+          <span className="text-sm font-semibold text-teal-400">Pro Tip</span>
+        </div>
+        <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
+          {block.text}
+        </p>
+      </motion.div>
+    );
+  }
+
+  if (block.type === 'stats') {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.03 }}
+        className="my-6 grid grid-cols-2 sm:grid-cols-4 gap-3"
+      >
+        {block.stats?.map((stat) => (
+          <div
+            key={stat.label}
+            className="text-center p-3 sm:p-4 rounded-xl bg-gradient-to-br from-teal-500/5 to-emerald-500/5 border border-teal-500/10"
+          >
+            <div className="text-xl sm:text-2xl font-bold gradient-text mb-1">
+              {stat.value}
+            </div>
+            <div className="text-xs text-slate-500">{stat.label}</div>
+          </div>
+        ))}
+      </motion.div>
+    );
+  }
+
+  if (block.type === 'code') {
+    return (
+      <motion.pre
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.03 }}
+        className="my-4 p-4 rounded-lg bg-black/40 border border-white/5 overflow-x-auto"
+      >
+        <code className="text-sm text-teal-300 font-mono">
+          <Code2 className="w-3 h-3 inline mr-2 text-slate-500" />
+          {block.text}
+        </code>
+      </motion.pre>
+    );
+  }
+
+  return null;
+}
 
 export default function BlogArticleModal({
   article,
   isOpen,
   onClose,
 }: ArticleModalProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Reset scroll position when article changes
+  useEffect(() => {
+    if (isOpen && contentRef.current) {
+      contentRef.current.scrollTop = 0;
+    }
+  }, [isOpen, article?.id]);
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <AnimatePresence>
         {isOpen && article && (
           <DialogContent
             showCloseButton={false}
-            className="glass-card rounded-2xl max-w-2xl mx-4 p-0 overflow-hidden border-white/10 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-bottom-4 data-[state=closed]:slide-out-to-bottom-4"
+            className="glass-card rounded-2xl max-w-3xl mx-4 p-0 overflow-hidden border-white/10 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-bottom-4 data-[state=closed]:slide-out-to-bottom-4 max-h-[90vh] flex flex-col"
           >
             <DialogTitle className="sr-only">{article.title}</DialogTitle>
             <DialogDescription className="sr-only">
@@ -43,7 +157,7 @@ export default function BlogArticleModal({
             </DialogDescription>
 
             {/* Gradient Header */}
-            <div className="relative h-56 bg-gradient-to-br overflow-hidden">
+            <div className="relative h-44 sm:h-52 bg-gradient-to-br overflow-hidden flex-shrink-0">
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${article.gradient}`}
               />
@@ -55,7 +169,7 @@ export default function BlogArticleModal({
                 />
               </div>
               {/* Light sweep effect */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/5" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-white/5" />
 
               {/* Category badge */}
               <div className="absolute top-5 left-6">
@@ -64,11 +178,19 @@ export default function BlogArticleModal({
                 </span>
               </div>
 
+              {/* Read time badge */}
+              <div className="absolute top-5 right-16">
+                <span className="px-2.5 py-1 rounded-full bg-black/30 backdrop-blur-sm text-white text-xs font-medium flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  {article.readTime}
+                </span>
+              </div>
+
               {/* Teal Close Button */}
               <DialogClose asChild>
                 <button
                   className="absolute top-5 right-5 w-9 h-9 rounded-full bg-black/30 backdrop-blur-sm border border-white/20 flex items-center justify-center text-teal-300 hover:bg-teal-500/80 hover:text-white hover:border-teal-400 transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400/50 focus:ring-offset-2 focus:ring-offset-black/20"
-                  aria-label="Close article preview"
+                  aria-label="Close article"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -87,18 +209,20 @@ export default function BlogArticleModal({
               </motion.div>
             </div>
 
-            {/* Content */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="p-6 sm:p-8"
+            {/* Scrollable Content */}
+            <div
+              ref={contentRef}
+              className="overflow-y-auto flex-1 p-6 sm:p-8"
             >
               {/* Meta info */}
-              <div className="flex items-center gap-4 text-sm text-slate-500 mb-4">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-4">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="w-4 h-4 text-teal-400" />
                   {article.date}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <User className="w-4 h-4 text-teal-400" />
+                  {article.author}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-teal-400" />
@@ -107,17 +231,12 @@ export default function BlogArticleModal({
               </div>
 
               {/* Full title */}
-              <h1 className="text-2xl sm:text-3xl font-bold text-white leading-tight mb-4">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight mb-5">
                 {article.title}
               </h1>
 
-              {/* Full excerpt */}
-              <p className="text-slate-400 leading-relaxed text-base mb-6">
-                {article.excerpt}
-              </p>
-
               {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-8">
+              <div className="flex flex-wrap gap-2 mb-6">
                 {article.tags.map((tag) => (
                   <span
                     key={tag}
@@ -128,15 +247,33 @@ export default function BlogArticleModal({
                 ))}
               </div>
 
-              {/* CTA Button */}
-              <button
-                onClick={() => onClose()}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/25"
-              >
-                Read Full Article
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </motion.div>
+              {/* Divider */}
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-teal-500/20 to-transparent mb-6" />
+
+              {/* Full article content */}
+              <div>
+                {article.content.map((block, idx) => (
+                  <ContentBlock key={idx} block={block} index={idx} />
+                ))}
+              </div>
+
+              {/* Bottom CTA */}
+              <div className="mt-8 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <button
+                  onClick={() => onClose()}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/25"
+                >
+                  Back to Blog
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => onClose()}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium text-slate-300 border border-white/10 hover:border-teal-500/30 hover:text-teal-300 transition-all duration-300"
+                >
+                  Share This Article
+                </button>
+              </div>
+            </div>
           </DialogContent>
         )}
       </AnimatePresence>
