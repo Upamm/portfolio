@@ -311,7 +311,7 @@ function PricingCard({
           <div className="mt-auto">
             <button
               onClick={() => onGetStarted(pkg.name)}
-              className={`w-full py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 cursor-pointer ${
+              className={`inline-flex items-center justify-center px-8 py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 cursor-pointer ${
                 pkg.featured
                   ? 'bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-white shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 btn-shine hover:scale-[1.02] active:scale-[0.98]'
                   : 'bg-transparent border border-teal-500/30 text-teal-400 hover:bg-teal-500/10 hover:border-teal-500/50 hover:scale-[1.02] active:scale-[0.98]'

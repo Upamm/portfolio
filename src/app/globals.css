@@ -2353,6 +2353,12 @@ body::before {
   box-shadow: 0 6px 20px rgba(5, 150, 105, 0.12);
 }
 
+/* Non-featured pricing card price numbers - dark text in light mode (override broad bg-gradient restore) */
+.light #pricing [class*="rounded-2xl"] .text-4xl.text-white,
+.light #pricing [class*="rounded-2xl"] .text-5xl.text-white {
+  color: #0e7490 !important;
+}
+
 /* Pricing section text-slate-400 - "$" sign, subtitles, descriptions - better contrast */
 .light #pricing .text-slate-400 {
   color: #475569 !important;
