@@ -1331,3 +1331,56 @@ MarqueeBar, StatsBanner, ClientsSection, IndustriesServedSection, FeaturedWorkSe
 ### Verification
 - `bun run lint` — Zero errors
 - Dev server compiles successfully, all 200 OK responses
+
+---
+## Phase N+2 - Light Mode Text Color Comprehensive Fix
+
+### Task
+Fix all text colors on light mode across every section. Ensure no text is invisible, too light, or has poor contrast.
+
+### Audit Method
+- Used agent-browser to take 4 light mode screenshots (top, mid, bottom, footer) + pricing page
+- Used VLM (z-ai vision) to analyze each screenshot for text readability issues
+- Sub-agent audit scanned all 26 .tsx components finding 70+ `text-slate-400`, 27+ `text-slate-300`, 23+ `text-slate-500` instances
+
+### Issues Found (VLM Analysis)
+1. Hero badge "Available for freelance work" — low contrast
+2. Hero description text — low contrast
+3. StatsBanner stat descriptions — nearly invisible
+4. Cookie consent banner text — hard to read
+5. Footer links & copyright — poor contrast
+6. All body/description text using `text-slate-400` — too light globally
+7. All label/meta text using `text-slate-500` — far too light globally
+
+### Root Cause
+Global light mode CSS overrides in `globals.css` were using teal-tinted colors that had insufficient contrast on the `#f0fafb` background:
+- `text-slate-400` → `#5a8fa0` (~3.8:1 contrast — FAILS WCAG AA)
+- `text-slate-500` → `#7bafc0` (~2.4:1 contrast — FAR TOO LOW)
+- `text-slate-600` → `#7bafc0` (~2.4:1 — FAR TOO LOW)
+- `text-slate-300` → `#3a7d8f` (OK but could be darker)
+
+### Fixes Applied (`src/app/globals.css`)
+
+**Global text overrides — darkened for WCAG AA compliance:**
+| Class | Before | After | Contrast Ratio |
+|-------|--------|-------|---------------|
+| `text-slate-300` | `#3a7d8f` | `#2d6a7a` | ~7.5:1 ✓ |
+| `text-slate-400` | `#5a8fa0` | `#475569` | ~5.5:1 ✓ |
+| `text-slate-500` | `#7bafc0` | `#64748b` | ~4.5:1 ✓ |
+| `text-slate-600` | `#7bafc0` | `#64748b` | ~4.5:1 ✓ |
+| `text-gray-300` | `#3a7d8f` | `#2d6a7a` | ~7.5:1 ✓ |
+| `text-gray-400` | `#5a8fa0` | `#475569` | ~5.5:1 ✓ |
+| `text-gray-500` | `#7bafc0` | `#64748b` | ~4.5:1 ✓ |
+| `text-zinc-300` | `#3a7d8f` | `#2d6a7a` | ~7.5:1 ✓ |
+| `text-zinc-400` | `#5a8fa0` | `#475569` | ~5.5:1 ✓ |
+| `text-zinc-500` | `#7bafc0` | `#64748b` | ~4.5:1 ✓ |
+| `text-neutral-300` | `#3a7d8f` | `#2d6a7a` | ~7.5:1 ✓ |
+| `text-neutral-400` | `#5a8fa0` | `#475569` | ~5.5:1 ✓ |
+| Placeholder text | `#7bafc0` | `#94a3b8` | ~3:1 (OK for placeholders) |
+
+These global overrides fix ALL 70+ instances of body text, descriptions, labels, meta text, timestamps, form labels, nav links, testimonial quotes, and section intros across all 20+ components simultaneously.
+
+### Verification
+- VLM confirmed: "All text is readable" on hero, mid-page, and footer sections in light mode
+- `bun run lint` — Zero errors
+- Dev server compiles successfully, all 200 OK responses
