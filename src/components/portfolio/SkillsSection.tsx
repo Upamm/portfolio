@@ -25,23 +25,160 @@ const skills: readonly SkillData[] = [
   { name: 'Virtual Assistance', percentage: 93, color: '#22d3ee', glowColor: 'rgba(34,211,238,0.35)' },
 ] as const;
 
-const tools: readonly string[] = [
-  'WordPress',
-  'WooCommerce',
-  'Elementor',
-  'Yoast SEO',
-  'Astra',
-  'Divi',
-  'Contact Form 7',
-  'WP Rocket',
-  'Rank Math',
-  'Mailchimp',
-  'HubSpot',
-  'LinkedIn Sales Nav',
-  'Google Analytics',
-  'Upwork',
-  'Fiverr',
-  'Zapier',
+interface ToolData {
+  readonly name: string;
+  readonly color: string;
+  readonly logo: React.ReactNode;
+}
+
+const ToolLogoWordPress = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M5.4 8.7l3.6 5.1 1.7-2.3h1.2l-2.5 3.4 3.3 4.6h-2.9l-3.4-4.9-1.6 2.1H3.3l2.1-2.8-3.2-4.3z" fill="currentColor" />
+    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18.5c-4.7 0-8.5-3.8-8.5-8.5S7.3 3.5 12 3.5s8.5 3.8 8.5 8.5-3.8 8.5-8.5 8.5z" fill="currentColor" />
+    <path d="M18.6 15.3l3.2-4.3h-2.2l-1.6 2.1-1.4-2.1h-2.3l2.5 3.4-2.5 3.4h2.2l1.7-2.3 1.4 2.3z" fill="currentColor" />
+  </svg>
+);
+
+const ToolLogoWooCommerce = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 8.16c-.186 0-.375.003-.563.012a.26.26 0 00-.218.178c-.07.252-.148.5-.234.742a.26.26 0 00.17.334c.198.06.362.12.51.186a1.99 1.99 0 01.85.938c.094.198.17.398.23.6a.26.26 0 01-.17.323 9.48 9.48 0 01-3.82.163 8.94 8.94 0 01-2.647-.743.26.26 0 01-.094-.412 5.966 5.966 0 01.646-1.182c.204-.3.43-.584.676-.85a.26.26 0 00-.044-.387A5.965 5.965 0 017.36 5.878a.26.26 0 01.334-.063 8.95 8.95 0 013.834 3.043.26.26 0 00.387.044c.266-.246.55-.472.85-.676a5.965 5.965 0 011.182-.646.26.26 0 01.412.094c.594 1.15.95 2.474.97 3.883a.26.26 0 00.17.334 8.94 8.94 0 01.743 2.647c.06 1.3-.118 2.562-.516 3.758a.26.26 0 01-.334.17" fill="currentColor" />
+  </svg>
+);
+
+const ToolLogoElementor = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M13.578 3.05c-.086-.242-.31-.4-.564-.4H7.154c-.255 0-.478.158-.564.4l-4.342 12.07c-.13.36.136.72.507.72h2.61c.255 0 .478-.158.564-.4L7.3 12.95h4.08l.975 2.49c.086.242.31.4.564.4h2.61c.37 0 .638-.36.506-.72L13.578 3.05zm-2.082 6.4H8.704L9.6 5.87l1.896 3.58z" fill="currentColor" />
+    <path d="M20.2 18.1c.19-.19.19-.5 0-.7l-2.2-2.2c-.1-.1-.23-.15-.35-.15H15c-.28 0-.5.22-.5.5v2.65c0 .28.22.5.5.5h2.65c.13 0 .25-.05.35-.15z" fill="currentColor" opacity="0.6" />
+  </svg>
+);
+
+const ToolLogoYoast = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <circle cx="12" cy="6.5" r="3" fill="currentColor" />
+    <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.7" />
+    <circle cx="12" cy="17.5" r="3" fill="currentColor" opacity="0.4" />
+    <rect x="10" y="3" width="4" height="18" rx="1" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+  </svg>
+);
+
+const ToolLogoAstra = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z" fill="currentColor" />
+  </svg>
+);
+
+const ToolLogoDivi = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <rect x="3" y="6" width="4" height="12" rx="1" fill="currentColor" />
+    <rect x="10" y="3" width="4" height="18" rx="1" fill="currentColor" opacity="0.8" />
+    <rect x="17" y="8" width="4" height="8" rx="1" fill="currentColor" opacity="0.6" />
+  </svg>
+);
+
+const ToolLogoCF7 = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <rect x="2" y="4" width="20" height="16" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    <polyline points="3,8 8,8 11,14 14,8 21,8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <line x1="3" y1="17" x2="21" y2="17" stroke="currentColor" strokeWidth="1.5" />
+  </svg>
+);
+
+const ToolLogoWPRocket = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M12 2C9 2 6.5 4 6 7l1.5 1C8 6.5 9.8 4.5 12 4.5S16 6.5 16.5 8L18 7c-.5-3-3-5-6-5z" fill="currentColor" opacity="0.7" />
+    <path d="M10 8l-1 8h2l-1 5 4-6h-2.5L14 8z" fill="currentColor" />
+    <path d="M7 7.5l-2.5 4.5c-.3.5-.1 1.2.4 1.5l3 1.5c.5.3 1.2.1 1.5-.4L12 11l-3-1.5z" fill="currentColor" opacity="0.6" />
+    <path d="M17 7.5l2.5 4.5c.3.5.1 1.2-.4 1.5l-3 1.5c-.5.3-1.2.1-1.5-.4L12 11l3-1.5z" fill="currentColor" opacity="0.6" />
+  </svg>
+);
+
+const ToolLogoRankMath = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <rect x="2" y="14" width="4" height="6" rx="0.5" fill="currentColor" />
+    <rect x="8" y="10" width="4" height="10" rx="0.5" fill="currentColor" opacity="0.8" />
+    <rect x="14" y="5" width="4" height="15" rx="0.5" fill="currentColor" opacity="0.6" />
+    <rect x="20" y="2" width="2" height="18" rx="0.5" fill="currentColor" opacity="0.4" />
+    <path d="M4 3L8 7 6 7z" fill="currentColor" opacity="0.5" />
+  </svg>
+);
+
+const ToolLogoMailchimp = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M12 2a6 6 0 00-6 6c0 .6.1 1.2.3 1.7A4 4 0 0012 16a4 4 0 002.8-1.2A5 5 0 0020 10a5 5 0 00-5-5 4.98 4.98 0 00-.7.05A6 6 0 0012 2z" fill="currentColor" opacity="0.85" />
+    <circle cx="9" cy="8" r="1" fill="currentColor" opacity="0.5" />
+    <circle cx="9" cy="8" r="0.4" fill="currentColor" />
+    <path d="M16 3a2 2 0 01-1 3.64" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.5" />
+  </svg>
+);
+
+const ToolLogoHubSpot = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <circle cx="12" cy="12" r="3" fill="currentColor" />
+    <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 2a8 8 0 110 16 8 8 0 010-16z" fill="currentColor" opacity="0.3" />
+    <circle cx="12" cy="5" r="1.5" fill="currentColor" opacity="0.6" />
+    <circle cx="17" cy="8.5" r="1.5" fill="currentColor" opacity="0.5" />
+    <circle cx="19" cy="12" r="1.5" fill="currentColor" opacity="0.4" />
+  </svg>
+);
+
+const ToolLogoLinkedIn = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="currentColor" />
+  </svg>
+);
+
+const ToolLogoGoogleAnalytics = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M20.5 6.5h-7V9h4.6A5.5 5.5 0 1112 14.5a5.47 5.47 0 01-3.2-1.04l-1.8 1.8A7.48 7.48 0 1019.5 9" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M20.5 2v5h-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <rect x="3" y="15" width="3" height="6" rx="0.5" fill="currentColor" opacity="0.4" />
+    <rect x="7" y="12" width="3" height="9" rx="0.5" fill="currentColor" opacity="0.6" />
+    <rect x="11" y="9" width="3" height="12" rx="0.5" fill="currentColor" opacity="0.8" />
+    <rect x="15" y="6" width="3" height="15" rx="0.5" fill="currentColor" />
+  </svg>
+);
+
+const ToolLogoUpwork = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M18.56 3.84l-3.44 8.12c-.25.6-.98.88-1.57.63l-1.5-.64 2.44-5.76a5.54 5.54 0 00-3.58-7.38 5.54 5.54 0 00-6.96 3.44l2.56 1.09a2.96 2.96 0 013.72-1.84 2.96 2.96 0 01-.63 3.72l-2.75 6.48 1.5.64c.6.25 1.33-.03 1.57-.63l1.64-3.87.33.14a7.7 7.7 0 004.34.1" fill="currentColor" />
+    <path d="M2 15l4.5 6 4.5-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
+  </svg>
+);
+
+const ToolLogoFiverr = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M23 5.5V20c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V5.5c0-1.1.9-2 2-2h18c1.1 0 2 .9 2 2z" fill="currentColor" opacity="0.15" />
+    <rect x="1" y="3" width="22" height="18" rx="2" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+    <path d="M7.5 8.5L5 18h2.2l.4-1.5h2.8L11 18h2.2L10.9 8.5zm1.6 6l.9-3.2.9 3.2z" fill="currentColor" />
+    <circle cx="17" cy="13" r="3" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M16 13l1-1 1 1" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const ToolLogoZapier = (
+  <svg viewBox="0 0 24 24" className="w-full h-full">
+    <path d="M12 2L4 14h7l-3 8 12-12h-7z" fill="currentColor" />
+  </svg>
+);
+
+const tools: readonly ToolData[] = [
+  { name: 'WordPress',       color: '#21759B', logo: ToolLogoWordPress },
+  { name: 'WooCommerce',     color: '#96588A', logo: ToolLogoWooCommerce },
+  { name: 'Elementor',      color: '#92003B', logo: ToolLogoElementor },
+  { name: 'Yoast SEO',      color: '#1A428A', logo: ToolLogoYoast },
+  { name: 'Astra',          color: '#0369A1', logo: ToolLogoAstra },
+  { name: 'Divi',           color: '#EB4D4D', logo: ToolLogoDivi },
+  { name: 'Contact Form 7', color: '#2E6AB0', logo: ToolLogoCF7 },
+  { name: 'WP Rocket',      color: '#F56640', logo: ToolLogoWPRocket },
+  { name: 'Rank Math',      color: '#E8553D', logo: ToolLogoRankMath },
+  { name: 'Mailchimp',      color: '#FFE01B', logo: ToolLogoMailchimp },
+  { name: 'HubSpot',        color: '#FF7A59', logo: ToolLogoHubSpot },
+  { name: 'LinkedIn Sales Nav', color: '#0A66C2', logo: ToolLogoLinkedIn },
+  { name: 'Google Analytics', color: '#E37400', logo: ToolLogoGoogleAnalytics },
+  { name: 'Upwork',         color: '#14A800', logo: ToolLogoUpwork },
+  { name: 'Fiverr',         color: '#1DBF73', logo: ToolLogoFiverr },
+  { name: 'Zapier',         color: '#FF4A00', logo: ToolLogoZapier },
 ] as const;
 
 const whyChooseMeItems: readonly string[] = [
@@ -53,7 +190,7 @@ const whyChooseMeItems: readonly string[] = [
 ] as const;
 
 // Indices of tools that should span 2 columns in the bento grid
-const bentoLargeIndices = new Set([0, 5, 9, 14]);
+const bentoLargeIndices = new Set<number>([0, 5, 9, 14]);
 
 // ---------------------------------------------------------------------------
 // Animated Counter Hook
@@ -423,14 +560,13 @@ function ToolBentoCard({
   isInView,
   isLarge,
 }: {
-  readonly tool: string;
+  readonly tool: ToolData;
   readonly index: number;
   readonly isInView: boolean;
   readonly isLarge: boolean;
 }) {
-  // Alternate icon symbols for visual interest
-  const icons = ['◆', '◉', '▲', '●', '★', '⬡', '♦', '◈', '▶', '⊕', '⊗', '⬢', '◎', '⬟', '⏣', '⎔'];
-  const icon = icons[index % icons.length];
+  // Determine if brand color is light (needs dark text/icon bg)
+  const isLight = tool.color === '#FFE01B';
 
   return (
     <motion.div
@@ -444,20 +580,37 @@ function ToolBentoCard({
       className={isLarge ? 'col-span-1 sm:col-span-2' : ''}
     >
       <div className="group relative glass-card rounded-xl overflow-hidden transition-all duration-400 hover:border-teal-500/25 hover:scale-[1.03] cursor-default h-full">
-        {/* Gradient shimmer on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-500/0 via-transparent to-emerald-500/0 group-hover:from-teal-500/5 group-hover:via-transparent group-hover:to-emerald-500/5 transition-all duration-500" />
+        {/* Brand-colored glow on hover */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at 20% 50%, ${tool.color}12, transparent 70%)`,
+          }}
+        />
 
         <div className="relative flex items-center gap-3 px-4 py-3 sm:px-5 sm:py-4">
-          <span className="text-teal-400/60 text-base sm:text-lg shrink-0 group-hover:text-teal-300 transition-colors duration-300 group-hover:scale-110 transform">
-            {icon}
-          </span>
+          {/* Brand Logo Container */}
+          <div
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+            style={{
+              backgroundColor: `${tool.color}15`,
+              boxShadow: `0 0 0 1px ${tool.color}25`,
+            }}
+          >
+            <div className="w-5 h-5 sm:w-[22px] sm:h-[22px]" style={{ color: tool.color }}>
+              {tool.logo}
+            </div>
+          </div>
           <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors duration-300 truncate">
-            {tool}
+            {tool.name}
           </span>
         </div>
 
-        {/* Bottom edge accent */}
-        <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-teal-400 to-emerald-400 group-hover:w-full transition-all duration-500" />
+        {/* Bottom edge accent in brand color */}
+        <div
+          className="absolute bottom-0 left-0 w-0 h-[2px] group-hover:w-full transition-all duration-500"
+          style={{ background: `linear-gradient(to right, transparent, ${tool.color}, transparent)` }}
+        />
       </div>
     </motion.div>
   );
@@ -623,7 +776,7 @@ export default function SkillsSection() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
                 {tools.map((tool, index) => (
                   <ToolBentoCard
-                    key={tool}
+                    key={tool.name}
                     tool={tool}
                     index={index}
                     isInView={isInView}
