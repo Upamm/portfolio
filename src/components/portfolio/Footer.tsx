@@ -63,7 +63,7 @@ export default function Footer({ onNavigate }: FooterProps) {
 
       {/* Footer Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10 mb-8">
           {/* Brand */}
           <div>
             <button
@@ -94,10 +94,10 @@ export default function Footer({ onNavigate }: FooterProps) {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
+          {/* Quick Links - 2 columns on mobile for better fit */}
+          <div className="col-span-2 sm:col-span-1">
             <h4 className="text-white font-semibold mb-3 text-sm">Quick Links</h4>
-            <ul className="space-y-2">
+            <ul className="grid grid-cols-2 sm:grid-cols-1 gap-x-4 gap-y-2">
               {footerLinks.map((link) => (
                 <li key={link.key}>
                   <button
@@ -111,8 +111,8 @@ export default function Footer({ onNavigate }: FooterProps) {
             </ul>
           </div>
 
-          {/* Services */}
-          <div>
+          {/* Services - hidden on mobile, shown on lg+ */}
+          <div className="hidden lg:block">
             <h4 className="text-white font-semibold mb-3 text-sm">Services</h4>
             <ul className="space-y-2">
               {['WordPress Development', 'Speed Optimization', 'B2B Lead Generation', 'Virtual Assistant', 'Data Entry & Research', 'WordPress Maintenance'].map((s) => (
