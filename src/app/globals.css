@@ -195,7 +195,7 @@ body::before {
 }
 
 .light .marquee-fade-overlay {
-  background: linear-gradient(to right, #f8fafc, transparent 15%, transparent 85%, #f8fafc);
+  background: linear-gradient(to right, #f0fafb, transparent 15%, transparent 85%, #f0fafb);
 }
 
 /* ==================== */
@@ -207,7 +207,7 @@ body::before {
 }
 
 .light .project-card-image-fade {
-  background: linear-gradient(to top, rgba(248, 250, 252, 0.6), transparent 50%, transparent);
+  background: linear-gradient(to top, rgba(240, 250, 251, 0.6), transparent 50%, transparent);
 }
 
 /* Modal card image fade */
@@ -217,7 +217,7 @@ body::before {
 }
 
 .light .modal-card-image-fade {
-  background: linear-gradient(to top, rgba(241, 245, 249, 0.7), transparent 50%, transparent);
+  background: linear-gradient(to top, rgba(224, 242, 248, 0.7), transparent 50%, transparent);
 }
 
 /* ==================== */
@@ -229,7 +229,7 @@ body::before {
 }
 
 .light .featured-card-fade {
-  background: linear-gradient(to top, rgba(255, 255, 255, 0.85), transparent);
+  background: linear-gradient(to top, rgba(224, 242, 248, 0.85), transparent);
 }
 
 /* Blog card image fade */
@@ -239,7 +239,7 @@ body::before {
 }
 
 .light .blog-card-image-fade {
-  background: linear-gradient(to top, rgba(248, 250, 252, 0.9), rgba(248, 250, 252, 0.3), transparent);
+  background: linear-gradient(to top, rgba(240, 250, 251, 0.9), rgba(240, 250, 251, 0.3), transparent);
 }
 
 /* Blog modal image fade */
@@ -249,7 +249,7 @@ body::before {
 }
 
 .light .blog-modal-image-fade {
-  background: linear-gradient(to top, rgba(248, 250, 252, 0.9), rgba(248, 250, 252, 0.4), rgba(248, 250, 252, 0.15));
+  background: linear-gradient(to top, rgba(240, 250, 251, 0.9), rgba(240, 250, 251, 0.4), rgba(240, 250, 251, 0.15));
 }
 
 /* About section image fade */
@@ -265,12 +265,12 @@ body::before {
 }
 
 .light .about-image-fade {
-  background: linear-gradient(to top, rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.15), transparent);
+  background: linear-gradient(to top, rgba(240, 250, 251, 0.85), rgba(240, 250, 251, 0.15), transparent);
 }
 
 @media (min-width: 1024px) {
   .light .about-image-fade {
-    background: linear-gradient(to right, transparent, transparent, rgba(248, 250, 252, 0.7));
+    background: linear-gradient(to right, transparent, transparent, rgba(240, 250, 251, 0.7));
   }
 }
 
@@ -286,12 +286,12 @@ body::before {
 }
 
 .light .about-image-fade-secondary {
-  background: linear-gradient(to top, rgba(248, 250, 252, 0.85), transparent, transparent);
+  background: linear-gradient(to top, rgba(240, 250, 251, 0.85), transparent, transparent);
 }
 
 @media (min-width: 1024px) {
   .light .about-image-fade-secondary {
-    background: linear-gradient(to right, rgba(248, 250, 252, 0.8), transparent, transparent);
+    background: linear-gradient(to right, rgba(240, 250, 251, 0.8), transparent, transparent);
   }
 }
 
@@ -303,7 +303,7 @@ body::before {
 }
 
 .light .hero-bg-gradient {
-  background: linear-gradient(to bottom, rgba(248, 250, 252, 0.88), rgba(248, 250, 252, 0.82), rgba(248, 250, 252, 0.95));
+  background: linear-gradient(to bottom, rgba(240, 250, 251, 0.88), rgba(240, 250, 251, 0.82), rgba(240, 250, 251, 0.95));
 }
 
 /* Hero avatar ring offset */
@@ -312,7 +312,7 @@ body::before {
 }
 
 .light .hero-avatar-ring {
-  --tw-ring-offset-color: #f8fafc;
+  --tw-ring-offset-color: #f0fafb;
 }
 
 /* ==================== */
@@ -1531,45 +1531,45 @@ body::before {
 /* LIGHT THEME OVERRIDES      */
 /* ============================== */
 
-/* Light theme CSS variables */
+/* Light theme CSS variables - teal/navy tinted palette (no white) */
 .light {
-  --background: #f8fafc;
-  --foreground: #1e293b;
-  --card: rgba(255, 255, 255, 0.8);
-  --card-foreground: #1e293b;
-  --popover: #ffffff;
-  --popover-foreground: #1e293b;
+  --background: #f0fafb;
+  --foreground: #134e6f;
+  --card: rgba(224, 242, 248, 0.7);
+  --card-foreground: #134e6f;
+  --popover: #e6f5f7;
+  --popover-foreground: #134e6f;
   --primary: #0891b2;
   --primary-foreground: #ffffff;
-  --secondary: #e2e8f0;
-  --secondary-foreground: #475569;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
+  --secondary: #cce8f0;
+  --secondary-foreground: #1b6b82;
+  --muted: #e0f2f5;
+  --muted-foreground: #5a8fa0;
   --accent: #059669;
   --accent-foreground: #ffffff;
   --destructive: #ef4444;
-  --border: rgba(6, 182, 212, 0.2);
-  --input: rgba(6, 182, 212, 0.15);
+  --border: rgba(8, 145, 178, 0.2);
+  --input: rgba(8, 145, 178, 0.15);
   --ring: #0891b2;
   --chart-1: #0891b2;
   --chart-2: #059669;
   --chart-3: #d97706;
   --chart-4: #7c3aed;
   --chart-5: #db2777;
-  --sidebar: #f8fafc;
-  --sidebar-foreground: #1e293b;
+  --sidebar: #f0fafb;
+  --sidebar-foreground: #134e6f;
   --sidebar-primary: #0891b2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #e2e8f0;
-  --sidebar-accent-foreground: #475569;
-  --sidebar-border: rgba(6, 182, 212, 0.15);
+  --sidebar-accent: #cce8f0;
+  --sidebar-accent-foreground: #1b6b82;
+  --sidebar-border: rgba(8, 145, 178, 0.18);
   --sidebar-ring: #0891b2;
 }
 
-/* Light body background */
+/* Light body background - teal-tinted, no white */
 .light body {
-  background: #f8fafc;
-  color: #1e293b;
+  background: #f0fafb;
+  color: #134e6f;
 }
 
 /* Light noise texture - subtler */
@@ -1579,7 +1579,7 @@ body::before {
 
 /* Light scrollbar */
 .light ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #e6f5f7;
 }
 
 .light ::-webkit-scrollbar-thumb {
@@ -1592,34 +1592,34 @@ body::before {
 
 /* Light selection */
 .light ::selection {
-  color: #1e293b;
+  color: #134e6f;
 }
 
-/* Light glass morphism */
+/* Light glass morphism - teal-tinted glass */
 .light .glass {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(6, 182, 212, 0.12);
+  background: rgba(224, 242, 248, 0.75);
+  border: 1px solid rgba(8, 145, 178, 0.12);
 }
 
 .light .glass-card {
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(6, 182, 212, 0.1);
+  background: rgba(224, 242, 248, 0.65);
+  border: 1px solid rgba(8, 145, 178, 0.1);
 }
 
 .light .glass-card:hover {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: rgba(6, 182, 212, 0.25);
-  box-shadow: 0 8px 32px rgba(6, 182, 212, 0.08), 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: rgba(224, 242, 248, 0.88);
+  border-color: rgba(8, 145, 178, 0.25);
+  box-shadow: 0 8px 32px rgba(8, 145, 178, 0.08), 0 2px 8px rgba(19, 78, 111, 0.06);
 }
 
 .light .glass-nav {
-  background: rgba(248, 250, 252, 0.85);
-  border-bottom: 1px solid rgba(6, 182, 212, 0.1);
+  background: rgba(240, 250, 251, 0.9);
+  border-bottom: 1px solid rgba(8, 145, 178, 0.1);
 }
 
 .light .mobile-menu-dropdown {
-  background: rgba(248, 250, 252, 0.95);
-  border-top-color: rgba(6, 182, 212, 0.12);
+  background: rgba(240, 250, 251, 0.96);
+  border-top-color: rgba(8, 145, 178, 0.12);
 }
 
 /* Light background patterns */
@@ -1676,7 +1676,7 @@ body::before {
 
 /* Light preloader */
 .light .preloader-overlay {
-  background: #f8fafc;
+  background: #f0fafb;
 }
 
 .light .preloader-ring {
@@ -1700,9 +1700,9 @@ body::before {
 
 /* Light nav scrolled */
 .light .nav-scrolled-enhanced {
-  background: rgba(248, 250, 252, 0.95) !important;
-  border-bottom: 1px solid rgba(6, 182, 212, 0.1) !important;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+  background: rgba(240, 250, 251, 0.95) !important;
+  border-bottom: 1px solid rgba(8, 145, 178, 0.1) !important;
+  box-shadow: 0 4px 30px rgba(19, 78, 111, 0.06);
 }
 
 /* Light tool card hover */
@@ -1738,87 +1738,87 @@ body::before {
 
 /* Light section transitions */
 .light .section-transition::before {
-  background: linear-gradient(to bottom, rgba(248, 250, 252, 0.8) 0%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(240, 250, 251, 0.8) 0%, transparent 100%);
 }
 
 .light .section-transition::after {
-  background: linear-gradient(to top, rgba(248, 250, 252, 0.8) 0%, transparent 100%);
+  background: linear-gradient(to top, rgba(240, 250, 251, 0.8) 0%, transparent 100%);
 }
 
 .light .reveal-section::after {
-  background: linear-gradient(to bottom, rgba(248, 250, 252, 0.4) 0%, transparent 5%, transparent 95%, rgba(248, 250, 252, 0.4) 100%);
+  background: linear-gradient(to bottom, rgba(240, 250, 251, 0.4) 0%, transparent 5%, transparent 95%, rgba(240, 250, 251, 0.4) 100%);
 }
 
 /* Light project image overlay */
 .light .project-image-overlay::after {
-  background: linear-gradient(to bottom, transparent 0%, transparent 40%, rgba(248, 250, 252, 0.8) 100%);
+  background: linear-gradient(to bottom, transparent 0%, transparent 40%, rgba(240, 250, 251, 0.8) 100%);
 }
 
 /* ========================================
    LIGHT MODE - COMPREHENSIVE TEXT COLORS
    ======================================== */
 
-/* Primary headings: text-white → soft dark slate, not pure black */
+/* Primary headings: text-white → dark teal-navy from palette */
 .light .text-white {
-  color: #334155 !important;
+  color: #134e6f !important;
 }
 
-/* Slate-100/200: very light, need dark color for light mode */
+/* Slate-100/200: dark teal-navy shades */
 .light .text-slate-100 {
-  color: #334155 !important;
+  color: #134e6f !important;
 }
 .light .text-slate-200 {
-  color: #475569 !important;
+  color: #1b6b82 !important;
 }
 
-/* Secondary text: text-slate-300 → medium slate */
+/* Secondary text: medium teal-navy */
 .light .text-slate-300 {
-  color: #64748b !important;
+  color: #3a7d8f !important;
 }
 
-/* Body/description text: text-slate-400 → keep readable */
+/* Body/description text: muted teal */
 .light .text-slate-400 {
-  color: #64748b !important;
+  color: #5a8fa0 !important;
 }
 
-/* Placeholder/label text: text-slate-500 → light slate */
+/* Placeholder/label text: light teal-muted */
 .light .text-slate-500 {
-  color: #94a3b8 !important;
+  color: #7bafc0 !important;
 }
 
 /* Dark subtitle text */
 .light .text-slate-600 {
-  color: #64748b !important;
+  color: #7bafc0 !important;
 }
 
-/* Gray variants */
+/* Gray variants - palette-matched */
 .light .text-gray-300 {
-  color: #64748b !important;
+  color: #3a7d8f !important;
 }
 .light .text-gray-400 {
-  color: #64748b !important;
+  color: #5a8fa0 !important;
 }
 .light .text-gray-500 {
-  color: #94a3b8 !important;
+  color: #7bafc0 !important;
 }
 
-/* Zinc variants */
+/* Zinc variants - palette-matched */
 .light .text-zinc-300 {
-  color: #64748b !important;
+  color: #3a7d8f !important;
 }
 .light .text-zinc-400 {
-  color: #64748b !important;
+  color: #5a8fa0 !important;
 }
 .light .text-zinc-500 {
-  color: #94a3b8 !important;
+  color: #7bafc0 !important;
 }
 
-/* Neutral variants */
+/* Neutral variants - palette-matched */
 .light .text-neutral-300 {
-  color: #64748b !important;
+  color: #3a7d8f !important;
 }
 .light .text-neutral-400 {
-  color: #64748b !important;
+  color: #5a8fa0 !important;
 }
 
 /* ========================================
@@ -1888,12 +1888,12 @@ body::before {
 .light [class*="bg-[#060f1d]"],
 .light [class*="bg-[#0f1f38]"],
 .light [class*="bg-[#162a4a]"] {
-  background-color: #f8fafc !important;
+  background-color: #f0fafb !important;
 }
 
 /* Dark navy with opacity */
 .light [class*="bg-[#0a1628]/50"] {
-  background-color: rgba(241, 245, 249, 0.8) !important;
+  background-color: rgba(224, 242, 248, 0.8) !important;
 }
 
 /* Black overlays → subtle dark overlays */
@@ -1924,7 +1924,7 @@ body::before {
   border-color: rgba(15, 23, 42, 0.15) !important;
 }
 .light [class*="border-slate-700"] {
-  border-color: #cbd5e1 !important;
+  border-color: #a3d5e0 !important;
 }
 .light [class*="border-slate-600"] {
   border-color: #94a3b8 !important;
@@ -1933,7 +1933,7 @@ body::before {
   border-color: rgba(100, 116, 139, 0.2) !important;
 }
 .light [class*="border-slate-800"] {
-  border-color: #e2e8f0 !important;
+  border-color: #cce8f0 !important;
 }
 
 /* ========================================
@@ -1942,14 +1942,14 @@ body::before {
 
 .light .contact-input,
 .light [class*="bg-[#0a1628]/50"] {
-  background-color: rgba(248, 250, 252, 0.9) !important;
-  border-color: rgba(6, 182, 212, 0.15) !important;
-  color: #1e293b !important;
+  background-color: rgba(240, 250, 251, 0.9) !important;
+  border-color: rgba(8, 145, 178, 0.15) !important;
+  color: #134e6f !important;
 }
 
 .light .contact-input::placeholder,
 .light [class*="placeholder:text-slate-500"]::placeholder {
-  color: #94a3b8 !important;
+  color: #7bafc0 !important;
 }
 
 /* ========================================
@@ -1957,13 +1957,13 @@ body::before {
    ======================================== */
 
 .light .text-slate-300.hover\:text-white:hover {
-  color: #334155 !important;
+  color: #0e7490 !important;
 }
 .light .text-slate-400.hover\:text-white:hover {
-  color: #334155 !important;
+  color: #0e7490 !important;
 }
 .light [class*="hover:text-white"]:hover {
-  color: #334155 !important;
+  color: #0e7490 !important;
 }
 
 /* Restore hover:text-teal on colored bg elements */
@@ -1994,13 +1994,13 @@ body::before {
 
 /* Modal/Dialog backgrounds */
 .light [class*="bg-[#0f1f38]"] {
-  background-color: #ffffff !important;
+  background-color: #e6f5f7 !important;
 }
 
 /* Cookie consent card */
 .light .shadow-2xl.shadow-black\/20 {
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 32px rgba(19, 78, 111, 0.12);
+  background-color: rgba(224, 242, 248, 0.95);
 }
 
 /* ScrollToTop button */
@@ -2017,7 +2017,7 @@ body::before {
 /* Light wave divider */
 .light .wave-divider svg path[fill="rgba(6, 15, 29, 1)"],
 .light .wave-divider svg path[fill*="#060f1d"] {
-  fill: #f8fafc;
+  fill: #f0fafb;
 }
 
 .light .wave-divider svg path[fill="rgba(6, 182, 212, 0.04)"] {
@@ -2142,34 +2142,34 @@ body::before {
   animation: gradient-reveal-sweep 3s ease forwards;
 }
 
-/* Light footer */
+/* Light footer - teal-tinted gradient */
 .light footer,
 .light footer .absolute[style*="top: '60px'"] {
-  background: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
+  background: linear-gradient(to bottom, #d5eef2, #cce8f0);
 }
 
 .light [class*="from-[#060f1d]"],
 .light [class*="from-[#0a1628]"] {
-  background: linear-gradient(to bottom, #f1f5f9, #e2e8f0) !important;
+  background: linear-gradient(to bottom, #d5eef2, #cce8f0) !important;
 }
 
-/* Light navbar scrolled state - hardcoded in component */
+/* Light navbar scrolled state */
 .light [class*="bg-[#0a1628]/95"] {
-  background: rgba(248, 250, 252, 0.95) !important;
+  background: rgba(240, 250, 251, 0.95) !important;
 }
 
-/* Light hero section bottom gradient / portfolio card overlay */
+/* Light hero section bottom gradient / portfolio card overlay - teal tinted */
 .light [class*="from-[#0a1628]/60"] {
-  --tw-gradient-from: rgba(248, 250, 252, 0.5) !important;
-  --tw-gradient-to: rgba(248, 250, 252, 0.8) !important;
+  --tw-gradient-from: rgba(240, 250, 251, 0.5) !important;
+  --tw-gradient-to: rgba(224, 242, 248, 0.8) !important;
 }
 
-/* Light hero section - full gradient overlay - softer, semi-transparent light */
+/* Light hero section - full gradient overlay - teal-tinted semi-transparent */
 .light [class*="from-[#0a1628]/90"],
 .light [class*="from-[#0a1628]/80"] {
-  --tw-gradient-from: rgba(248, 250, 252, 0.92) !important;
-  --tw-gradient-via: rgba(241, 245, 249, 0.88) !important;
-  --tw-gradient-to: rgba(248, 250, 252, 0.95) !important;
+  --tw-gradient-from: rgba(240, 250, 251, 0.92) !important;
+  --tw-gradient-via: rgba(224, 242, 248, 0.88) !important;
+  --tw-gradient-to: rgba(240, 250, 251, 0.95) !important;
 }
 
 /* Light hero - show background image with light overlay */
@@ -2291,7 +2291,7 @@ body::before {
 
 /* Light ring-offset on avatar */
 .light [class*="ring-offset-[#0a1628]"] {
-  --tw-ring-offset-color: #f8fafc !important;
+  --tw-ring-offset-color: #f0fafb !important;
 }
 
 /* ========================================

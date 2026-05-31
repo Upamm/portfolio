@@ -1208,3 +1208,45 @@ Replaced all `from-[#0a1628]` Tailwind gradient overlays with custom CSS classes
 ### Verification
 - `bun run lint` — Zero errors
 - Dev server compiles successfully
+
+---
+
+## Phase N+2 - Light Mode Palette Refactor (No White Colors)
+
+### Problem
+Light mode was using generic white/gray colors (`#f8fafc`, `#ffffff`, `#f1f5f9`, `#e2e8f0`) that felt disconnected from the existing navy/teal/emerald design system. User requested using light colors from the existing color palette instead.
+
+### Solution
+Replaced ALL white/generic light colors with a cohesive teal/navy-tinted palette derived from the existing color scheme:
+
+**New Light Palette:**
+| Role | Old Color | New Color | Rationale |
+|------|-----------|-----------|-----------|
+| Background | `#f8fafc` | `#f0fafb` | Very light teal tint |
+| Foreground | `#1e293b` | `#134e6f` | Dark navy-teal for text |
+| Cards | `rgba(255,255,255,0.8)` | `rgba(224,242,248,0.7)` | Translucent teal glass |
+| Popover | `#ffffff` | `#e6f5f7` | Light teal surface |
+| Secondary | `#e2e8f0` | `#cce8f0` | Medium teal surface |
+| Secondary text | `#475569` | `#1b6b82` | Navy-teal dark |
+| Muted | `#f1f5f9` | `#e0f2f5` | Light teal muted |
+| Muted foreground | `#64748b` | `#5a8fa0` | Muted teal text |
+| Borders | generic slate | teal-tinted `rgba(8,145,178,...)` | Palette borders |
+
+**Text Color Mapping (all palette-derived):**
+- `text-white` → `#134e6f` (dark navy-teal)
+- `text-slate-200` → `#1b6b82` (medium navy-teal)
+- `text-slate-300` → `#3a7d8f` (medium teal)
+- `text-slate-400` → `#5a8fa0` (muted teal)
+- `text-slate-500` → `#7bafc0` (light teal-muted)
+
+**Glass/Overlay Updates:**
+All glass cards, nav, modals, hero gradient, card fades, marquee fade, about fades, blog fades, section transitions, and project overlays updated from white-based to teal-tinted colors.
+
+**Intentionally Kept:** White text (`#ffffff`) on colored gradient backgrounds (buttons, badges, icons on teal/emerald bg).
+
+### Files Modified
+- `src/app/globals.css` — Comprehensive palette refactor across ~80+ light mode rules
+
+### Verification
+- `bun run lint` — Zero errors
+- Dev server compiles successfully
