@@ -2347,7 +2347,7 @@ export default function BlogSection() {
   };
 
   return (
-    <section id="blog" className="relative py-10 sm:py-16 overflow-hidden">
+    <section id="blog" className="relative pt-14 sm:pt-16 pb-10 sm:pb-16 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-dots opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />

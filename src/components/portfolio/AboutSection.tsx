@@ -47,7 +47,7 @@ export default function AboutSection() {
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="about" className="relative pt-10 sm:pt-16 pb-4 lg:pt-16 lg:pb-6 overflow-hidden">
+    <section id="about" className="relative pt-14 sm:pt-16 pb-4 lg:pt-16 lg:pb-6 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-20" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
