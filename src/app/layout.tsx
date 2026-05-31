@@ -37,7 +37,13 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Upam", url: "https://www.fiverr.com/upam1721" }],
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.svg", sizes: "180x180", type: "image/svg+xml" },
+    ],
   },
   openGraph: {
     title: "Upam - WordPress Virtual Assistant & Web Designer",

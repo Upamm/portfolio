@@ -1527,3 +1527,22 @@ Stage Summary:
 - Modified: `src/app/globals.css` (logo animations), `src/components/portfolio/Navbar.tsx`, `src/components/portfolio/Footer.tsx`
 - Zero lint errors, zero compilation errors
 - Logo appears in navbar and footer with draw-in, particle float, cursor shimmer, and ring spin animations
+
+---
+## Favicon Creation (Logo Icon Mark)
+
+### Work Log:
+- Created `src/app/icon.svg` — 32x32 static SVG favicon using the logo icon mark (no text, no animations)
+  - Dark navy background (`#0a1628`) with rounded corners
+  - Cursor icon, code brackets `< />`, center dot, floating particles, dashed ring
+  - Teal-to-emerald gradients matching the site theme
+- Created `src/app/apple-touch-icon.svg` — 180x180 Apple touch icon (same design, scaled up with glow filter)
+- Updated `src/app/layout.tsx` metadata icons config:
+  - Primary: `/icon.svg` (SVG favicon)
+  - Fallback: `/favicon.ico` (any size)
+  - Apple: `/apple-touch-icon.svg` (180x180)
+
+### Stage Summary:
+- New files: `src/app/icon.svg`, `src/app/apple-touch-icon.svg`
+- Modified: `src/app/layout.tsx` (icons metadata)
+- The favicon renders the logo icon mark (cursor + code brackets + particles) without the "UPAM" text
