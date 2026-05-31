@@ -14,81 +14,22 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-
-const categories = ['All', 'WordPress', 'E-Commerce', 'Lead Gen', 'Design'];
-
-const projects = [
-  {
-    title: 'E-Commerce WordPress Store',
-    category: 'E-Commerce',
-    description: 'Full-featured WooCommerce store with payment integration',
-    fullDescription: 'Built a complete e-commerce platform using WooCommerce with secure payment gateway integration, inventory management, order tracking, and a responsive design that increased online sales by 35%.',
-    gradient: 'from-teal-600 to-cyan-600',
-    image: '/images/project-ecommerce.png',
-    tags: ['WooCommerce', 'Elementor'],
-  },
-  {
-    title: 'Business Corporate Website',
-    category: 'WordPress',
-    description: 'Professional corporate site with custom theme and animations',
-    fullDescription: 'Designed and developed a modern corporate website with custom theme development, smooth animations, responsive layout, and SEO optimization that improved organic traffic by 45%.',
-    gradient: 'from-emerald-600 to-teal-600',
-    image: '/images/project-corporate.png',
-    tags: ['Custom Theme', 'Astra'],
-  },
-  {
-    title: 'Real Estate Portal',
-    category: 'WordPress',
-    description: 'Property listing website with advanced search and filtering',
-    fullDescription: 'Created a comprehensive real estate portal with advanced property search, map integration, virtual tours, agent management system, and lead capture forms for a major property agency.',
-    gradient: 'from-cyan-600 to-teal-600',
-    image: '/images/project-realestate.png',
-    tags: ['WP Residence', 'Maps API'],
-  },
-  {
-    title: 'Healthcare Website',
-    category: 'WordPress',
-    description: 'Medical practice website with appointment booking system',
-    fullDescription: 'Developed a healthcare website for a medical practice featuring online appointment booking, patient portal, doctor profiles, service listings, and HIPAA-compliant contact forms.',
-    gradient: 'from-teal-500 to-emerald-500',
-    image: '/images/project-healthcare.png',
-    tags: ['Healthcare', 'Booking'],
-  },
-  {
-    title: 'Restaurant & Food Delivery',
-    category: 'E-Commerce',
-    description: 'Restaurant website with online ordering and delivery tracking',
-    fullDescription: 'Built a restaurant website with full online ordering system, menu management, delivery tracking integration, table reservation system, and customer loyalty program.',
-    gradient: 'from-emerald-500 to-cyan-500',
-    image: '/images/project-restaurant.png',
-    tags: ['Food Delivery', 'WooCommerce'],
-  },
-  {
-    title: 'B2B Lead Generation Campaign',
-    category: 'Lead Gen',
-    description: 'Comprehensive lead research campaign with 5000+ verified contacts',
-    fullDescription: 'Executed a large-scale B2B lead generation campaign delivering 5000+ verified contacts across multiple industries with decision-maker contacts, company profiles, and verified email addresses.',
-    gradient: 'from-cyan-500 to-teal-500',
-    image: '/images/project-leadgen.png',
-    tags: ['Data Research', 'LinkedIn'],
-  },
-];
+import { allProjects, projectCategories } from './projects-data';
 
 export default function PortfolioSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [activeFilter, setActiveFilter] = useState('All');
-  const [selectedProject, setSelectedProject] = useState<(typeof projects)[0] | null>(null);
+  const [selectedProject, setSelectedProject] = useState<(typeof allProjects)[0] | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const filteredProjects =
     activeFilter === 'All'
-      ? projects
-      : projects.filter((p) => p.category === activeFilter);
+      ? allProjects
+      : allProjects.filter((p) => p.category === activeFilter);
 
-  const openProjectDetail = useCallback((project: (typeof projects)[0]) => {
+  const openProjectDetail = useCallback((project: (typeof allProjects)[0]) => {
     setSelectedProject(project);
-    // Use requestAnimationFrame to ensure state is set before dialog opens
     requestAnimationFrame(() => {
       setDialogOpen(true);
     });
@@ -97,7 +38,6 @@ export default function PortfolioSection() {
   const handleDialogChange = useCallback((open: boolean) => {
     if (!open) {
       setDialogOpen(false);
-      // Delay clearing selected project to allow close animation
       setTimeout(() => setSelectedProject(null), 200);
     }
   }, []);
@@ -121,7 +61,7 @@ export default function PortfolioSection() {
             My Work
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
-            Featured <span className="gradient-text">Projects</span>
+            Project <span className="gradient-text">Portfolio</span>
           </h2>
           <span className="section-heading-line" />
           <p className="text-slate-400 mt-6 max-w-2xl mx-auto">
@@ -136,7 +76,7 @@ export default function PortfolioSection() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12"
         >
-          {categories.map((category) => (
+          {projectCategories.map((category) => (
             <button
               key={category}
               onClick={() => setActiveFilter(category)}
@@ -154,67 +94,69 @@ export default function PortfolioSection() {
         {/* Projects Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.title}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="glass-card card-spotlight rounded-2xl overflow-hidden group cursor-pointer hover-glow hover-lift"
-                onClick={() => openProjectDetail(project)}
-              >
-                {/* Project Image */}
-                <div
-                  className={`relative h-48 bg-gradient-to-br ${project.gradient} overflow-hidden`}
+            {filteredProjects.map((project, index) => {
+              const IconComp = project.icon;
+              return (
+                <motion.div
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  className="glass-card card-spotlight rounded-2xl overflow-hidden group cursor-pointer hover-glow hover-lift"
+                  onClick={() => openProjectDetail(project)}
                 >
-                  {project.image && (
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/60 via-transparent to-transparent" />
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40">
-                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform">
-                      <ExternalLink className="w-5 h-5 text-white" />
+                  {/* Project Image */}
+                  <div className="relative h-48 bg-gradient-to-br from-slate-800 to-slate-900 overflow-hidden">
+                    {project.image && (
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/60 via-transparent to-transparent" />
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40">
+                      <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform">
+                        <ExternalLink className="w-5 h-5 text-white" />
+                      </div>
+                    </div>
+                    {/* Category Badge */}
+                    <div className="absolute top-4 left-4">
+                      <Badge
+                        variant="secondary"
+                        className="bg-black/30 backdrop-blur-sm text-white border-white/10 text-xs"
+                      >
+                        <IconComp className="w-3 h-3 mr-1" />
+                        {project.category}
+                      </Badge>
                     </div>
                   </div>
-                  {/* Category Badge */}
-                  <div className="absolute top-4 left-4">
-                    <Badge
-                      variant="secondary"
-                      className="bg-black/30 backdrop-blur-sm text-white border-white/10 text-xs"
-                    >
-                      {project.category}
-                    </Badge>
-                  </div>
-                </div>
 
-                {/* Content */}
-                <div className="p-4 sm:p-6">
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-teal-300 transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-slate-400 text-sm mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  {/* Content */}
+                  <div className="p-4 sm:p-6">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-teal-300 transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-slate-400 text-sm mb-4 line-clamp-2">{project.description}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
       </div>
@@ -225,7 +167,7 @@ export default function PortfolioSection() {
           {selectedProject && (
             <>
               {/* Project image in modal */}
-              <div className={`relative h-48 sm:h-56 bg-gradient-to-br ${selectedProject.gradient}`}>
+              <div className="relative h-48 sm:h-56 bg-gradient-to-br from-slate-800 to-slate-900">
                 {selectedProject.image && (
                   <Image
                     src={selectedProject.image}
