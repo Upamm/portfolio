@@ -44,7 +44,7 @@ export default function CookieConsent() {
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6"
         >
-          <div className="max-w-4xl mx-auto rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-center sm:items-center gap-4 shadow-2xl shadow-black/20 border border-teal-500/10" style={{ background: 'rgba(15, 31, 56, 0.35)', backdropFilter: 'blur(32px) saturate(180%)', WebkitBackdropFilter: 'blur(32px) saturate(180%)' }}>
+          <div className="cookie-card max-w-4xl mx-auto rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-center sm:items-center gap-4 shadow-2xl border border-teal-500/10">
             {/* Icon */}
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-emerald-500/20 flex items-center justify-center shrink-0">
               <Cookie className="w-6 h-6 text-teal-400" />
