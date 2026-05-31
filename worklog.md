@@ -1435,3 +1435,23 @@ Stage Summary:
 - Starter ($99) and Premium ($499) price text now visible in light mode with dark cyan color (#0e7490)
 - All 3 plan "Get Started" buttons are now auto-width (not full card width)
 - Professional plan price uses gradient-text which already works in light mode
+
+---
+Task ID: Pricing page glow separator removal + table glow
+Agent: Main Agent
+Task: Remove glow separators from pricing page + add animated glowing border to comparison table
+
+Work Log:
+- Removed both `.glow-separator` divs from PricingSection.tsx (after pricing cards and after CTA banner)
+- Changed comparison table wrapper from `glass-card` to new `pricing-table-glow` class
+- Added CSS for `pricing-table-glow`:
+  - Base: glass-like background with `::before` conic-gradient border that rotates via `--table-glow-angle` @property (4s cycle)
+  - `::after` pulsing box-shadow glow (3s ease-in-out breathing effect)
+  - `@property --table-glow-angle` for smooth CSS Houdini animation
+  - Light mode variant: softer opacity, adjusted teal colors, separate pulse keyframes
+- Lint passes clean, dev server compiles successfully
+
+Stage Summary:
+- Pricing page no longer has glow separators between sections
+- Comparison table now has a continuously rotating conic-gradient border glow + pulsing box-shadow
+- Both dark and light modes have properly styled animated glow effects
