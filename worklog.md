@@ -1073,3 +1073,53 @@ Stage Summary:
 - Smooth CSS transitions (0.3-0.4s) when switching themes
 - Moon/Sun icon animation with rotate/scale/opacity
 - All text and backgrounds properly colored in light mode across all sections
+
+---
+Task ID: 4
+Agent: Main Agent
+Task: Fix light mode - marquee, images, pricing icons, blog images, soften colors
+
+Work Log:
+- **Soften overall light mode color palette:**
+  - `.light .text-white`: #0f172a → #334155 (slate-700, much softer)
+  - `.light .text-slate-300`: #475569 → #64748b (softer medium)
+  - `.light .text-slate-600`: #475569 → #64748b (softer)
+  - `.light .text-gray/zinc/neutral-300`: → #64748b (consistent medium)
+  - Hover states: all use #334155 instead of #0f172a
+
+- **Fix Marquee bar:**
+  - Added `.light .marquee-container { background: transparent; }`
+  - Text colors already handled by slate-400 override
+  - Fade-edge gradient `from-[#0a1628]` already overridden
+
+- **Fix Homepage background images:**
+  - Hero bg image: `.light section#home .bg-cover { opacity: 0.15; filter: brightness(1.1); }`
+  - Hero gradient overlay: softened to rgba(248,250,252,0.92) → rgba(248,250,252,0.95)
+  - Portfolio card overlays: from rgba(248,250,252,0.5) → rgba(248,250,252,0.8)
+
+- **Fix Pricing section:**
+  - Icon backgrounds: `.light .bg-slate-700/50` → rgba(100,116,139,0.12) (soft visible bg)
+  - Comparison table rows: `.light [class*="bg-white/[0.01]"]` → rgba(6,182,212,0.03)
+  - Table borders: `.light [class*="border-white/5"]` → rgba(6,182,212,0.08)
+  - Divider lines: `.light [class*="bg-white/5"]` → rgba(6,182,212,0.08)
+
+- **Fix scroll indicator:**
+  - Border: `.light [class*="border-slate-600/30"]` → rgba(6,182,212,0.3)
+  - Background: `.light [class*="bg-white/[0.02]"]` → rgba(6,182,212,0.05)
+
+- **Fix avatar ring offset:**
+  - `.light [class*="ring-offset-[#0a1628]"]` → --tw-ring-offset-color: #f8fafc
+
+- **Verified via browser:**
+  - All sections (Hero, Marquee, Services, Portfolio, Pricing, Blog, Contact) text visible
+  - Pricing cards show Starter $99, Professional $249, Premium $499
+  - Blog images visible with readable text
+  - Toggle smooth between light and dark
+  - Lint passes, build compiles with GET / 200
+
+Stage Summary:
+- Light mode now uses soft slate-500 to slate-700 palette — no harsh contrasts
+- Hero background image shows through with 15% opacity in light mode
+- Marquee text readable, pricing icons have soft visible backgrounds
+- Blog images and all page images visible in light mode
+- Comparison table uses soft teal-tinted backgrounds
