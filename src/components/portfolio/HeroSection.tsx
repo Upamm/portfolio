@@ -1,10 +1,9 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { motion, useInView } from 'framer-motion';
-import { Briefcase, Users, FolderOpen, Award, ArrowRight } from 'lucide-react';
-
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 const FIVERR_IMAGE = 'https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_original/v1/attachments/profile/photo/c4f0de1b0c500594ed3b984332754e19-1551338465000/ade0268f-4643-49c9-804b-c301b683facb.jpg';
 
@@ -14,46 +13,6 @@ const roles = [
   'B2B Lead Generation Expert',
   'WordPress Developer',
 ];
-
-const stats = [
-  { icon: Briefcase, value: 8, suffix: '+', label: 'Years Exp.' },
-  { icon: Users, value: 847, suffix: '+', label: 'Clients' },
-  { icon: FolderOpen, value: 500, suffix: '+', label: 'Projects' },
-  { icon: Award, value: 'L2', label: 'Fiverr Level' },
-];
-
-function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!isInView) return;
-    const steps = 40;
-    const duration = 1500;
-    const stepTime = duration / steps;
-    const increment = value / steps;
-    let current = 0;
-    let step = 0;
-    const timer = setInterval(() => {
-      step++;
-      current += increment;
-      if (step >= steps) {
-        setCount(value);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(current));
-      }
-    }, stepTime);
-    return () => clearInterval(timer);
-  }, [isInView, value]);
-
-  return (
-    <span ref={ref} className="text-xl sm:text-2xl font-bold gradient-text">
-      {count}{suffix}
-    </span>
-  );
-}
 
 export default function HeroSection() {
   const [roleIndex, setRoleIndex] = useState(0);
@@ -114,7 +73,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-grid opacity-20" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-4 sm:py-8 lg:py-12 pb-20 sm:pb-24 lg:pb-28">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-4 sm:py-8 lg:py-12 pb-16 sm:pb-20 lg:pb-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -210,31 +169,6 @@ export default function HeroSection() {
 
         </motion.div>
 
-        {/* Stats Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1 }}
-          className="mt-6 sm:mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto"
-        >
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 1.1 + index * 0.1 }}
-              className="glass-card rounded-xl p-2.5 sm:p-4 text-center"
-            >
-              <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 text-teal-400 mx-auto mb-1" />
-              {typeof stat.value === 'number' ? (
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              ) : (
-                <div className="text-lg sm:text-2xl font-bold gradient-text">{stat.value}</div>
-              )}
-              <div className="text-[10px] sm:text-xs text-slate-400 mt-0.5">{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
 
       {/* Scroll Down Indicator - interactive, hides on scroll */}
