@@ -14,7 +14,6 @@ const ExperienceSection = dynamic(() => import('./ExperienceSection'), { ssr: fa
 const ServicesSection = dynamic(() => import('./ServicesSection'), { ssr: false });
 const ProcessSection = dynamic(() => import('./ProcessSection'), { ssr: false });
 const PortfolioSection = dynamic(() => import('./PortfolioSection'), { ssr: false });
-const ToolsGrid = dynamic(() => import('./ToolsGrid'), { ssr: false });
 const ValuesSection = dynamic(() => import('./ValuesSection'), { ssr: false });
 const PricingSection = dynamic(() => import('./PricingSection'), { ssr: false });
 const SkillsSection = dynamic(() => import('./SkillsSection'), { ssr: false });
@@ -70,7 +69,6 @@ function AboutPage() {
       <AboutSection />
       <ExperienceSection />
       <ValuesSection />
-      <ToolsGrid />
     </>
   );
 }
@@ -81,7 +79,6 @@ function ServicesPage() {
       <ServicesSection />
       <ProcessSection />
       <SkillsSection />
-      <ToolsGrid />
     </>
   );
 }
