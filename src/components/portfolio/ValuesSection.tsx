@@ -48,7 +48,7 @@ export default function ValuesSection() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="values" className="relative py-24 sm:py-32 overflow-hidden">
+    <section id="values" className="relative py-16 sm:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -61,7 +61,7 @@ export default function ValuesSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             Why Choose Me

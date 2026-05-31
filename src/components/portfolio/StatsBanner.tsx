@@ -47,10 +47,10 @@ function AnimatedStatCounter({ stat, isInView }: { stat: (typeof stats)[0]; isIn
 
   return (
     <div className="text-center group">
-      <div className="w-14 h-14 rounded-2xl bg-teal-500/10 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
-        <stat.icon className={`w-7 h-7 ${stat.color}`} />
+      <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-teal-500/10 flex items-center justify-center mx-auto mb-2 sm:mb-3 group-hover:scale-110 transition-transform duration-300">
+        <stat.icon className={`w-5 h-5 sm:w-7 sm:h-7 ${stat.color}`} />
       </div>
-      <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
+      <div className="text-2xl sm:text-4xl font-bold text-white mb-1">
         {displayValue}
       </div>
       <div className="text-xs sm:text-sm text-slate-400">{stat.label}</div>
@@ -79,7 +79,7 @@ export default function StatsBanner() {
       <div className="absolute bottom-0 left-0 right-0 section-divider" />
 
       <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 lg:gap-8">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}

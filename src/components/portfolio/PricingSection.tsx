@@ -77,7 +77,7 @@ function PricingCard({
     >
       {/* "Most Popular" badge */}
       {pkg.featured && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
+        <div className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 z-20">
           <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white text-xs font-bold shadow-lg shadow-teal-500/30">
             <Sparkles className="w-3.5 h-3.5" />
             Most Popular
@@ -165,7 +165,7 @@ export default function PricingSection() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="pricing" className="relative py-24 sm:py-32 overflow-hidden">
+    <section id="pricing" className="relative py-16 sm:py-32 overflow-x-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -178,7 +178,7 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             Pricing Plans
@@ -206,7 +206,7 @@ export default function PricingSection() {
         </div>
 
         {/* Glow Separator - Skills/Pricing → Testimonials */}
-        <div className="glow-separator mt-24 sm:mt-32" />
+        <div className="glow-separator mt-16 sm:mt-32" />
       </div>
     </section>
   );

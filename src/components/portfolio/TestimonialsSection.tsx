@@ -83,7 +83,7 @@ export default function TestimonialsSection() {
   };
 
   return (
-    <section id="testimonials" className="relative py-24 sm:py-32 overflow-hidden">
+    <section id="testimonials" className="relative py-16 sm:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -95,7 +95,7 @@ export default function TestimonialsSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             Testimonials
@@ -116,10 +116,10 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-3xl mx-auto"
         >
-          <div className="relative glass-card testimonial-glow rounded-2xl p-8 sm:p-12 min-h-[320px] flex items-center overflow-hidden">
+          <div className="relative glass-card testimonial-glow rounded-2xl p-6 sm:p-12 min-h-[280px] sm:min-h-[320px] flex items-center overflow-hidden">
             {/* Quote icon */}
-            <Quote className="absolute top-8 right-10 w-20 h-20 text-teal-500/5 rotate-180" />
-            <Quote className="absolute bottom-6 left-10 w-16 h-16 text-emerald-500/5" />
+            <Quote className="absolute top-4 sm:top-8 right-6 sm:right-10 w-16 h-16 sm:w-20 sm:h-20 text-teal-500/5 rotate-180" />
+            <Quote className="absolute bottom-4 sm:bottom-6 left-6 sm:left-10 w-12 h-12 sm:w-16 sm:h-16 text-emerald-500/5" />
 
             {/* Bottom reflection/glow gradient */}
             <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-teal-500/5 to-transparent pointer-events-none" />
@@ -136,11 +136,11 @@ export default function TestimonialsSection() {
                 className="w-full"
               >
                 {/* Stars */}
-                <div className="flex gap-1 mb-6">
+                <div className="flex gap-0.5 sm:gap-1 mb-4 sm:mb-6">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-6 h-6 transition-all duration-300 ${
+                      className={`w-5 h-5 sm:w-6 sm:h-6 transition-all duration-300 ${
                         i < testimonials[current].rating
                           ? 'fill-yellow-400 text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.3)]'
                           : 'text-slate-600'
@@ -150,7 +150,7 @@ export default function TestimonialsSection() {
                 </div>
 
                 {/* Text */}
-                <p className="text-lg sm:text-xl text-slate-300 leading-relaxed mb-8 italic">
+                <p className="text-base sm:text-xl text-slate-300 leading-relaxed mb-6 sm:mb-8 italic">
                   &ldquo;{testimonials[current].text}&rdquo;
                 </p>
 
@@ -196,7 +196,7 @@ export default function TestimonialsSection() {
           <div className="flex items-center justify-center gap-4 mt-8">
             <button
               onClick={prev}
-              className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+              className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-white transition-colors"
               aria-label="Previous testimonial"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -223,7 +223,7 @@ export default function TestimonialsSection() {
 
             <button
               onClick={next}
-              className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+              className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-white transition-colors"
               aria-label="Next testimonial"
             >
               <ChevronRight className="w-5 h-5" />

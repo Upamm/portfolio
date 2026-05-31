@@ -46,7 +46,7 @@ function ToolCard({
     >
       <div className="glass-card card-spotlight hover-glow rounded-2xl p-4 sm:p-5 w-full flex flex-col items-center gap-3 cursor-default transition-all duration-300 hover:-translate-y-1.5">
         {/* Short code circle */}
-        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:shadow-teal-500/40 group-hover:scale-110 transition-all duration-300">
+        <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:shadow-teal-500/40 group-hover:scale-110 transition-all duration-300">
           <span className="text-sm sm:text-base font-bold text-white tracking-wide">
             {tool.shortCode}
           </span>
@@ -74,7 +74,7 @@ export default function ToolsGrid() {
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="tools" className="relative py-24 sm:py-32 overflow-hidden">
+    <section id="tools" className="relative py-16 sm:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-dots opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -87,7 +87,7 @@ export default function ToolsGrid() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             My Arsenal
@@ -102,7 +102,7 @@ export default function ToolsGrid() {
         </motion.div>
 
         {/* Tools Grid — 4 cols mobile, 6 cols tablet, 8 cols desktop */}
-        <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
           {toolsData.map((tool, index) => (
             <ToolCard
               key={tool.shortCode}

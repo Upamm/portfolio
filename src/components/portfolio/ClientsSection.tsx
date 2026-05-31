@@ -26,7 +26,7 @@ export default function ClientsSection() {
   const doubled = [...clients, ...clients];
 
   return (
-    <section id="clients" className="relative py-24 sm:py-32 overflow-hidden">
+    <section id="clients" className="relative py-16 sm:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-500/[0.02] to-transparent" />
 

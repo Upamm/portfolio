@@ -48,7 +48,7 @@ export default function FAQSection() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="faq" className="relative py-24 sm:py-32 overflow-hidden">
+    <section id="faq" className="relative py-16 sm:py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -61,7 +61,7 @@ export default function FAQSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-4">
             <HelpCircle className="w-4 h-4 text-teal-400" />
@@ -109,7 +109,7 @@ export default function FAQSection() {
         </motion.div>
 
         {/* Glow Separator - FAQ → Contact */}
-        <div className="glow-separator mt-24 sm:mt-32" />
+        <div className="glow-separator mt-16 sm:mt-32" />
       </div>
     </section>
   );
