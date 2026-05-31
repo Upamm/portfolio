@@ -108,7 +108,7 @@
   html.transitioning *,
   html.transitioning *::before,
   html.transitioning *::after {
-    transition: background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+    transition: background-color 0.4s ease, background 0.4s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
   }
 
   [id] {
@@ -1816,7 +1816,8 @@ button:hover .logo-text-group {
 
 /* Light section divider */
 .light .section-divider {
-  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.15), transparent);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(8, 145, 178, 0.2), transparent) !important;
 }
 
 /* Light glow effects */
