@@ -20,10 +20,10 @@ export default function HeroSection() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
-  // Hide scroll indicator when user scrolls
+  // Hide scroll indicator when user scrolls down a little bit
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 60) {
+      if (window.scrollY > 30) {
         setShowScrollIndicator(false);
       } else {
         setShowScrollIndicator(true);
@@ -171,34 +171,26 @@ export default function HeroSection() {
 
       </div>
 
-      {/* Scroll Down Indicator - interactive, hides on scroll */}
-      <motion.a
-        href="#about"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: showScrollIndicator ? 1 : 0, y: showScrollIndicator ? 0 : 15, scale: showScrollIndicator ? 1 : 0.8 }}
-        transition={{ delay: 1.5, duration: 0.3 }}
-        onClick={(e) => {
-          e.preventDefault();
-          const nav = (window as unknown as Record<string, unknown>).__navigateTo as ((p: string) => void) | undefined;
-          nav?.('about');
-        }}
-        className="absolute bottom-8 sm:bottom-12 lg:bottom-16 left-1/2 -translate-x-1/2 cursor-pointer group z-10"
-        aria-label="Scroll to about section"
+      {/* Scroll Down Indicator - purely decorative, hides on scroll */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showScrollIndicator ? 1 : 0, y: showScrollIndicator ? 0 : 20 }}
+        transition={{ delay: 1.5, duration: 0.4, ease: 'easeOut' }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 pointer-events-none select-none"
+        aria-hidden="true"
       >
         <motion.div
-          whileHover={{ scale: 1.2 }}
-          whileTap={{ scale: 0.85 }}
           animate={{ y: [0, 5, 0] }}
-          transition={{ y: { repeat: Infinity, duration: 2.5, ease: 'easeInOut' }, scale: { duration: 0.15 } }}
-          className="relative w-8 h-12 sm:w-9 sm:h-13 rounded-full border-2 border-slate-600/30 group-hover:border-teal-400/70 flex items-start justify-center pt-2.5 transition-all duration-300 bg-white/[0.02] group-hover:bg-teal-500/8 group-hover:shadow-lg group-hover:shadow-teal-500/15"
+          transition={{ y: { repeat: Infinity, duration: 2.5, ease: 'easeInOut' } }}
+          className="relative w-6 h-10 rounded-full border-2 border-slate-600/25 flex items-start justify-center pt-2"
         >
           <motion.div
-            animate={{ y: [0, 12, 0], opacity: [1, 0.1, 1] }}
+            animate={{ y: [0, 10, 0], opacity: [1, 0.2, 1] }}
             transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
-            className="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_10px_rgba(6,182,212,0.8)]"
+            className="w-1 h-1 rounded-full bg-teal-400/80"
           />
         </motion.div>
-      </motion.a>
+      </motion.div>
     </section>
   );
 }
