@@ -1615,3 +1615,43 @@ Fix blog page popup (modal) cover image - when scrolling within the modal, the c
 ### Verification
 - `bun run lint` — 0 errors
 - Dev server compiles successfully
+
+---
+## Phase - Scroll-to-Top Button Redesign
+
+### Task
+Fix the scroll-to-top button — make it visible and properly animated.
+
+### Problem
+The original ScrollToTop button was nearly invisible — just a thin 3px stroke circle with 10px percentage text on a dark background, no fill, no glow. Invisible to users.
+
+### Changes Made - Complete Redesign of `src/components/portfolio/ScrollToTop.tsx`:
+
+1. **Solid Glass Background** — Added a dark semi-transparent circle (`rgba(6,20,40,0.85)`) with `backdrop-filter: blur(12px)` and a teal border, making the button clearly visible against any background.
+
+2. **Animated Progress Ring** — Thicker stroke (3.5px) with a 3-stop gradient (teal → teal-emerald → emerald). Includes `drop-shadow` filter for a neon glow effect on the progress arc.
+
+3. **Glowing Dot Indicator** — A small glowing dot (3.5px radius) at the leading edge of the progress arc that moves as you scroll, with a bright drop-shadow for emphasis.
+
+4. **ChevronUp Arrow Icon** — Replaced the tiny percentage-only display with a Lucide ChevronUp arrow (w-5, h-5, teal-400, stroke 2.5) sitting above the gradient percentage number.
+
+5. **Outer Glow Ring** — Always-visible blurred gradient glow (`from-teal-500/20 to-emerald-500/20`) that intensifies on hover.
+
+6. **Hover Animations** — Arrow lifts up and scales up on hover; outer glow intensifies to 30px + 60px spread; outer ring border fades in.
+
+7. **Spring Entrance Animation** — Button enters with `opacity: 0, y: 30, scale: 0.6` → `1` using a custom spring curve `[0.34, 1.56, 0.64, 1]` for a bouncy feel.
+
+8. **Performance** — RAF-throttled scroll handler prevents excessive re-renders. Visibility state uses a ref comparison to avoid unnecessary state updates.
+
+9. **Inner Glass Reflection** — Subtle radial gradient at top-left corner for a glass/reflection effect.
+
+### Technical Details
+- Button size: 52×52px
+- Appears after 200px scroll (lowered from 300px for quicker appearance)
+- Progress range: 0-100%, capped with `Math.min()`
+- Z-index: 50 (above content, below modals)
+- Position: fixed bottom-6 right-6
+
+### Verification
+- `bun run lint` — 0 errors
+- Dev server compiled successfully
