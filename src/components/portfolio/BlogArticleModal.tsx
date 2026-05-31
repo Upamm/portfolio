@@ -1,10 +1,16 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Calendar, Clock, ArrowRight, X, User, Lightbulb } from 'lucide-react';
 import Image from 'next/image';
 import type { BlogArticle, BlogContentBlock } from './BlogSection';
+
+// Check if we're in the browser (client-side)
+const subscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export type ArticleModalProps = {
   article: BlogArticle | null;
@@ -127,27 +133,24 @@ export default function BlogArticleModal({
   onClose,
 }: ArticleModalProps) {
   const contentRef = useRef<HTMLDivElement>(null);
-
-  // Reset scroll position when article changes
-  useEffect(() => {
-    if (isOpen && contentRef.current) {
-      contentRef.current.scrollTop = 0;
-    }
-  }, [isOpen, article?.id]);
+  const mounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   // Lock body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      if (contentRef.current) contentRef.current.scrollTop = 0;
     } else {
       document.body.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isOpen]);
+  }, [isOpen, article?.id]);
 
-  return (
+  if (!mounted) return null;
+
+  const modalContent = (
     <AnimatePresence>
       {isOpen && article && (
         <>
@@ -299,4 +302,6 @@ export default function BlogArticleModal({
       )}
     </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 }
