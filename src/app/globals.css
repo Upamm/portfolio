@@ -2209,19 +2209,15 @@ button:hover .logo-text-group {
   border-color: rgba(8, 145, 178, 0.15) !important;
 }
 
-/* ScrollToTop button - light mode background */
-.light [style*="rgba(6, 20, 40, 0.85)"] {
-  background: rgba(224, 242, 248, 0.9) !important;
-  border-color: rgba(8, 145, 178, 0.2) !important;
+/* ScrollToTop button - light mode */
+.light .scroll-top-btn {
+  background: rgba(224, 242, 254, 0.7) !important;
+  border-color: rgba(8, 145, 178, 0.25) !important;
+  color: #0e7490 !important;
 }
-
-.light .shadow-lg.shadow-teal-500\/10 {
-  box-shadow: 0 10px 30px rgba(6, 182, 212, 0.15);
-}
-
-/* ScrollToTop progress gradient in light mode */
-.light [stroke*="url(#scrollGrad)"] {
-  stroke: url(#scrollGrad);
+.light .scroll-top-btn:hover {
+  background: rgba(186, 230, 253, 0.8) !important;
+  border-color: rgba(6, 182, 212, 0.4) !important;
 }
 
 /* ==================== */
