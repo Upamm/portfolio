@@ -103,7 +103,7 @@ export default function HeroSection() {
                 src={FIVERR_IMAGE}
                 alt="Upam"
                 fill
-                sizes="56px"
+                sizes="(max-width: 639px) 56px, 80px"
                 className="object-cover object-top"
                 priority
               />

@@ -6,7 +6,7 @@ import { Mail } from 'lucide-react';
 
 export default function WhatsAppFAB() {
   const [isVisible, setIsVisible] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -16,13 +16,20 @@ export default function WhatsAppFAB() {
       { threshold: 0.1 }
     );
 
-    const heroEl = document.getElementById('home');
-    if (heroEl) {
-      observer.observe(heroEl);
-      heroRef.current = heroEl;
-    }
+    let cancelled = false;
+    const tryObserve = () => {
+      const heroEl = document.getElementById('home');
+      if (heroEl && !cancelled) {
+        observer.observe(heroEl);
+        heroRef.current = heroEl;
+      } else if (!cancelled) {
+        requestAnimationFrame(tryObserve);
+      }
+    };
+    tryObserve();
 
     return () => {
+      cancelled = true;
       if (heroRef.current) {
         observer.unobserve(heroRef.current);
       }

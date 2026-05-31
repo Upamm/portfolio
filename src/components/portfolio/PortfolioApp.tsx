@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useTransition, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef, Suspense, useTransition, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './Navbar';
@@ -116,24 +116,24 @@ const getPages = (onNavigate: (page: PageKey) => void): Record<PageKey, () => Re
 });
 
 export default function PortfolioApp() {
-  // Restore last visited page from cookie for instant reload
-  const [currentPage, setCurrentPage] = useState<PageKey>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = getCookie(COOKIES.LAST_PAGE);
-      if (saved && pageList.includes(saved as PageKey)) {
-        return saved as PageKey;
-      }
-      // Fallback to hash if set
-      const hash = window.location.hash.replace('#', '');
-      if (hash && pageList.includes(hash as PageKey)) {
-        return hash as PageKey;
-      }
-    }
-    return 'home';
-  });
-
+  // Default to home; cookie/hash sync happens in useEffect on mount
+  const [currentPage, setCurrentPage] = useState<PageKey>('home');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const navTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  // Restore last visited page from cookie or URL hash on mount (avoids hydration mismatch)
+  useEffect(() => {
+    const saved = getCookie(COOKIES.LAST_PAGE);
+    if (saved && pageList.includes(saved as PageKey)) {
+      setCurrentPage(saved as PageKey);
+      return;
+    }
+    const hash = window.location.hash.replace('#', '');
+    if (hash && pageList.includes(hash as PageKey)) {
+      setCurrentPage(hash as PageKey);
+    }
+  }, []);
 
   // Save current page to cookie on change (persists across reloads)
   useEffect(() => {
@@ -180,8 +180,11 @@ export default function PortfolioApp() {
       }
     };
 
-    // Sync initial hash with current page
-    if (!window.location.hash) {
+    // Sync initial hash — read it OR write it
+    const existingHash = window.location.hash.replace('#', '') as PageKey;
+    if (existingHash && pageList.includes(existingHash)) {
+      setCurrentPage(existingHash);
+    } else if (!window.location.hash) {
       window.location.hash = currentPage;
     }
 
@@ -195,15 +198,22 @@ export default function PortfolioApp() {
 
     setIsTransitioning(true);
     // Reduced transition delay for snappier feel
-    setTimeout(() => {
+    navTimeoutRef.current = setTimeout(() => {
       startTransition(() => {
         setCurrentPage(page);
         window.location.hash = page;
         window.scrollTo({ top: 0, behavior: 'instant' });
-        setIsTransitioning(false);
       });
+      setIsTransitioning(false);
     }, 80); // Reduced from 150ms for faster feel
   }, [currentPage]);
+
+  // Cleanup nav timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (navTimeoutRef.current) clearTimeout(navTimeoutRef.current);
+    };
+  }, []);
 
   // Expose navigateTo globally for Navbar/Footer
   useEffect(() => {
