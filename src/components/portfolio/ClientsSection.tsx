@@ -33,20 +33,24 @@ export default function ClientsSection() {
       {/* Top separator */}
       <div className="absolute top-0 left-0 right-0 section-divider" />
 
-      <div ref={ref} className="relative z-10">
+      <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-10"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             Trusted By
           </span>
-          <h3 className="text-xl sm:text-2xl font-bold text-white mt-2">
+          <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mt-3">
             Clients I&apos;ve Worked <span className="gradient-text">With</span>
           </h3>
+          <span className="section-heading-line" />
+          <p className="text-slate-400 mt-6 max-w-2xl mx-auto">
+            Trusted by businesses across diverse industries worldwide.
+          </p>
         </motion.div>
 
         {/* Row 1 - Left to Right */}

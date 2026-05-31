@@ -78,7 +78,7 @@ export default function StatsBanner() {
       <div className="absolute top-0 left-0 right-0 section-divider" />
       <div className="absolute bottom-0 left-0 right-0 section-divider" />
 
-      <div ref={ref} className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div ref={ref} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 lg:gap-8">
           {stats.map((stat, index) => (
             <motion.div

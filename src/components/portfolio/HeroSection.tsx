@@ -1,9 +1,12 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import { ChevronDown, Briefcase, Users, FolderOpen, Award, Download, ArrowRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+
+const FIVERR_IMAGE = 'https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_original/v1/attachments/profile/photo/c4f0de1b0c500594ed3b984332754e19-1551338465000/ade0268f-4643-49c9-804b-c301b683facb.jpg';
 
 const roles = [
   'WordPress Virtual Assistant',
@@ -115,11 +118,31 @@ export default function HeroSection() {
             <span className="text-xs sm:text-sm text-slate-300 font-medium">Available for freelance work</span>
           </motion.div>
 
-          {/* Main Heading */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-2 sm:mb-4 tracking-tight leading-tight">
-            <span className="text-white">I&apos;m </span>
-            <span className="gradient-text">Upam</span>
-          </h1>
+          {/* Profile Image + Main Heading */}
+          <div className="flex items-center justify-center gap-4 sm:gap-5 mb-2 sm:mb-4">
+            {/* Small avatar */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden shrink-0 ring-2 ring-teal-500/30 ring-offset-2 ring-offset-[#0a1628]"
+            >
+              <Image
+                src={FIVERR_IMAGE}
+                alt="Upam"
+                fill
+                sizes="56px"
+                className="object-cover object-top"
+                priority
+              />
+            </motion.div>
+            <div className="text-left">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
+                <span className="text-white">I&apos;m </span>
+                <span className="gradient-text">Upam</span>
+              </h1>
+            </div>
+          </div>
 
           {/* Typing subtitle */}
           <div className="h-8 sm:h-12 flex items-center justify-center mb-4 sm:mb-7">
