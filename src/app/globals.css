@@ -1730,18 +1730,18 @@ body::before {
   background: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
 }
 
-.light .bg-gradient-to-b.from-\[\#060f1d\],
-.light .bg-gradient-to-b.from-[#0a1628] {
+.light [class*="from-[#060f1d]"],
+.light [class*="from-[#0a1628]"] {
   background: linear-gradient(to bottom, #f1f5f9, #e2e8f0) !important;
 }
 
 /* Light navbar scrolled state - hardcoded in component */
-.light .bg-\[\#0a1628\]\/95 {
+.light [class*="bg-[#0a1628]/95"] {
   background: rgba(248, 250, 252, 0.95) !important;
 }
 
 /* Light hero section bottom gradient */
-.light .from-\[#0a1628\]\/60 {
+.light [class*="from-[#0a1628]/60"] {
   --tw-gradient-from: rgba(248, 250, 252, 0.7) !important;
   --tw-gradient-to: #f8fafc !important;
 }

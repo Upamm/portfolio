@@ -973,3 +973,24 @@ Comprehensive layout fixes across all 25 portfolio components, global consistenc
 3. **Medium**: Add light theme CSS styles (toggle exists but no light theme)
 4. **Medium**: Performance audit with Lighthouse
 5. **Low**: Add prefers-reduced-motion media query support
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix CSS parsing error in globals.css - escaped # characters incompatible with Turbopack/lightningcss
+
+Work Log:
+- Identified CSS build error: `Parsing CSS source code failed` at line 1734 in globals.css
+- Root cause: Turbopack uses lightningcss which cannot parse escaped `#` characters in CSS class selectors (e.g., `.from-\[#0a1628\]`)
+- Found 4 problematic selectors using escaped `#` in class names
+- Replaced all 4 with attribute selectors where `#` is safely inside quoted strings:
+  - `.light .bg-gradient-to-b.from-\[\#060f1d\]` → `.light [class*="from-[#060f1d]"]`
+  - `.light .bg-gradient-to-b.from-\[\#0a1628\]` → `.light [class*="from-[#0a1628]"]`
+  - `.light .bg-\[\#0a1628\]\/95` → `.light [class*="bg-[#0a1628]/95"]`
+  - `.light .from-\[#0a1628\]\/60` → `.light [class*="from-[#0a1628]/60"]`
+- Restarted dev server, verified `GET / 200` with zero CSS errors
+
+Stage Summary:
+- CSS build error completely resolved
+- Dev server compiles cleanly with no parsing errors
+- Light theme overrides for backgrounds and gradients still functional via attribute selectors
