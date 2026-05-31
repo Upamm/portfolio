@@ -480,7 +480,7 @@ export default function PricingSection() {
   };
 
   return (
-    <section id="pricing" className="relative pt-14 sm:pt-16 pb-10 sm:pb-16 overflow-x-hidden">
+    <section id="pricing" className="relative pt-20 sm:pt-24 pb-10 sm:pb-16 overflow-x-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
