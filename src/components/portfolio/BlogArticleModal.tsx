@@ -129,14 +129,13 @@ export default function BlogArticleModal({
               </div>
 
               {/* CTA Button */}
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
+              <button
+                onClick={() => onClose()}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/25"
               >
                 Read Full Article
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </button>
             </motion.div>
           </DialogContent>
         )}

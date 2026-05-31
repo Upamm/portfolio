@@ -102,6 +102,10 @@
     scroll-behavior: smooth;
   }
 
+  [id] {
+    scroll-margin-top: 80px;
+  }
+
   body {
     @apply bg-background text-foreground;
     overflow-x: hidden;
@@ -1247,4 +1251,70 @@ body::before {
   50% {
     background-position: 100% 50%;
   }
+}
+
+/* ==================== */
+/* SECTION TRANSITIONS    */
+/* ==================== */
+.section-transition {
+  position: relative;
+}
+
+.section-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 22, 40, 0.5) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.section-transition::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(
+    to top,
+    rgba(10, 22, 40, 0.5) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ==================== */
+/* SCROLL DOWN INDICATOR  */
+/* ==================== */
+@keyframes scroll-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.6;
+  }
+}
+
+.scroll-down-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* ==================== */
+/* ENHANCED MOBILE NAV    */
+/* ==================== */
+.mobile-nav-active {
+  background: rgba(6, 182, 212, 0.15);
+  border-left: 3px solid #06b6d4;
+  padding-left: 13px;
 }

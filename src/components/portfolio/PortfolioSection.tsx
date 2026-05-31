@@ -152,7 +152,7 @@ export default function PortfolioSection() {
         </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project, index) => (
               <motion.div
@@ -271,7 +271,7 @@ export default function PortfolioSection() {
                     asChild
                     className="btn-shine bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-white font-medium shadow-lg shadow-teal-500/20"
                   >
-                    <a href="#" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.fiverr.com/upam1721" target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View Live Site
                     </a>

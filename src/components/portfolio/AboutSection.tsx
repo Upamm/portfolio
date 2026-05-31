@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { MapPin, Clock, Globe, MessageCircle, Star, Download } from 'lucide-react';
 import Image from 'next/image';
+import { useToast } from '@/hooks/use-toast';
 
 const quickInfo = [
   { icon: MapPin, label: 'Location', value: 'Bangladesh' },
@@ -13,6 +14,7 @@ const quickInfo = [
 ];
 
 export default function AboutSection() {
+  const { toast } = useToast();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -153,13 +155,13 @@ export default function AboutSection() {
               transition={{ duration: 0.5, delay: 0.9 }}
               className="mt-8"
             >
-              <a
-                href="#"
+              <button
+                onClick={() => toast({ title: 'Resume Available', description: 'Resume PDF will be available for download soon. Contact me to request a copy!' })}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-teal-400 border border-teal-500/30 hover:border-teal-400/60 hover:bg-teal-500/10 transition-all duration-300 hover:scale-105"
               >
                 <Download className="w-4 h-4" />
                 Download Resume
-              </a>
+              </button>
             </motion.div>
           </motion.div>
         </div>

@@ -223,7 +223,7 @@ export default function SkillsSection() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Progress Bars */}
           <div className="space-y-5">
             {skills.map((skill, index) => (
@@ -237,55 +237,57 @@ export default function SkillsSection() {
           </div>
 
           {/* Tools & Technologies */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
+          <div className="space-y-8">
             <SkillRadarChart isInView={isInView} />
-            <h3 className="text-xl font-bold text-white mb-6">
-              Tools & Technologies
-            </h3>
-            <div className="flex flex-wrap gap-3">
-              {tools.map((tool, index) => (
-                <motion.span
-                  key={tool}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.3, delay: 0.4 + index * 0.03 }}
-                  className="px-4 py-2.5 rounded-xl glass-card text-sm font-medium text-slate-300 hover:text-teal-300 hover:border-teal-500/30 cursor-default transition-all duration-300"
-                >
-                  {tool}
-                </motion.span>
-              ))}
-            </div>
-
-            {/* Additional info */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="mt-10 glass-card rounded-2xl p-6 sm:p-8"
+              initial={{ opacity: 0, x: 30 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <h4 className="text-lg font-bold text-white mb-3">
-                Why Choose Me?
-              </h4>
-              <ul className="space-y-3">
-                {[
-                  '8+ years of hands-on WordPress experience',
-                  '4.8/5 rating across 847+ completed projects',
-                  'Quick turnaround with no compromise on quality',
-                  'Clear communication and regular progress updates',
-                  'Post-project support and maintenance available',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-slate-400">
-                    <span className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" />
-                    {item}
-                  </li>
+              <h3 className="text-xl font-bold text-white mb-6">
+                Tools & Technologies
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {tools.map((tool, index) => (
+                  <motion.span
+                    key={tool}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ duration: 0.3, delay: 0.4 + index * 0.03 }}
+                    className="px-4 py-2.5 rounded-xl glass-card text-sm font-medium text-slate-300 hover:text-teal-300 hover:border-teal-500/30 cursor-default transition-all duration-300"
+                  >
+                    {tool}
+                  </motion.span>
                 ))}
-              </ul>
+              </div>
+
+              {/* Additional info */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                className="mt-10 glass-card rounded-2xl p-6 sm:p-8"
+              >
+                <h4 className="text-lg font-bold text-white mb-3">
+                  Why Choose Me?
+                </h4>
+                <ul className="space-y-3">
+                  {[
+                    '8+ years of hands-on WordPress experience',
+                    '4.8/5 rating across 847+ completed projects',
+                    'Quick turnaround with no compromise on quality',
+                    'Clear communication and regular progress updates',
+                    'Post-project support and maintenance available',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-slate-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

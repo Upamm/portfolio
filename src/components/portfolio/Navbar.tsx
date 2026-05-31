@@ -143,7 +143,7 @@ export default function Navbar() {
                   transition={{ delay: index * 0.05 }}
                   className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                     activeSection === link.href.replace('#', '')
-                      ? 'text-teal-400 bg-teal-500/10'
+                      ? 'text-teal-400 mobile-nav-active'
                       : 'text-slate-300 hover:text-white hover:bg-white/5'
                   }`}
                 >

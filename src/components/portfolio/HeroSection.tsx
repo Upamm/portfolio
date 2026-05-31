@@ -4,6 +4,7 @@ import { useRef, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useEffect, useState, useMemo } from 'react';
 import { ChevronDown, Briefcase, Users, FolderOpen, Award, Download } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const roles = [
   'WordPress Virtual Assistant',
@@ -116,6 +117,7 @@ function MagneticButton({
 }
 
 export default function HeroSection() {
+  const { toast } = useToast();
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -326,13 +328,13 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 1 }}
             className="mt-6"
           >
-            <a
-              href="#"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium text-slate-400 border border-slate-600/30 hover:border-teal-500/40 hover:text-teal-400 transition-all duration-300"
+            <button
+              onClick={() => toast({ title: 'Resume Available', description: 'Resume PDF will be available for download soon. Contact me to request a copy!' })}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium text-slate-400 border border-slate-600/30 hover:border-teal-500/40 hover:text-teal-400 transition-all duration-300 hover:scale-105"
             >
               <Download className="w-4 h-4" />
               Download Resume
-            </a>
+            </button>
           </motion.div>
         </motion.div>
 

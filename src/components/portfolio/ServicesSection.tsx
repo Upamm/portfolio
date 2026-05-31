@@ -1,8 +1,7 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { useState } from 'react';
 import {
   Code,
   Zap,
@@ -178,7 +177,7 @@ export default function ServicesSection() {
         </motion.div>
 
         {/* Services Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {services.map((service, index) => (
             <TiltCard
               key={service.title}

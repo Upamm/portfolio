@@ -42,7 +42,7 @@ const certifications = [
     description:
       'Specialized in WordPress performance tuning (90+ PageSpeed scores).',
     gradientFrom: 'from-cyan-400',
-    gradientTo: 'to-blue-500',
+    gradientTo: 'to-teal-500',
   },
   {
     icon: FolderCheck,
@@ -82,14 +82,15 @@ export default function CertificationsSection() {
     <section
       id="certifications"
       ref={sectionRef}
-      className="relative py-24 overflow-hidden"
+      className="relative py-24 sm:py-32 overflow-hidden"
     >
       {/* Background decorations */}
       <div className="absolute inset-0 bg-dots opacity-30" />
+      <div className="absolute top-0 left-0 right-0 section-divider" />
       <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-cyan-500/10 to-emerald-500/10 blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 -left-40 w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-teal-500/10 to-cyan-500/10 blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -97,17 +98,20 @@ export default function CertificationsSection() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-            <span className="gradient-text">Certifications &amp; Awards</span>
+          <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
+            Recognition
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mt-3">
+            Certifications &amp; <span className="gradient-text">Awards</span>
           </h2>
-          <div className="section-heading-line mx-auto mb-6" />
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          <span className="section-heading-line" />
+          <p className="text-slate-400 mt-6 max-w-2xl mx-auto">
             Recognized achievements and milestones throughout my career
           </p>
         </motion.div>
 
         {/* Certifications grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {certifications.map((cert, index) => {
             const Icon = cert.icon;
 
@@ -141,7 +145,7 @@ export default function CertificationsSection() {
                 </h3>
 
                 {/* Description */}
-                <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
                   {cert.description}
                 </p>
 

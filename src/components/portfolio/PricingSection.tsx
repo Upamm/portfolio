@@ -144,14 +144,14 @@ function PricingCard({
           {/* CTA Button */}
           <div className="mt-auto">
             <Button
-              asChild
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               className={`w-full py-3 rounded-xl font-medium transition-all duration-300 ${
                 pkg.featured
                   ? 'bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-white shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 btn-shine'
                   : 'bg-transparent border border-teal-500/30 text-teal-400 hover:bg-teal-500/10 hover:border-teal-500/50'
               }`}
             >
-              <a href="#contact">Get Started</a>
+              Get Started
             </Button>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function PricingSection() {
         </motion.div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 items-start">
+        <div className="grid md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-start">
           {packages.map((pkg, index) => (
             <PricingCard
               key={pkg.name}

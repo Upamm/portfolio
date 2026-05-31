@@ -76,7 +76,7 @@ export default function ValuesSection() {
         </motion.div>
 
         {/* Values Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {values.map((value, index) => (
             <motion.div
               key={value.title}

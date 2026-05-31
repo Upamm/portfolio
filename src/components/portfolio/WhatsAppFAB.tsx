@@ -41,7 +41,7 @@ export default function WhatsAppFAB() {
         <Tooltip>
           <TooltipTrigger asChild>
             <motion.a
-              href="https://wa.me/message/yourmessage"
+              href="https://wa.me/?text=Hi%20Upam%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project."
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20, scale: 0.8 }}

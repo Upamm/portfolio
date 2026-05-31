@@ -188,13 +188,13 @@ export default function BlogSection() {
           transition={{ duration: 0.5, delay: 0.8 }}
           className="text-center mt-12"
         >
-          <a
-            href="#"
+          <button
+            onClick={() => document.getElementById('blog')?.scrollIntoView({ behavior: 'smooth' })}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium text-teal-400 border border-teal-500/30 hover:border-teal-400/60 hover:bg-teal-500/10 transition-all duration-300 hover:scale-105"
           >
             View All Articles
             <ArrowUpRight className="w-4 h-4" />
-          </a>
+          </button>
         </motion.div>
       </div>
     </section>
