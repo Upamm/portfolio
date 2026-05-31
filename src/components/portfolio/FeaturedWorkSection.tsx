@@ -83,7 +83,7 @@ function FeaturedCard({
         </div>
 
         {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#0a1628] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-20 featured-card-fade" />
       </div>
 
       {/* Content Area */}

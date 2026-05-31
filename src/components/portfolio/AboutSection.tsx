@@ -96,8 +96,8 @@ export default function AboutSection() {
                   priority
                 />
                 {/* Dark gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#0a1628]/80" />
-                <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#0a1628] via-transparent to-transparent" />
+                <div className="absolute inset-0 about-image-fade" />
+                <div className="absolute inset-0 about-image-fade-secondary" />
 
                 {/* Badges overlay on image - positioned at bottom for mobile, right for desktop */}
                 <div className="absolute bottom-0 left-0 right-0 lg:bottom-auto lg:top-6 lg:left-6 p-4 lg:p-0 flex flex-wrap gap-2 lg:flex-col lg:gap-3">

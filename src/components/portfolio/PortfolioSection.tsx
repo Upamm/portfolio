@@ -118,9 +118,9 @@ export default function PortfolioSection() {
                         className="object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/60 via-transparent to-transparent" />
+                    <div className="absolute inset-0 project-card-image-fade" />
                     {/* Hover overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 card-hover-overlay">
                       <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover:scale-100 transition-transform">
                         <ExternalLink className="w-5 h-5 text-white" />
                       </div>
@@ -177,7 +177,7 @@ export default function PortfolioSection() {
                     className="object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0f1f38] via-transparent to-transparent" />
+                <div className="absolute inset-0 modal-card-image-fade" />
                 {/* Category badge */}
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-black/30 backdrop-blur-sm text-white border-white/10 text-xs">

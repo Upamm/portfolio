@@ -2192,7 +2192,7 @@ function BlogCard({
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         {/* overlay gradient from bottom */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/40 to-transparent" />
+        <div className="absolute inset-0 blog-card-image-fade" />
         {/* Category badge top-left */}
         <div className="absolute top-4 left-4 z-10">
           <span className="px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm text-white text-xs font-medium">

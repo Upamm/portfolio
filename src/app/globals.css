@@ -188,6 +188,145 @@ body::before {
 }
 
 /* ==================== */
+/* MARQUEE FADE OVERLAY  */
+/* ==================== */
+.marquee-fade-overlay {
+  background: linear-gradient(to right, #0a1628, transparent 15%, transparent 85%, #0a1628);
+}
+
+.light .marquee-fade-overlay {
+  background: linear-gradient(to right, #f8fafc, transparent 15%, transparent 85%, #f8fafc);
+}
+
+/* ==================== */
+/* PROJECT CARD IMAGE FADE */
+/* ==================== */
+.project-card-image-fade {
+  background: linear-gradient(to top, rgba(10, 22, 40, 0.6), transparent 50%, transparent);
+  pointer-events: none;
+}
+
+.light .project-card-image-fade {
+  background: linear-gradient(to top, rgba(248, 250, 252, 0.6), transparent 50%, transparent);
+}
+
+/* Modal card image fade */
+.modal-card-image-fade {
+  background: linear-gradient(to top, rgba(15, 31, 56, 0.8), transparent 50%, transparent);
+  pointer-events: none;
+}
+
+.light .modal-card-image-fade {
+  background: linear-gradient(to top, rgba(241, 245, 249, 0.7), transparent 50%, transparent);
+}
+
+/* ==================== */
+/* FEATURED CARD FADE     */
+/* ==================== */
+.featured-card-fade {
+  background: linear-gradient(to top, #0a1628, transparent);
+  pointer-events: none;
+}
+
+.light .featured-card-fade {
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.85), transparent);
+}
+
+/* Blog card image fade */
+.blog-card-image-fade {
+  background: linear-gradient(to top, rgba(10, 22, 40, 1), rgba(10, 22, 40, 0.4), transparent);
+  pointer-events: none;
+}
+
+.light .blog-card-image-fade {
+  background: linear-gradient(to top, rgba(248, 250, 252, 0.9), rgba(248, 250, 252, 0.3), transparent);
+}
+
+/* Blog modal image fade */
+.blog-modal-image-fade {
+  background: linear-gradient(to top, rgba(10, 22, 40, 1), rgba(10, 22, 40, 0.5), rgba(10, 22, 40, 0.2));
+  pointer-events: none;
+}
+
+.light .blog-modal-image-fade {
+  background: linear-gradient(to top, rgba(248, 250, 252, 0.9), rgba(248, 250, 252, 0.4), rgba(248, 250, 252, 0.15));
+}
+
+/* About section image fade */
+.about-image-fade {
+  background: linear-gradient(to top, rgba(10, 22, 40, 1), rgba(10, 22, 40, 0.2), transparent);
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .about-image-fade {
+    background: linear-gradient(to right, transparent, transparent, rgba(10, 22, 40, 0.8));
+  }
+}
+
+.light .about-image-fade {
+  background: linear-gradient(to top, rgba(248, 250, 252, 0.85), rgba(248, 250, 252, 0.15), transparent);
+}
+
+@media (min-width: 1024px) {
+  .light .about-image-fade {
+    background: linear-gradient(to right, transparent, transparent, rgba(248, 250, 252, 0.7));
+  }
+}
+
+.about-image-fade-secondary {
+  background: linear-gradient(to top, rgba(10, 22, 40, 1), transparent, transparent);
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .about-image-fade-secondary {
+    background: linear-gradient(to right, rgba(10, 22, 40, 1), transparent, transparent);
+  }
+}
+
+.light .about-image-fade-secondary {
+  background: linear-gradient(to top, rgba(248, 250, 252, 0.85), transparent, transparent);
+}
+
+@media (min-width: 1024px) {
+  .light .about-image-fade-secondary {
+    background: linear-gradient(to right, rgba(248, 250, 252, 0.8), transparent, transparent);
+  }
+}
+
+/* ==================== */
+/* HERO BACKGROUND GRADIENT */
+/* ==================== */
+.hero-bg-gradient {
+  background: linear-gradient(to bottom, rgba(10, 22, 40, 0.9), rgba(10, 22, 40, 0.8), #0a1628);
+}
+
+.light .hero-bg-gradient {
+  background: linear-gradient(to bottom, rgba(248, 250, 252, 0.88), rgba(248, 250, 252, 0.82), rgba(248, 250, 252, 0.95));
+}
+
+/* Hero avatar ring offset */
+.hero-avatar-ring {
+  --tw-ring-offset-color: #0a1628;
+}
+
+.light .hero-avatar-ring {
+  --tw-ring-offset-color: #f8fafc;
+}
+
+/* ==================== */
+/* CARD HOVER OVERLAY     */
+/* ==================== */
+.card-hover-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.light .card-hover-overlay {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ==================== */
 /* GRADIENT REVEAL TEXT  */
 /* ==================== */
 .gradient-reveal {

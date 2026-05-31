@@ -67,7 +67,7 @@ export default function HeroSection() {
     >
       {/* Background */}
       <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/hero-bg.png')" }} />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/90 via-[#0a1628]/80 to-[#0a1628]" />
+      <div className="absolute inset-0 hero-bg-gradient" />
       <div className="absolute top-1/4 left-10 w-72 h-72 bg-teal-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl" />
       <div className="absolute inset-0 bg-grid opacity-20" />
@@ -97,7 +97,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden shrink-0 ring-2 ring-teal-500/30 ring-offset-2 ring-offset-[#0a1628]"
+              className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden shrink-0 ring-2 ring-teal-500/30 ring-offset-2 hero-avatar-ring"
             >
               <Image
                 src={FIVERR_IMAGE}

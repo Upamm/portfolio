@@ -1123,3 +1123,49 @@ Stage Summary:
 - Marquee text readable, pricing icons have soft visible backgrounds
 - Blog images and all page images visible in light mode
 - Comparison table uses soft teal-tinted backgrounds
+
+---
+
+## Phase N - Light Mode Image & Marquee Fix
+
+### Problem
+- Homepage marquee not showing in light mode (edge fade overlay using `from-[#0a1628]` was caught by broad `.light [class*="from-[#0a1628]"]` selector, replacing entire gradient with solid light bg)
+- Portfolio section card images not visible in light mode (same broad selector was replacing image overlay gradients with solid light backgrounds, washing out images)
+- Hero background image hidden in light mode (same issue with hero gradient overlay)
+- Blog cards, About section images, BlogArticleModal images all affected by same broad selector
+
+### Root Cause
+The broad CSS override `.light [class*="from-[#0a1628]"]` was replacing the ENTIRE `background` property of any element that had `from-[#0a1628]` in its class list, including gradient overlays on images. This caused:
+1. Marquee edge fades → solid light bg, covering text
+2. Image overlays → solid light bg, washing out all project/blog images
+3. Hero overlay → solid light bg, hiding background image completely
+
+### Solution
+Replaced all `from-[#0a1628]` Tailwind gradient overlays with custom CSS classes that have proper light mode counterparts:
+
+**New CSS Classes Added to globals.css:**
+- `.marquee-fade-overlay` / `.light .marquee-fade-overlay` — horizontal edge fade (navy→light)
+- `.project-card-image-fade` / `.light .project-card-image-fade` — portfolio card image bottom fade
+- `.modal-card-image-fade` / `.light .modal-card-image-fade` — modal image bottom fade
+- `.featured-card-fade` / `.light .featured-card-fade` — featured work card bottom fade
+- `.card-hover-overlay` / `.light .card-hover-overlay` — hover overlay on project cards
+- `.hero-bg-gradient` / `.light .hero-bg-gradient` — hero section gradient overlay
+- `.hero-avatar-ring` / `.light .hero-avatar-ring` — avatar ring offset color
+- `.blog-card-image-fade` / `.light .blog-card-image-fade` — blog card image overlay
+- `.blog-modal-image-fade` / `.light .blog-modal-image-fade` — blog modal image overlay
+- `.about-image-fade` / `.light .about-image-fade` — about section image overlay (responsive)
+- `.about-image-fade-secondary` / `.light .about-image-fade-secondary` — about secondary overlay (responsive)
+
+### Files Modified
+- `src/app/globals.css` — Added 11 new CSS class pairs (dark + light variants) for gradient overlays
+- `src/components/portfolio/MarqueeBar.tsx` — Replaced Tailwind gradient with `.marquee-fade-overlay`
+- `src/components/portfolio/HeroSection.tsx` — Replaced Tailwind gradient with `.hero-bg-gradient`, avatar ring with `.hero-avatar-ring`
+- `src/components/portfolio/PortfolioSection.tsx` — Replaced image overlay + hover overlay with custom classes
+- `src/components/portfolio/FeaturedWorkSection.tsx` — Replaced bottom fade with `.featured-card-fade`
+- `src/components/portfolio/BlogSection.tsx` — Replaced image overlay with `.blog-card-image-fade`
+- `src/components/portfolio/BlogArticleModal.tsx` — Replaced image overlay with `.blog-modal-image-fade`
+- `src/components/portfolio/AboutSection.tsx` — Replaced image overlays with `.about-image-fade` + `.about-image-fade-secondary`
+
+### Verification
+- `bun run lint` — Zero errors
+- Dev server compiles successfully with all changes

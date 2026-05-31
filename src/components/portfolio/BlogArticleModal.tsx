@@ -557,7 +557,7 @@ export default function BlogArticleModal({
                   priority
                 />
                 {/* Gradient overlays */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-[#0a1628]/50 to-[#0a1628]/20" />
+                <div className="absolute inset-0 blog-modal-image-fade" />
                 <div className={`absolute inset-0 bg-gradient-to-br ${article.gradient} opacity-30`} />
 
                 {/* Category badge */}
