@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-const FIVERR_IMAGE = 'https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_original/v1/attachments/profile/photo/c4f0de1b0c500594ed3b984332754e19-1551338465000/ade0268f-4643-49c9-804b-c301b683facb.jpg';
+const ABOUT_IMAGE = '/about-portrait.png';
 
 const quickInfo = [
   { icon: MapPin, label: 'Location', value: 'Bangladesh' },
@@ -88,11 +88,11 @@ export default function AboutSection() {
               {/* Image fills the full height on desktop */}
               <div className="relative h-64 sm:h-72 lg:h-full min-h-[280px] lg:min-h-[520px]">
                 <Image
-                  src={FIVERR_IMAGE}
+                  src={ABOUT_IMAGE}
                   alt="Upam - WordPress Virtual Assistant & B2B Lead Generation Specialist"
                   fill
                   sizes="(max-width: 1024px) 100vw, 420px"
-                  className="object-cover object-top"
+                  className="object-cover object-center"
                   priority
                 />
                 {/* Dark gradient overlay */}
