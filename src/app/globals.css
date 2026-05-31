@@ -1373,3 +1373,449 @@ body::before {
   margin-left: 4px;
   letter-spacing: 0.04em;
 }
+
+/* ============================== */
+/* LIGHT THEME OVERRIDES      */
+/* ============================== */
+
+/* Light theme CSS variables */
+.light {
+  --background: #f8fafc;
+  --foreground: #1e293b;
+  --card: rgba(255, 255, 255, 0.8);
+  --card-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+  --primary: #0891b2;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #475569;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #059669;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --border: rgba(6, 182, 212, 0.2);
+  --input: rgba(6, 182, 212, 0.15);
+  --ring: #0891b2;
+  --chart-1: #0891b2;
+  --chart-2: #059669;
+  --chart-3: #d97706;
+  --chart-4: #7c3aed;
+  --chart-5: #db2777;
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #1e293b;
+  --sidebar-primary: #0891b2;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e2e8f0;
+  --sidebar-accent-foreground: #475569;
+  --sidebar-border: rgba(6, 182, 212, 0.15);
+  --sidebar-ring: #0891b2;
+}
+
+/* Light body background */
+.light body {
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+/* Light noise texture - subtler */
+.light body::before {
+  opacity: 0.02;
+}
+
+/* Light scrollbar */
+.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: rgba(8, 145, 178, 0.3);
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(8, 145, 178, 0.5);
+}
+
+/* Light selection */
+.light ::selection {
+  color: #1e293b;
+}
+
+/* Light glass morphism */
+.light .glass {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(6, 182, 212, 0.12);
+}
+
+.light .glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(6, 182, 212, 0.1);
+}
+
+.light .glass-card:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(6, 182, 212, 0.25);
+  box-shadow: 0 8px 32px rgba(6, 182, 212, 0.08), 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.light .glass-nav {
+  background: rgba(248, 250, 252, 0.85);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.1);
+}
+
+/* Light background patterns */
+.light .bg-grid {
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
+}
+
+.light .bg-dots {
+  background-image: radial-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+}
+
+/* Light section divider */
+.light .section-divider {
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.15), transparent);
+}
+
+/* Light glow effects */
+.light .glow-teal {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.08), 0 0 40px rgba(6, 182, 212, 0.03);
+}
+
+.light .glow-teal-strong {
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.12), 0 0 60px rgba(6, 182, 212, 0.05);
+}
+
+.light .hover-glow:hover {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+/* Light glow separator */
+.light .glow-separator {
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.2);
+}
+
+/* Light testimonial glow */
+.light .testimonial-glow {
+  box-shadow: inset 0 -1px 0 rgba(6, 182, 212, 0.05), 0 2px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(6, 182, 212, 0.1);
+}
+
+.light .testimonial-glow:hover {
+  box-shadow: inset 0 -1px 0 rgba(6, 182, 212, 0.08), 0 4px 24px rgba(6, 182, 212, 0.08);
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+/* Light contact input */
+.light .contact-input:focus {
+  border-color: rgba(6, 182, 212, 0.3) !important;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.08), 0 0 12px rgba(6, 182, 212, 0.05);
+}
+
+/* Light preloader */
+.light .preloader-overlay {
+  background: #f8fafc;
+}
+
+.light .preloader-ring {
+  border-color: rgba(6, 182, 212, 0.2);
+  border-top-color: #0891b2;
+}
+
+/* Light card depth */
+.light .card-depth {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.light .card-depth:hover {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Light hover lift */
+.light .hover-lift:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Light nav scrolled */
+.light .nav-scrolled-enhanced {
+  background: rgba(248, 250, 252, 0.95) !important;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.1) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* Light tool card hover */
+.light .tool-card-hover:hover {
+  border-color: rgba(6, 182, 212, 0.25);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+}
+
+/* Light text glow - reduced */
+.light .text-glow-teal {
+  text-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+}
+
+.light .text-glow-emerald {
+  text-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+}
+
+/* Light pulse effects */
+.light .pulse-glow,
+.light .animate-pulse-glow {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.06);
+}
+
+.light .orb-breathe {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.06);
+}
+
+/* Light particles - softer */
+.light .hero-particle {
+  background: rgba(8, 145, 178, 0.3);
+  box-shadow: 0 0 4px rgba(8, 145, 178, 0.2);
+}
+
+/* Light section transitions */
+.light .section-transition::before {
+  background: linear-gradient(to bottom, rgba(248, 250, 252, 0.8) 0%, transparent 100%);
+}
+
+.light .section-transition::after {
+  background: linear-gradient(to top, rgba(248, 250, 252, 0.8) 0%, transparent 100%);
+}
+
+.light .reveal-section::after {
+  background: linear-gradient(to bottom, rgba(248, 250, 252, 0.4) 0%, transparent 5%, transparent 95%, rgba(248, 250, 252, 0.4) 100%);
+}
+
+/* Light project image overlay */
+.light .project-image-overlay::after {
+  background: linear-gradient(to bottom, transparent 0%, transparent 40%, rgba(248, 250, 252, 0.8) 100%);
+}
+
+/* Light wave divider */
+.light .wave-divider svg path[fill="rgba(6, 15, 29, 1)"],
+.light .wave-divider svg path[fill*="#060f1d"] {
+  fill: #f8fafc;
+}
+
+.light .wave-divider svg path[fill="rgba(6, 182, 212, 0.04)"] {
+  fill: rgba(6, 182, 212, 0.06);
+}
+
+/* Light gradient orb */
+.light .bg-radial-teal {
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, rgba(16, 185, 129, 0.03) 40%, transparent 70%);
+}
+
+/* Light shimmer */
+.light .shimmer-bg {
+  background: linear-gradient(90deg, transparent 0%, rgba(6, 182, 212, 0.03) 50%, transparent 100%);
+}
+
+/* Light service card */
+.light .service-card-enhanced:hover .service-icon-glow {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+}
+
+/* Light cookie pulse */
+.light .cookie-pulse {
+  box-shadow: 0 8px 32px rgba(6, 182, 212, 0.05), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Light availability badge */
+.light .availability-badge-v2::before {
+  background: linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.04) 50%, transparent 100%);
+}
+
+/* Light mobile nav active */
+.light .mobile-nav-active {
+  background: rgba(6, 182, 212, 0.1);
+}
+
+/* Light card spotlight */
+.light .card-spotlight:hover::after {
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(6, 182, 212, 0.04), transparent 40%);
+}
+
+/* Light icon pulse */
+.light .icon-pulse-glow {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+}
+
+/* Light cert badge */
+.light .cert-badge:hover::before {
+  background: conic-gradient(from var(--cert-angle, 0deg), transparent 0%, #0891b2 10%, #059669 20%, transparent 30%);
+}
+
+/* Light accent line */
+.light .accent-line-hover::after {
+  background: linear-gradient(90deg, #0891b2, #059669);
+}
+
+/* Light link hover */
+.light .link-hover-slide::after {
+  background: linear-gradient(90deg, #0891b2, #059669);
+}
+
+/* Light heading line */
+.light .section-heading-line::after {
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+}
+
+/* Light nav active indicator */
+.light .bg-teal-500\/10 {
+  background-color: rgba(6, 182, 212, 0.1);
+}
+
+.light .border-teal-500\/20 {
+  border-color: rgba(6, 182, 212, 0.15);
+}
+
+.light .border-teal-500\/30 {
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+.light .bg-teal-500\/10 {
+  background-color: rgba(6, 182, 212, 0.08);
+}
+
+.light .bg-teal-500\/20 {
+  background-color: rgba(6, 182, 212, 0.15);
+}
+
+.light .bg-teal-500\/5 {
+  background-color: rgba(6, 182, 212, 0.04);
+}
+
+.light .bg-emerald-500\/5 {
+  background-color: rgba(16, 185, 129, 0.04);
+}
+
+.light .bg-emerald-500\/20 {
+  background-color: rgba(16, 185, 129, 0.15);
+}
+
+/* Light gradient text - slightly darker for readability on light bg */
+.light .gradient-text {
+  background: linear-gradient(135deg, #0891b2 0%, #06b6d4 50%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.light .gradient-text-teal {
+  background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Light gradient reveal */
+.light .gradient-reveal {
+  background: linear-gradient(90deg, #0891b2 0%, #06b6d4 15%, #059669 30%, #0891b2 45%, #06b6d4 60%, #059669 75%, #0891b2 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-reveal-sweep 3s ease forwards;
+}
+
+/* Light footer */
+.light footer,
+.light footer .absolute[style*="top: '60px'"] {
+  background: linear-gradient(to bottom, #f1f5f9, #e2e8f0);
+}
+
+.light .bg-gradient-to-b.from-\[\#060f1d\],
+.light .bg-gradient-to-b.from-[#0a1628] {
+  background: linear-gradient(to bottom, #f1f5f9, #e2e8f0) !important;
+}
+
+/* Light navbar scrolled state - hardcoded in component */
+.light .bg-\[\#0a1628\]\/95 {
+  background: rgba(248, 250, 252, 0.95) !important;
+}
+
+/* Light hero section bottom gradient */
+.light .from-\[#0a1628\]\/60 {
+  --tw-gradient-from: rgba(248, 250, 252, 0.7) !important;
+  --tw-gradient-to: #f8fafc !important;
+}
+
+/* Light price shadow */
+.light .shadow-teal-500\/20 {
+  box-shadow: 0 10px 30px rgba(6, 182, 212, 0.12);
+}
+
+/* Light btn-shine - darker for contrast */
+.light .btn-shine::after {
+  background: linear-gradient(105deg, transparent 40%, rgba(0, 0, 0, 0.05) 45%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.05) 55%, transparent 60%);
+}
+
+/* Light cookie consent card */
+.light .shadow-2xl.shadow-black\/20 {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Light heading gradient animated */
+.light .heading-gradient-animated {
+  background: linear-gradient(135deg, #0891b2 0%, #06b6d4 25%, #059669 50%, #0891b2 75%, #06b6d4 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Light animated border */
+.light .animated-border::before {
+  background: linear-gradient(135deg, #0891b2, #059669, #0891b2);
+  background-size: 200% 200%;
+}
+
+/* Light gradient border animated */
+.light .gradient-border-animated::before {
+  background: linear-gradient(var(--gradient-angle, 135deg), #0891b2, #059669, #0891b2, #059669);
+  background-size: 300% 300%;
+}
+
+/* Light pricing border */
+.light .pricing-gradient-border {
+  background: conic-gradient(from 0deg, #0891b2, #059669, #0891b2, transparent 70%, #0891b2);
+}
+
+/* Light animated border rotate */
+.light .animated-border-rotate::before {
+  background: conic-gradient(from var(--border-angle), #0891b2, #059669, transparent 40%, #0891b2);
+}
+
+/* Light badge glow dot */
+.light .section-heading-line::after {
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+}
+
+/* Light floating FAB shadow */
+.light .shadow-lg {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Light status indicators */
+.light .pulse-dot {
+  box-shadow: 0 0 0 0 rgba(8, 145, 178, 0.3);
+}
+
+.light .pulse-dot {
+  animation: pulse-dot-light 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot-light {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(8, 145, 178, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(8, 145, 178, 0);
+  }
+}

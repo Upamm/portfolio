@@ -5,22 +5,29 @@ import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import { homeFeaturedProjects } from './projects-data';
+import type { PageKey } from './PortfolioApp';
 
 interface FeaturedWorkSectionProps {
-  onNavigate?: (page: string) => void;
+  onNavigate?: (page: PageKey) => void;
 }
 
 function FeaturedCard({
   project,
   index,
   isInView,
+  onNavigate,
 }: {
   project: (typeof homeFeaturedProjects)[0];
   index: number;
   isInView: boolean;
+  onNavigate?: (page: PageKey) => void;
 }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const IconComp = project.icon;
+
+  const handleClick = () => {
+    onNavigate?.('portfolio');
+  };
 
   return (
     <motion.div
@@ -34,6 +41,10 @@ function FeaturedCard({
         card.style.setProperty('--mouse-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
         card.style.setProperty('--mouse-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
       }}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }}
     >
       {/* Image Area */}
       <div className="relative h-44 sm:h-52 lg:h-56 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
@@ -97,7 +108,7 @@ function FeaturedCard({
         </div>
 
         {/* View Details Link */}
-        <div className="mt-3 sm:mt-4 flex items-center gap-1.5 text-teal-400 hover:text-teal-300 transition-colors duration-200 group/link cursor-pointer">
+        <div className="mt-3 sm:mt-4 flex items-center gap-1.5 text-teal-400 hover:text-teal-300 transition-colors duration-200 group/link cursor-pointer" onClick={(e) => { e.stopPropagation(); handleClick(); }}>
           <span className="text-xs sm:text-sm font-medium">View Details</span>
           <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/link:translate-x-0.5 transition-transform duration-200" />
         </div>
@@ -149,6 +160,7 @@ export default function FeaturedWorkSection({ onNavigate }: FeaturedWorkSectionP
               project={project}
               index={index}
               isInView={isInView}
+              onNavigate={onNavigate}
             />
           ))}
         </div>
@@ -162,7 +174,7 @@ export default function FeaturedWorkSection({ onNavigate }: FeaturedWorkSectionP
         >
           <button
             onClick={() => onNavigate?.('portfolio')}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-teal-400 border border-teal-500/30 hover:border-teal-400/60 hover:bg-teal-500/10 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+            className="btn-shine inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium text-white bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 shadow-lg shadow-teal-500/20 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
           >
             View All Projects
             <ArrowRight className="w-4 h-4" />
