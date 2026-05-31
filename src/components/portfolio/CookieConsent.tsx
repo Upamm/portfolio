@@ -3,16 +3,17 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cookie, X, Shield } from 'lucide-react';
+import { getCookie, setCookie, COOKIES } from '@/lib/cookies';
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    // Only show on first visit, after user scrolls past hero section
-    const consent = localStorage.getItem('cookie-consent');
+    // Only show if user hasn't already made a choice (stored in cookie)
+    const consent = getCookie(COOKIES.COOKIE_CONSENT);
     if (!consent) {
       const handleScroll = () => {
-        // Show banner once user has scrolled past hero (100vh)
+        // Show banner once user has scrolled past hero (80% of viewport)
         if (window.scrollY > window.innerHeight * 0.8) {
           setShowBanner(true);
           window.removeEventListener('scroll', handleScroll);
@@ -24,12 +25,12 @@ export default function CookieConsent() {
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem('cookie-consent', 'accepted');
+    setCookie(COOKIES.COOKIE_CONSENT, 'accepted');
     setShowBanner(false);
   };
 
   const handleDecline = () => {
-    localStorage.setItem('cookie-consent', 'declined');
+    setCookie(COOKIES.COOKIE_CONSENT, 'declined');
     setShowBanner(false);
   };
 
@@ -56,8 +57,8 @@ export default function CookieConsent() {
                 <Shield className="w-3.5 h-3.5 text-emerald-400" />
               </div>
               <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                This website uses cookies to enhance your browsing experience and analyze site traffic. 
-                By continuing to use this site, you agree to our use of cookies.
+                This website uses cookies to enhance your browsing experience, remember your preferences,
+                and analyze site traffic. Your choices are saved for 1 year.
               </p>
             </div>
 

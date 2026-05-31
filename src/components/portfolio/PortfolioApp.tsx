@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense, useTransition, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { getCookie, setCookie, COOKIES } from '@/lib/cookies';
 
 // Lazy-loaded page sections
 const HeroSection = dynamic(() => import('./HeroSection'), { ssr: false });
@@ -115,37 +116,94 @@ const getPages = (onNavigate: (page: PageKey) => void): Record<PageKey, () => Re
 });
 
 export default function PortfolioApp() {
-  const [currentPage, setCurrentPage] = useState<PageKey>('home');
+  // Restore last visited page from cookie for instant reload
+  const [currentPage, setCurrentPage] = useState<PageKey>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = getCookie(COOKIES.LAST_PAGE);
+      if (saved && pageList.includes(saved as PageKey)) {
+        return saved as PageKey;
+      }
+      // Fallback to hash if set
+      const hash = window.location.hash.replace('#', '');
+      if (hash && pageList.includes(hash as PageKey)) {
+        return hash as PageKey;
+      }
+    }
+    return 'home';
+  });
+
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  // Save current page to cookie on change (persists across reloads)
+  useEffect(() => {
+    setCookie(COOKIES.LAST_PAGE, currentPage);
+  }, [currentPage]);
+
+  // Preload all page chunks after initial mount for fast navigation
+  useEffect(() => {
+    const preloadTimer = setTimeout(() => {
+      // Eagerly trigger dynamic imports so chunks are cached in memory
+      // This makes subsequent navigation instant since chunks are already loaded
+      void import('./AboutSection');
+      void import('./ExperienceSection');
+      void import('./ServicesSection');
+      void import('./ProcessSection');
+      void import('./PortfolioSection');
+      void import('./ValuesSection');
+      void import('./PricingSection');
+      void import('./SkillsSection');
+      void import('./StatsBanner');
+      void import('./ClientsSection');
+      void import('./TestimonialsSection');
+      void import('./CertificationsSection');
+      void import('./IndustriesServedSection');
+      void import('./FeaturedWorkSection');
+      void import('./WorkWithMeSection');
+      void import('./BlogSection');
+      void import('./FAQSection');
+      void import('./ContactSection');
+      void import('./HeroSection');
+      void import('./MarqueeBar');
+    }, 2000); // Wait 2s after initial page load to avoid blocking
+    return () => clearTimeout(preloadTimer);
+  }, []);
 
   // Hash-based routing
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '') as PageKey;
       if (pageList.includes(hash)) {
-        setCurrentPage(hash);
+        startTransition(() => {
+          setCurrentPage(hash);
+        });
       }
     };
 
-    // Initial check
-    if (window.location.hash) {
-      handleHash();
+    // Sync initial hash with current page
+    if (!window.location.hash) {
+      window.location.hash = currentPage;
     }
 
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
-  // Navigate function
+  // Navigate function with optimized transition
   const navigateTo = useCallback((page: PageKey) => {
+    if (page === currentPage) return; // Skip if already on this page
+
     setIsTransitioning(true);
+    // Reduced transition delay for snappier feel
     setTimeout(() => {
-      setCurrentPage(page);
-      window.location.hash = page;
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      setIsTransitioning(false);
-    }, 150);
-  }, []);
+      startTransition(() => {
+        setCurrentPage(page);
+        window.location.hash = page;
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        setIsTransitioning(false);
+      });
+    }, 80); // Reduced from 150ms for faster feel
+  }, [currentPage]);
 
   // Expose navigateTo globally for Navbar/Footer
   useEffect(() => {
@@ -155,7 +213,7 @@ export default function PortfolioApp() {
     };
   }, [navigateTo]);
 
-  const pages = getPages(navigateTo);
+  const pages = useMemo(() => getPages(navigateTo), [navigateTo]);
   const PageComponent = pages[currentPage];
 
   return (
@@ -168,10 +226,10 @@ export default function PortfolioApp() {
           {!isTransitioning && (
             <motion.div
               key={currentPage}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
               className="flex-1"
             >
               <Suspense fallback={<PageLoader />}>

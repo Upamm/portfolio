@@ -55,13 +55,45 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Blocking script that reads the theme cookie BEFORE first paint.
+ * This prevents the flash-of-wrong-theme on page reload/initial load.
+ * It runs before React hydration, so the DOM classes are correct from the start.
+ */
+const themeScript = `
+(function(){
+  try {
+    var c = document.cookie.split('; ');
+    var theme = 'dark';
+    for (var i = 0; i < c.length; i++) {
+      var p = c[i].split('=');
+      if (p[0] === 'upam_theme' && p.length > 1) {
+        theme = decodeURIComponent(p[1]);
+        break;
+      }
+    }
+    var r = document.documentElement;
+    if (theme === 'light') {
+      r.classList.remove('dark');
+      r.classList.add('light');
+    } else {
+      r.classList.add('dark');
+      r.classList.remove('light');
+    }
+  } catch(e) {}
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="scroll-smooth dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
         <Preloader />
         {children}

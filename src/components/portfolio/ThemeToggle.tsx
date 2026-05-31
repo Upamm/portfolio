@@ -1,8 +1,9 @@
 'use client';
 
-import { useCallback, useSyncExternalStore } from 'react';
+import { useCallback, useSyncExternalStore, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Moon, Sun } from 'lucide-react';
+import { getCookie, setCookie, COOKIES } from '@/lib/cookies';
 
 const emptySubscribe = () => () => {};
 
@@ -11,7 +12,8 @@ function useMounted() {
 }
 
 function useTheme() {
-  const getSnapshot = () => localStorage.getItem('theme') !== 'light';
+  const getSnapshot = () => getCookie(COOKIES.THEME) !== 'light';
+  // Default to dark on server (matches the blocking script in layout)
   const getServerSnapshot = () => true;
   return useSyncExternalStore(emptySubscribe, getSnapshot, getServerSnapshot);
 }
@@ -21,19 +23,36 @@ export default function ThemeToggle() {
   const mounted = useMounted();
 
   const toggle = useCallback(() => {
-    const newIsDark = localStorage.getItem('theme') !== 'light';
-    const newTheme = !newIsDark;
-    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
-    if (newTheme) {
+    const currentIsDark = getCookie(COOKIES.THEME) !== 'light';
+    const newIsDark = !currentIsDark;
+    const newTheme = newIsDark ? 'dark' : 'light';
+
+    // Persist to cookie (survives across sessions, no flash on reload)
+    setCookie(COOKIES.THEME, newTheme);
+
+    if (newIsDark) {
       document.documentElement.classList.remove('light');
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
       document.documentElement.classList.add('light');
     }
-    // Trigger re-render by dispatching a storage event
+    // Trigger re-render
     window.dispatchEvent(new Event('storage'));
   }, []);
+
+  // Sync cookie value to DOM classes on mount (in case cookie was set externally)
+  useEffect(() => {
+    if (!mounted) return;
+    const theme = getCookie(COOKIES.THEME) || 'dark';
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [mounted]);
 
   if (!mounted) return null;
 

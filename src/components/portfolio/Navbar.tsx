@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import type { PageKey } from './PortfolioApp';
+import ThemeToggle from './ThemeToggle';
 
 const navLinks: { label: string; key: PageKey }[] = [
   { label: 'Home', key: 'home' },
@@ -58,6 +59,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-0.5">
+            <ThemeToggle />
             {navLinks.map((link) => (
               <button
                 key={link.key}
@@ -80,14 +82,17 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+          {/* Theme Toggle + Mobile Menu Button */}
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
         </div>
       </div>
 
