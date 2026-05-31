@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 import { validateCSRFToken, sanitizeInput, validateEmail, logSecurityEvent, getIPViolationCount } from '@/lib/security';
+import { sendContactNotification } from '@/lib/email';
 
 // ───────────────────────────────────────────────────────────────
 // Zod Validation Schema
@@ -234,6 +235,9 @@ export async function POST(request: NextRequest) {
         ipAddress: ip,
       },
     });
+
+    // Send email notification (non-blocking — don't fail the request if email fails)
+    sendContactNotification(sanitizedData).catch(() => {});
 
     logSecurityEvent('CONTACT_SUCCESS', ip, '/api/contact', userAgent, `Name: ${sanitizedData.name}`);
 
