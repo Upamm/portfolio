@@ -618,7 +618,7 @@ export default function PricingSection() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mb-8 sm:mb-12"
         >
-          <div className="pricing-table-glow rounded-2xl overflow-hidden max-w-4xl mx-auto">
+          <div className="pricing-table-glow rounded-2xl overflow-hidden max-w-3xl mx-auto">
             <div className="p-5 sm:p-6 border-b border-white/5">
               <h3 className="text-lg sm:text-xl font-bold text-white">Quick Plan Comparison</h3>
               <p className="text-sm text-slate-400 mt-1">See what&apos;s included in each plan at a glance</p>
