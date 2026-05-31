@@ -60,6 +60,7 @@ function HomePage({ onNavigate }: { onNavigate: (page: PageKey) => void }) {
       <TestimonialsSection />
       <CertificationsSection />
       <WorkWithMeSection />
+      <ToolsGrid />
     </>
   );
 }

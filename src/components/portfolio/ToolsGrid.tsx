@@ -214,22 +214,22 @@ function ToolCard({
       }}
     >
       <div
-        className="glass-card card-spotlight hover-glow rounded-2xl p-4 sm:p-5 w-full flex flex-col items-center gap-2.5 sm:gap-3 cursor-default transition-all duration-300 hover:-translate-y-1.5 h-full"
+        className="glass-card card-spotlight hover-glow rounded-2xl p-3 sm:p-5 w-full flex flex-col items-center justify-start gap-2 sm:gap-3 cursor-default transition-all duration-300 hover:-translate-y-1.5 h-full min-h-[90px] sm:min-h-0"
       >
-        {/* Brand Logo Circle */}
+        {/* Brand Logo */}
         <div
-          className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl shrink-0 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl overflow-hidden ring-1 ring-white/10"
+          className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl shrink-0 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl overflow-hidden ring-1 ring-white/10"
         >
           {tool.logo}
         </div>
 
-        {/* Tool Name */}
-        <span className="text-xs sm:text-sm font-semibold text-slate-300 group-hover:text-white transition-colors duration-300 leading-tight text-center">
+        {/* Tool Name — always visible, truncated on mobile */}
+        <span className="text-[10px] sm:text-sm font-semibold text-slate-300 group-hover:text-white transition-colors duration-300 leading-tight text-center line-clamp-1">
           {tool.name}
         </span>
 
-        {/* Description */}
-        <p className="text-[10px] sm:text-xs text-slate-500 group-hover:text-slate-400 leading-relaxed text-center transition-colors duration-300 opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-12 group-hover:mt-0.5" style={{ transition: 'opacity 0.3s, max-height 0.3s, margin-top 0.3s, color 0.3s' }}>
+        {/* Description — visible on sm+, hidden on mobile */}
+        <p className="hidden sm:block text-xs text-slate-500 group-hover:text-slate-400 leading-relaxed text-center transition-colors duration-300">
           {tool.description}
         </p>
       </div>
