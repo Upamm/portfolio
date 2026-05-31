@@ -22,6 +22,9 @@ const StatsBanner = dynamic(() => import('./StatsBanner'), { ssr: false });
 const ClientsSection = dynamic(() => import('./ClientsSection'), { ssr: false });
 const TestimonialsSection = dynamic(() => import('./TestimonialsSection'), { ssr: false });
 const CertificationsSection = dynamic(() => import('./CertificationsSection'), { ssr: false });
+const IndustriesServedSection = dynamic(() => import('./IndustriesServedSection'), { ssr: false });
+const FeaturedWorkSection = dynamic(() => import('./FeaturedWorkSection'), { ssr: false });
+const WorkWithMeSection = dynamic(() => import('./WorkWithMeSection'), { ssr: false });
 const BlogSection = dynamic(() => import('./BlogSection'), { ssr: false });
 const FAQSection = dynamic(() => import('./FAQSection'), { ssr: false });
 const ContactSection = dynamic(() => import('./ContactSection'), { ssr: false });
@@ -45,15 +48,18 @@ function PageLoader() {
   );
 }
 
-function HomePage() {
+function HomePage({ onNavigate }: { onNavigate: (page: PageKey) => void }) {
   return (
     <>
       <HeroSection />
       <MarqueeBar />
       <StatsBanner />
       <ClientsSection />
+      <IndustriesServedSection />
+      <FeaturedWorkSection onNavigate={onNavigate} />
       <TestimonialsSection />
       <CertificationsSection />
+      <WorkWithMeSection />
     </>
   );
 }
@@ -99,16 +105,16 @@ function ContactPage() {
   return <ContactSection />;
 }
 
-const pages: Record<PageKey, () => React.ReactNode> = {
-  home: HomePage,
-  about: AboutPage,
-  services: ServicesPage,
-  portfolio: PortfolioPage,
-  pricing: PricingPage,
-  blog: BlogPage,
-  faq: FAQPage,
-  contact: ContactPage,
-};
+const getPages = (onNavigate: (page: PageKey) => void): Record<PageKey, () => React.ReactNode> => ({
+  home: () => <HomePage onNavigate={onNavigate} />,
+  about: () => <AboutPage />,
+  services: () => <ServicesPage />,
+  portfolio: () => <PortfolioPage />,
+  pricing: () => <PricingPage />,
+  blog: () => <BlogPage />,
+  faq: () => <FAQPage />,
+  contact: () => <ContactPage />,
+});
 
 export default function PortfolioApp() {
   const [currentPage, setCurrentPage] = useState<PageKey>('home');
@@ -151,6 +157,7 @@ export default function PortfolioApp() {
     };
   }, [navigateTo]);
 
+  const pages = getPages(navigateTo);
   const PageComponent = pages[currentPage];
 
   return (
