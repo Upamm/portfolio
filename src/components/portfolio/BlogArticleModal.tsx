@@ -477,12 +477,28 @@ export default function BlogArticleModal({
   const contentRef = useRef<HTMLDivElement>(null);
   const mounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [copied, setCopied] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const rafRef = useRef<number>(0);
+
+  // Scroll handler with RAF throttling
+  const handleContentScroll = useCallback(() => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      if (contentRef.current) {
+        setScrollY(contentRef.current.scrollTop);
+      }
+    });
+  }, []);
 
   // Lock body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      if (contentRef.current) contentRef.current.scrollTop = 0;
+      if (contentRef.current) {
+        contentRef.current.scrollTop = 0;
+        // Dispatch a scroll event so the scroll handler picks up scrollTop=0
+        contentRef.current.dispatchEvent(new Event('scroll'));
+      }
     } else {
       document.body.style.overflow = '';
     }
@@ -490,6 +506,30 @@ export default function BlogArticleModal({
       document.body.style.overflow = '';
     };
   }, [isOpen, article?.id]);
+
+  // Cleanup RAF on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
+  // Compute header shrink values
+  const maxShrinkScroll = 160;
+  const shrinkRatio = Math.min(scrollY / maxShrinkScroll, 1);
+  // Clamp with easeOut for smoother feel
+  const easedRatio = 1 - Math.pow(1 - shrinkRatio, 3);
+  const badgeOpacity = 1 - easedRatio;
+  const badgeTranslateY = easedRatio * -10;
+  const headerMinH = 56;
+  const headerMaxH = typeof window !== 'undefined' && window.innerWidth >= 768
+    ? 224
+    : typeof window !== 'undefined' && window.innerWidth >= 640
+      ? 192
+      : 160;
+  const headerHeight = headerMaxH - easedRatio * (headerMaxH - headerMinH);
+  const imageScale = 1 + easedRatio * 0.08;
+  const imageTranslateY = easedRatio * -8;
 
   const handleCopyLink = useCallback(() => {
     const url = getShareUrl();
@@ -545,37 +585,68 @@ export default function BlogArticleModal({
               className="relative z-[10001] w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl max-h-[92vh] sm:max-h-[94vh] md:max-h-[95vh] rounded-2xl overflow-hidden pointer-events-auto glass-card border border-white/10 shadow-2xl shadow-black/40 flex flex-col mx-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Image Header */}
-              <div className="relative h-40 sm:h-48 md:h-56 bg-gradient-to-br flex-shrink-0">
-                {/* Background image */}
+              {/* Image Header - shrinks on scroll */}
+              <div
+                className="relative bg-gradient-to-br flex-shrink-0 overflow-hidden"
+                style={{
+                  height: `${headerHeight}px`,
+                  transition: 'height 0.1s ease-out',
+                }}
+              >
+                {/* Background image - subtle zoom on scroll */}
                 <Image
                   src={article.image}
                   alt={article.title}
                   fill
                   className="object-cover opacity-70"
+                  style={{
+                    transform: `scale(${imageScale}) translateY(${imageTranslateY}px)`,
+                    transition: 'transform 0.1s ease-out',
+                  }}
                   sizes="(max-width: 768px) 100vw, 768px"
                   priority
                 />
                 {/* Gradient overlays */}
                 <div className="absolute inset-0 blog-modal-image-fade" />
                 <div className={`absolute inset-0 bg-gradient-to-br ${article.gradient} opacity-30`} />
+                {/* Extra bottom gradient for shrunk state */}
+                <div
+                  className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent"
+                  style={{ height: `${24 + easedRatio * 32}px` }}
+                />
 
-                {/* Category badge */}
-                <div className="absolute top-4 left-4 sm:top-5 sm:left-5 z-10">
+                {/* Category badge - fades on scroll */}
+                <div
+                  className="absolute top-4 left-4 sm:top-5 sm:left-5 z-10"
+                  style={{
+                    opacity: badgeOpacity,
+                    transform: `translateY(${badgeTranslateY}px)`,
+                    transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
+                    pointerEvents: badgeOpacity < 0.3 ? 'none' : 'auto',
+                  }}
+                >
                   <span className="px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-medium border border-white/10">
                     {article.category}
                   </span>
                 </div>
 
-                {/* Read time badge */}
-                <div className="absolute top-4 right-12 sm:top-5 sm:right-14 z-10">
+                {/* Read time badge - fades on scroll */}
+                <div
+                  className="absolute top-4 right-12 sm:top-5 sm:right-14 z-10"
+                  style={{
+                    opacity: badgeOpacity,
+                    transform: `translateY(${badgeTranslateY}px)`,
+                    transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
+                    pointerEvents: badgeOpacity < 0.3 ? 'none' : 'auto',
+                  }}
+                >
                   <span className="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs font-medium flex items-center gap-1 border border-white/10">
                     <Clock className="w-3 h-3" />
                     {article.readTime}
                   </span>
                 </div>
 
-                {/* Close Button */}
+                {/* Close Button - stays visible */}
                 <button
                   onClick={onClose}
                   className="absolute top-4 right-4 sm:top-5 sm:right-5 z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-teal-300 hover:bg-teal-500/80 hover:text-white hover:border-teal-400 transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-teal-400/50"
@@ -588,6 +659,7 @@ export default function BlogArticleModal({
               {/* Scrollable Content */}
               <div
                 ref={contentRef}
+                onScroll={handleContentScroll}
                 className="overflow-y-auto overflow-x-hidden flex-1 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 scroll-smooth"
               >
                 {/* Meta info */}

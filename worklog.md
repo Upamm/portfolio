@@ -1582,3 +1582,36 @@ Stage Summary:
 - File: `src/components/portfolio/SkillsSection.tsx` - complete rewrite (640 lines)
 - Responsive: 1/2/4 col skill grid, 2/3 col tool bento, 1/2 col radar+tools layout
 - All animations use framer-motion (useInView, motion, useMotionValue, animate)
+
+---
+## Phase - Blog Modal Cover Image Scroll Shrink Fix
+
+### Task
+Fix blog page popup (modal) cover image - when scrolling within the modal, the cover image should shrink to a smaller height.
+
+### Changes Made
+- **`src/components/portfolio/BlogArticleModal.tsx`**:
+  - Added scroll tracking via `onScroll` handler on the modal content div with `requestAnimationFrame` throttling
+  - Added `scrollY` state and `rafRef` for performance
+  - Computed dynamic header height based on scroll position:
+    - Full height: 160px (mobile), 192px (sm), 224px (md)
+    - Min height on scroll: 56px
+    - Eased cubic shrink ratio for smooth feel
+  - Cover image header shrinks dynamically with CSS transition (`height 0.1s ease-out`)
+  - Background image has subtle zoom (scale 1→1.08) and translate as it shrinks
+  - Category badge and read time badge fade out + slide up as header shrinks
+  - Extra bottom gradient overlay grows stronger as header shrinks (for text readability)
+  - Close button remains visible throughout scroll
+  - Reset scroll position on article change via dispatched scroll event
+
+### Technical Details
+- RAF throttling prevents excessive re-renders during scroll
+- Eased cubic function (`1 - (1-x)^3`) for natural shrink feel
+- Responsive: header max height adapts to viewport width on each render
+- CSS transitions (0.1s ease-out) for smooth interpolation between frames
+- No hydration issues (component only renders when `mounted` is true)
+- Lint passes with 0 errors
+
+### Verification
+- `bun run lint` — 0 errors
+- Dev server compiles successfully
