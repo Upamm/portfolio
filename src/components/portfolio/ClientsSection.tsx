@@ -98,9 +98,9 @@ export default function ClientsSection() {
           </div>
         </div>
 
-        {/* Row 2 - Right to Left */}
+        {/* Row 2 - Left to Right (opposite of Row 1) */}
         <div className="overflow-hidden">
-          <div className="flex animate-[marquee_45s_linear_infinite] hover:[animation-play-state:paused]">
+          <div className="flex animate-[marquee-reverse_45s_linear_infinite] hover:[animation-play-state:paused]">
             {[...row2Clients, ...row2Clients].map((client, index) => (
               <div
                 key={`r2-${client.name}-${index}`}
