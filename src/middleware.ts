@@ -312,10 +312,10 @@ export function middleware(request: NextRequest) {
   }
 
   // 8. Block requests with suspicious headers
+  // NOTE: x-forwarded-host is set by the gateway/proxy — do NOT block it
   const suspiciousHeaders = [
     'x-original-url',
     'x-rewrite-url',
-    'x-forwarded-host', // Can be used for host header injection
   ];
   for (const header of suspiciousHeaders) {
     if (request.headers.get(header)) {
@@ -374,8 +374,8 @@ export function middleware(request: NextRequest) {
   // Prevent MIME type sniffing
   response.headers.set('X-Content-Type-Options', 'nosniff');
 
-  // Prevent clickjacking
-  response.headers.set('X-Frame-Options', 'DENY');
+  // Prevent clickjacking (allow embedding from same origin for preview)
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
 
   // Referrer policy
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');

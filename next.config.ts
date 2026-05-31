@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const securityHeaders = [
   {
     key: 'X-Frame-Options',
-    value: 'DENY',
+    value: 'SAMEORIGIN', // Allow embedding from same origin (preview panels)
   },
   {
     key: 'X-Content-Type-Options',
@@ -38,7 +38,7 @@ const securityHeaders = [
       "img-src 'self' data: blob: https://fiverr-res.cloudinary.com https://images.unsplash.com",
       "font-src 'self' data: https://fonts.gstatic.com",
       "connect-src 'self' https://fonts.googleapis.com",
-      "frame-ancestors 'none'",
+      "frame-ancestors 'self' https://*.space-z.ai", // Allow preview panel iframe
       "base-uri 'self'",
       "form-action 'self'",
       "object-src 'none'",
@@ -52,11 +52,7 @@ const securityHeaders = [
   },
   {
     key: 'Cross-Origin-Resource-Policy',
-    value: 'same-origin',
-  },
-  {
-    key: 'Cross-Origin-Embedder-Policy',
-    value: 'credentialless',
+    value: 'cross-origin', // Allow preview panels and cross-origin access
   },
 ];
 
