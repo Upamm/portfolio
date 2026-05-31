@@ -209,7 +209,7 @@ function PricingCard({
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: 0.15 + index * 0.15 }}
-      className={`relative rounded-2xl p-[1.5px] ${
+      className={`relative rounded-2xl p-[1.5px] h-full ${
         pkg.featured
           ? 'bg-gradient-to-br from-teal-500 to-emerald-500'
           : 'bg-gradient-to-br from-slate-700/40 to-slate-700/40'

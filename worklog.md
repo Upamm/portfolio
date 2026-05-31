@@ -1169,3 +1169,42 @@ Replaced all `from-[#0a1628]` Tailwind gradient overlays with custom CSS classes
 ### Verification
 - `bun run lint` — Zero errors
 - Dev server compiles successfully with all changes
+
+---
+
+## Phase N+1 - Pricing Page Light Mode Fix & Card Height Equalization
+
+### Problem
+1. **Pricing page text not visible in light mode** — `text-slate-200` (#e2e8f0) used for card names and feature text was nearly invisible on the light `#f8fafc` background. This class had NO light mode override.
+2. **Icon backgrounds too subtle** — `bg-teal-500/15` and `bg-emerald-500/15` were nearly invisible in light mode; `bg-slate-700/50` was also very faint.
+3. **Non-featured card borders invisible** — `from-slate-700/40 to-slate-700/40` gradient border was nearly invisible on white background.
+4. **Pricing card heights unequal** — Outer `motion.div` wrapper lacked `h-full`, preventing grid `items-stretch` from equalizing card heights.
+
+### Root Cause
+- Missing `text-slate-200` and `text-slate-100` light mode overrides in globals.css
+- Generic overrides for `bg-teal-500/15` were missing (only `/10` was overridden)
+- No pricing-specific light mode section in CSS
+- Card wrapper missing `h-full` class for grid stretch behavior
+
+### Solution
+
+**globals.css changes:**
+1. Added `.light .text-slate-100` (→ #334155) and `.light .text-slate-200` (→ #475569) overrides
+2. Added comprehensive "LIGHT MODE - PRICING SECTION SPECIFIC" section with:
+   - `bg-teal-500/15` → rgba(8, 145, 178, 0.12) for visible icon backgrounds
+   - `bg-emerald-500/15` → rgba(5, 150, 105, 0.12) for guarantee card icon backgrounds
+   - Non-featured card border gradient override via `#pricing` scoping
+   - Featured card glow, CTA banner decorations, badge shadows — all softer for light mode
+   - Comparison table and FAQ chevron overrides
+   - All scoped to `#pricing` section to avoid affecting other components
+
+**PricingSection.tsx changes:**
+1. Added `h-full` to outer `motion.div` wrapper in PricingCard component to enable grid `items-stretch` equalization
+
+### Files Modified
+- `src/app/globals.css` — Added text-slate-100/200 overrides + pricing-specific light section (~70 lines)
+- `src/components/portfolio/PricingSection.tsx` — Added `h-full` to PricingCard outer wrapper
+
+### Verification
+- `bun run lint` — Zero errors
+- Dev server compiles successfully

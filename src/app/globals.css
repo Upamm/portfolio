@@ -1763,6 +1763,14 @@ body::before {
   color: #334155 !important;
 }
 
+/* Slate-100/200: very light, need dark color for light mode */
+.light .text-slate-100 {
+  color: #334155 !important;
+}
+.light .text-slate-200 {
+  color: #475569 !important;
+}
+
 /* Secondary text: text-slate-300 → medium slate */
 .light .text-slate-300 {
   color: #64748b !important;
@@ -2284,4 +2292,73 @@ body::before {
 /* Light ring-offset on avatar */
 .light [class*="ring-offset-[#0a1628]"] {
   --tw-ring-offset-color: #f8fafc !important;
+}
+
+/* ========================================
+   LIGHT MODE - PRICING SECTION SPECIFIC
+   ======================================== */
+
+/* Pricing icon backgrounds - more visible in light mode */
+.light .bg-teal-500\/15 {
+  background-color: rgba(8, 145, 178, 0.12) !important;
+}
+
+.light .bg-emerald-500\/15 {
+  background-color: rgba(5, 150, 105, 0.12) !important;
+}
+
+/* Non-featured pricing card border gradient - visible subtle border */
+.light #pricing [class*="from-slate-700/40"],
+.light #pricing [class*="to-slate-700/40"] {
+  --tw-gradient-from: rgba(100, 116, 139, 0.28) !important;
+  --tw-gradient-to: rgba(100, 116, 139, 0.28) !important;
+}
+
+/* Featured pricing card background glow - subtle */
+.light #pricing .blur-3xl.bg-teal-500\/10 {
+  background-color: rgba(8, 145, 178, 0.06) !important;
+}
+
+/* Comparison table - Professional column background */
+.light #pricing .bg-teal-500\/5 {
+  background-color: rgba(8, 145, 178, 0.05) !important;
+}
+
+/* Pricing FAQ chevron - inactive state */
+.light #pricing .bg-slate-700\/50.text-slate-500 {
+  background-color: rgba(100, 116, 139, 0.12) !important;
+  color: #94a3b8 !important;
+}
+
+/* Pricing section CTA banner background decorations */
+.light #pricing .blur-3xl.bg-teal-500\/10 {
+  background-color: rgba(8, 145, 178, 0.05) !important;
+}
+
+.light #pricing .blur-3xl.bg-emerald-500\/10 {
+  background-color: rgba(5, 150, 105, 0.05) !important;
+}
+
+/* Pricing card "Most Popular" badge shadow - softer in light */
+.light #pricing .shadow-lg.shadow-teal-500\/30 {
+  box-shadow: 0 8px 24px rgba(8, 145, 178, 0.15);
+}
+
+/* Pricing section header icons shadow */
+.light #pricing .shadow-lg.shadow-teal-500\/20 {
+  box-shadow: 0 6px 20px rgba(8, 145, 178, 0.12);
+}
+
+.light #pricing .shadow-lg.shadow-emerald-500\/20 {
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.12);
+}
+
+/* Comparison table text - ensure readability */
+.light #pricing [class*="text-slate-600"] {
+  color: #94a3b8 !important;
+}
+
+/* Process step "Step" label - readable */
+.light #pricing .text-slate-500.uppercase {
+  color: #94a3b8 !important;
 }
