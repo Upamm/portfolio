@@ -99,8 +99,8 @@ export default function AboutSection() {
                 <div className="absolute inset-0 about-image-fade" />
                 <div className="absolute inset-0 about-image-fade-secondary" />
 
-                {/* Badges overlay on image - positioned at bottom for mobile, right for desktop */}
-                <div className="absolute bottom-0 left-0 right-0 lg:bottom-auto lg:top-6 lg:left-6 p-4 lg:p-0 flex flex-wrap gap-2 lg:flex-col lg:gap-3">
+                {/* Badges overlay on image - positioned at top for both mobile and desktop */}
+                <div className="absolute top-0 left-0 right-0 p-4 lg:p-0 flex flex-wrap gap-2 lg:flex-col lg:gap-3 lg:top-6 lg:left-6 lg:right-auto lg:p-0">
                   {/* Level 2 Badge */}
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}

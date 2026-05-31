@@ -254,7 +254,7 @@ body::before {
 
 /* About section image fade */
 .about-image-fade {
-  background: linear-gradient(to top, rgba(10, 22, 40, 1), rgba(10, 22, 40, 0.2), transparent);
+  background: linear-gradient(to top, rgba(10, 22, 40, 1), rgba(10, 22, 40, 0.2), transparent 60%);
   pointer-events: none;
 }
 
@@ -265,7 +265,7 @@ body::before {
 }
 
 .light .about-image-fade {
-  background: linear-gradient(to top, rgba(240, 250, 251, 0.85), rgba(240, 250, 251, 0.15), transparent);
+  background: linear-gradient(to top, rgba(240, 250, 251, 0.85), rgba(240, 250, 251, 0.15), transparent 60%);
 }
 
 @media (min-width: 1024px) {
@@ -275,7 +275,7 @@ body::before {
 }
 
 .about-image-fade-secondary {
-  background: linear-gradient(to top, rgba(10, 22, 40, 1), transparent, transparent);
+  background: linear-gradient(to bottom, rgba(10, 22, 40, 0.7), transparent 40%, transparent, rgba(10, 22, 40, 1));
   pointer-events: none;
 }
 
@@ -286,7 +286,7 @@ body::before {
 }
 
 .light .about-image-fade-secondary {
-  background: linear-gradient(to top, rgba(240, 250, 251, 0.85), transparent, transparent);
+  background: linear-gradient(to bottom, rgba(240, 250, 251, 0.6), transparent 40%, transparent, rgba(240, 250, 251, 0.85));
 }
 
 @media (min-width: 1024px) {
