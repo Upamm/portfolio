@@ -196,7 +196,7 @@ export default function SkillsSection() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="skills" className="relative py-16 sm:py-32 overflow-hidden">
+    <section id="skills" className="relative py-10 sm:py-16 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-dots opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -208,7 +208,7 @@ export default function SkillsSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-16"
+          className="text-center mb-6 sm:mb-10"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             What I Know
@@ -223,7 +223,7 @@ export default function SkillsSection() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Progress Bars */}
           <div className="space-y-5">
             {skills.map((skill, index) => (

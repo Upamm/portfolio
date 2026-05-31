@@ -26,7 +26,7 @@ export default function ClientsSection() {
   const doubled = [...clients, ...clients];
 
   return (
-    <section id="clients" className="relative py-16 sm:py-32 overflow-hidden">
+    <section id="clients" className="relative py-10 sm:py-16 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-500/[0.02] to-transparent" />
 
@@ -39,7 +39,7 @@ export default function ClientsSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-16"
+          className="text-center mb-6 sm:mb-10"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             Trusted By
@@ -54,7 +54,7 @@ export default function ClientsSection() {
         </motion.div>
 
         {/* Row 1 - Left to Right */}
-        <div className="mb-6 sm:mb-8 overflow-hidden">
+        <div className="mb-4 sm:mb-6 overflow-hidden">
           <div className="flex animate-[marquee_25s_linear_infinite] hover:[animation-play-state:paused]">
             {doubled.map((client, index) => (
               <div

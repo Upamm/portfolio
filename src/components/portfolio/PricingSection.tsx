@@ -479,7 +479,7 @@ export default function PricingSection() {
   };
 
   return (
-    <section id="pricing" className="relative py-16 sm:py-24 overflow-x-hidden">
+    <section id="pricing" className="relative py-10 sm:py-16 overflow-x-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -492,7 +492,7 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-16"
+          className="text-center mb-6 sm:mb-10"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             Pricing Plans
@@ -525,7 +525,7 @@ export default function PricingSection() {
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-slate-400 mt-8 sm:mt-12"
+          className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-slate-400 mt-6 sm:mt-8"
         >
           <span className="flex items-center gap-1.5">
             <Check className="w-3.5 h-3.5 text-teal-400" />
@@ -546,14 +546,14 @@ export default function PricingSection() {
         </motion.div>
 
         {/* Glow Separator */}
-        <div className="glow-separator mt-16 sm:mt-24" />
+        <div className="glow-separator mt-10 sm:mt-14" />
 
         {/* ===== CLIENT UNDERSTANDING SECTION ===== */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-center mt-16 sm:mt-24 mb-10 sm:mb-14"
+          className="text-center mt-10 sm:mt-14 mb-6 sm:mb-10"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             How It Works
@@ -568,7 +568,7 @@ export default function PricingSection() {
         </motion.div>
 
         {/* Process Steps */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-14 sm:mb-20">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {clientProcess.map((item, index) => (
             <ProcessStep
               key={item.step}
@@ -588,7 +588,7 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-10 sm:mb-14"
+          className="mb-6 sm:mb-10"
         >
           <div className="flex items-center gap-3 mb-6 sm:mb-8">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-teal-500/20">
@@ -619,7 +619,7 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="mb-14 sm:mb-20"
+          className="mb-8 sm:mb-12"
         >
           <div className="glass-card rounded-2xl overflow-hidden max-w-4xl mx-auto">
             <div className="p-5 sm:p-6 border-b border-white/5">
@@ -673,7 +673,7 @@ export default function PricingSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mb-10 sm:mb-16"
+          className="mb-6 sm:mb-10"
         >
           <div className="flex items-center gap-3 mb-6 sm:mb-8">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
@@ -740,7 +740,7 @@ export default function PricingSection() {
         </motion.div>
 
         {/* Glow Separator */}
-        <div className="glow-separator mt-16 sm:mt-24" />
+        <div className="glow-separator mt-10 sm:mt-14" />
       </div>
 
       {/* Contact Form Modal */}

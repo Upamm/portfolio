@@ -47,7 +47,7 @@ export default function ExperienceSection() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="experience" className="relative py-16 sm:py-32 overflow-hidden">
+    <section id="experience" className="relative py-10 sm:py-16 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-dots opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -60,7 +60,7 @@ export default function ExperienceSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-16"
+          className="text-center mb-6 sm:mb-10"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             My Journey
@@ -79,7 +79,7 @@ export default function ExperienceSection() {
           {/* Vertical connecting line */}
           <div className="absolute left-6 sm:left-1/2 sm:-translate-x-px top-0 bottom-0 w-px bg-gradient-to-b from-teal-500/30 via-teal-500/50 to-emerald-500/30" />
 
-          <div className="space-y-12">
+          <div className="space-y-8">
             {milestones.map((milestone, index) => (
               <motion.div
                 key={milestone.year}

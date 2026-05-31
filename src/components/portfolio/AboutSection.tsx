@@ -49,7 +49,7 @@ export default function AboutSection() {
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="about" className="relative pt-20 sm:pt-24 pb-8 lg:pt-28 lg:pb-12 overflow-hidden">
+    <section id="about" className="relative pt-10 sm:pt-16 pb-4 lg:pt-16 lg:pb-6 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-20" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -62,7 +62,7 @@ export default function AboutSection() {
           initial={{ opacity: 0, y: 15 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="mb-6 lg:mb-8"
+          className="mb-4 lg:mb-6"
         >
           <span className="text-teal-400 text-xs font-medium uppercase tracking-widest">
             Get to Know Me
@@ -260,7 +260,7 @@ export default function AboutSection() {
         </motion.div>
 
         {/* Glow Separator - About → Experience */}
-        <div className="glow-separator mt-8 lg:mt-12" />
+        <div className="glow-separator mt-6 lg:mt-8" />
       </div>
     </section>
   );

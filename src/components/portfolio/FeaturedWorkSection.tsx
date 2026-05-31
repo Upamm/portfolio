@@ -125,7 +125,7 @@ export default function FeaturedWorkSection({ onNavigate }: FeaturedWorkSectionP
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="featured-work" className="relative py-16 sm:py-32 overflow-hidden">
+    <section id="featured-work" className="relative py-10 sm:py-16 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-dots opacity-20" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -138,7 +138,7 @@ export default function FeaturedWorkSection({ onNavigate }: FeaturedWorkSectionP
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-16"
+          className="text-center mb-6 sm:mb-10"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             Portfolio
@@ -170,7 +170,7 @@ export default function FeaturedWorkSection({ onNavigate }: FeaturedWorkSectionP
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="flex justify-center mt-10 sm:mt-16"
+          className="flex justify-center mt-6 sm:mt-10"
         >
           <button
             onClick={() => onNavigate?.('portfolio')}

@@ -63,7 +63,7 @@ export default function StatsBanner() {
   const isInView = useInView(ref, { once: true, margin: '-50px' });
 
   return (
-    <section className="relative py-16 sm:py-20 overflow-hidden">
+    <section className="relative py-8 sm:py-12 overflow-hidden">
       {/* Animated mesh gradient background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 via-transparent to-emerald-500/5" />

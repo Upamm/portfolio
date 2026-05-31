@@ -30,7 +30,7 @@ function MarqueeContent() {
 
 export default function MarqueeBar() {
   return (
-    <div className="relative py-6 sm:py-8 border-y border-teal-500/10 overflow-hidden">
+    <div className="relative py-4 sm:py-5 border-y border-teal-500/10 overflow-hidden">
       <div className="absolute inset-0 marquee-fade-overlay z-10 pointer-events-none" />
       <div className="marquee-container">
         <div className="marquee-track">

@@ -32,8 +32,8 @@ export default function Footer({ onNavigate }: FooterProps) {
       <div className="absolute inset-0 bg-gradient-to-b from-[#060f1d] to-[#040b16]" style={{ top: '60px' }} />
 
       {/* CTA Banner */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
-        <div className="glass-card rounded-2xl p-6 sm:p-10 lg:p-12 mb-10 sm:mb-14 lg:mb-20 text-center relative overflow-hidden">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
+        <div className="glass-card rounded-2xl p-6 sm:p-10 lg:p-12 mb-6 sm:mb-10 lg:mb-14 text-center relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-teal-500/40 to-transparent" />
           <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 sm:mb-3">
             Ready to Start Your <span className="gradient-text">Project</span>?

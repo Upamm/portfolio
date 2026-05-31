@@ -73,7 +73,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-grid opacity-20" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-4 sm:py-8 lg:py-12 pb-16 sm:pb-20 lg:pb-24">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full py-4 sm:py-6 lg:py-8 pb-10 sm:pb-14 lg:pb-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -84,7 +84,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass mb-3 sm:mb-7"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass mb-3 sm:mb-5"
           >
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
             <span className="text-xs sm:text-sm text-slate-300 font-medium">Available for freelance work</span>
@@ -117,7 +117,7 @@ export default function HeroSection() {
           </div>
 
           {/* Typing subtitle */}
-          <div className="h-8 sm:h-12 flex items-center justify-center mb-4 sm:mb-7">
+          <div className="h-8 sm:h-12 flex items-center justify-center mb-3 sm:mb-5">
             <p className="text-lg sm:text-xl md:text-2xl text-slate-300 font-light">
               {displayedText}
               <span className="inline-block w-0.5 h-5 sm:h-6 bg-teal-400 ml-1 animate-pulse" />
@@ -129,7 +129,7 @@ export default function HeroSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-5 sm:mb-9 leading-relaxed px-2"
+            className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mb-4 sm:mb-7 leading-relaxed px-2"
           >
             Specialized in WordPress site management, theme customization,
             speed optimization, and B2B lead generation with 8+ years of experience.

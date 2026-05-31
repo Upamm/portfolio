@@ -1280,3 +1280,54 @@ Added pricing-specific text overrides for better contrast in light mode:
 - `bun run lint` — Zero errors
 - Dev server compiles successfully, all 200 OK responses
 
+
+---
+## Phase N+1 - Spacing Audit & Tightening Round
+
+### Task
+Check all spaces on all sections, make sure no extra space with the design.
+
+### Changes Made — Systematic spacing reduction across 22 components
+
+**Section Root Padding (18 sections affected):**
+- `py-16 sm:py-32` (128px mobile / 256px desktop) → `py-10 sm:py-16` (80px mobile / 128px desktop) — **37.5% reduction mobile, 50% reduction desktop**
+- PricingSection: `py-16 sm:py-24` → `py-10 sm:py-16`
+- StatsBanner: `py-16 sm:py-20` → `py-8 sm:py-12` (stats compact, divider-style)
+- MarqueeBar: `py-6 sm:py-8` → `py-4 sm:py-5` (tight ticker bar)
+- AboutSection: `pt-20 sm:pt-24 pb-8 lg:pt-28 lg:pb-12` → `pt-10 sm:pt-16 pb-4 lg:pt-16 lg:pb-6` (balanced, tighter)
+
+**Section Header Margin (17 headers affected):**
+- `mb-10 sm:mb-16` (40px mobile / 64px desktop) → `mb-6 sm:mb-10` (24px mobile / 40px desktop) — **40% reduction**
+- AboutSection: `mb-6 lg:mb-8` → `mb-4 lg:mb-6`
+
+**PricingSection Internal Separators:**
+- Glow separators: `mt-16 sm:mt-24` → `mt-10 sm:mt-14`
+- Client Understanding header: `mt-16 sm:mt-24 mb-10 sm:mb-14` → `mt-10 sm:mt-14 mb-6 sm:mb-10`
+- Process grid: `mb-14 sm:mb-20` → `mb-8 sm:mb-12`
+- Guarantees: `mb-10 sm:mb-14` → `mb-6 sm:mb-10`
+- Comparison table: `mb-14 sm:mb-20` → `mb-8 sm:mb-12`
+- FAQs: `mb-10 sm:mb-16` → `mb-6 sm:mb-10`
+- Trust note: `mt-8 sm:mt-12` → `mt-6 sm:mt-8`
+
+**Other Internal Spacing:**
+- HeroSection: `py-4 sm:py-8 lg:py-12 pb-16 sm:pb-20 lg:pb-24` → `py-4 sm:py-6 lg:py-8 pb-10 sm:pb-14 lg:pb-16`
+- HeroSection badge: `mb-3 sm:mb-7` → `mb-3 sm:mb-5`
+- HeroSection typing: `mb-4 sm:mb-7` → `mb-3 sm:mb-5`
+- HeroSection description: `mb-5 sm:mb-9` → `mb-4 sm:mb-7`
+- ClientsSection row gap: `mb-6 sm:mb-8` → `mb-4 sm:mb-6`
+- FeaturedWork CTA: `mt-10 sm:mt-16` → `mt-6 sm:mt-10`
+- PortfolioSection filter tabs: `mb-8 sm:mb-12` → `mb-6 sm:mb-8`
+- SkillsSection two-col gap: `gap-12 lg:gap-16` → `gap-8 lg:gap-12`
+- ExperienceSection timeline: `space-y-12` → `space-y-8`
+- FAQSection glow separator: `mt-16 sm:mt-32` → `mt-10 sm:mt-16`
+- AboutSection glow separator: `mt-8 lg:mt-12` → `mt-6 lg:mt-8`
+- ContactSection grid gap: `gap-8 lg:gap-12` → `gap-6 lg:gap-10`
+- Footer CTA: `pt-8 sm:pt-12 mb-10 sm:mb-14 lg:mb-20` → `pt-6 sm:pt-8 mb-6 sm:mb-10 lg:mb-14`
+
+### Files Modified (22 total)
+All portfolio section components in `src/components/portfolio/`:
+MarqueeBar, StatsBanner, ClientsSection, IndustriesServedSection, FeaturedWorkSection, TestimonialsSection, CertificationsSection, WorkWithMeSection, HeroSection, AboutSection, ExperienceSection, ValuesSection, ServicesSection, ProcessSection, SkillsSection, PortfolioSection, PricingSection, BlogSection, FAQSection, ContactSection, Footer
+
+### Verification
+- `bun run lint` — Zero errors
+- Dev server compiles successfully, all 200 OK responses

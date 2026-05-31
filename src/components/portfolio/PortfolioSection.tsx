@@ -43,7 +43,7 @@ export default function PortfolioSection() {
   }, []);
 
   return (
-    <section id="portfolio" className="relative py-16 sm:py-32 overflow-hidden">
+    <section id="portfolio" className="relative py-10 sm:py-16 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-dots opacity-15" />
       <div className="absolute top-0 left-0 right-0 section-divider" />
@@ -55,7 +55,7 @@ export default function PortfolioSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 sm:mb-16"
+          className="text-center mb-6 sm:mb-10"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             My Work
@@ -74,7 +74,7 @@ export default function PortfolioSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12"
+          className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8"
         >
           {projectCategories.map((category) => (
             <button

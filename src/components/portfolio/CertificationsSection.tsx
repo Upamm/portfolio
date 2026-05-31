@@ -82,7 +82,7 @@ export default function CertificationsSection() {
     <section
       id="certifications"
       ref={sectionRef}
-      className="relative py-16 sm:py-32 overflow-hidden"
+      className="relative py-10 sm:py-16 overflow-hidden"
     >
       {/* Background decorations */}
       <div className="absolute inset-0 bg-dots opacity-30" />
@@ -96,7 +96,7 @@ export default function CertificationsSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-10 sm:mb-16"
+          className="text-center mb-6 sm:mb-10"
         >
           <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
             Recognition
