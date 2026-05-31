@@ -3,118 +3,90 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import ThemeToggle from '@/components/portfolio/ThemeToggle';
+import type { PageKey } from './PortfolioApp';
 
-const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Services', href: '#services' },
-  { label: 'Portfolio', href: '#portfolio' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'Blog', href: '#blog' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'Contact', href: '#contact' },
+const navLinks: { label: string; key: PageKey }[] = [
+  { label: 'Home', key: 'home' },
+  { label: 'About', key: 'about' },
+  { label: 'Services', key: 'services' },
+  { label: 'Portfolio', key: 'portfolio' },
+  { label: 'Pricing', key: 'pricing' },
+  { label: 'Blog', key: 'blog' },
+  { label: 'FAQ', key: 'faq' },
+  { label: 'Contact', key: 'contact' },
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+  currentPage: PageKey;
+  onNavigate: (page: PageKey) => void;
+}
+
+export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-
-      const sections = navLinks.map((link) => link.href.replace('#', ''));
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 120) {
-            setActiveSection(sections[i]);
-            break;
-          }
-        }
-      }
+      setScrolled(window.scrollY > 30);
     };
-
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleClick = (href: string) => {
+  const handleClick = (key: PageKey) => {
     setIsOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    onNavigate(key);
   };
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'nav-scrolled-enhanced' : 'bg-transparent'
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-[#0a1628]/95 backdrop-blur-lg border-b border-teal-500/10 shadow-lg shadow-black/10'
+          : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
-          <motion.a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              handleClick('#home');
-            }}
-            className="text-2xl font-bold tracking-wider"
-            whileHover={{ scale: 1.05 }}
+          <button
+            onClick={() => handleClick('home')}
+            className="text-xl sm:text-2xl font-bold tracking-wider hover:scale-105 transition-transform"
           >
             <span className="gradient-text">UPAM</span>
-          </motion.a>
+          </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-0.5">
             {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleClick(link.href);
-                }}
-                className={`relative px-2.5 py-2 text-sm font-medium rounded-lg transition-colors duration-300 link-hover-slide ${
-                  activeSection === link.href.replace('#', '')
+              <button
+                key={link.key}
+                onClick={() => handleClick(link.key)}
+                className={`relative px-2.5 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  currentPage === link.key
                     ? 'text-teal-400'
-                    : 'text-slate-300 hover:text-white'
+                    : 'text-slate-300 hover:text-white hover:bg-white/5'
                 }`}
               >
-                {activeSection === link.href.replace('#', '') && (
+                {currentPage === link.key && (
                   <motion.span
                     layoutId="activeNav"
                     className="absolute inset-0 rounded-lg bg-teal-500/10 border border-teal-500/20"
-                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                    transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
                   />
                 )}
                 <span className="relative z-10">{link.label}</span>
-              </a>
+              </button>
             ))}
-          </div>
-
-          {/* Theme Toggle (desktop only) */}
-          <div className="hidden lg:block ml-3">
-            <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+            className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
@@ -126,38 +98,31 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden glass-nav border-t border-teal-500/10 overflow-hidden"
+            transition={{ duration: 0.25 }}
+            className="md:hidden overflow-hidden border-t border-teal-500/10"
+            style={{ background: 'rgba(10, 22, 40, 0.95)', backdropFilter: 'blur(20px)' }}
           >
-            <div className="px-4 py-4 space-y-1">
+            <div className="px-3 py-3 space-y-0.5">
               {navLinks.map((link, index) => (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleClick(link.href);
-                  }}
-                  initial={{ opacity: 0, x: -20 }}
+                <motion.button
+                  key={link.key}
+                  onClick={() => handleClick(link.key)}
+                  initial={{ opacity: 0, x: -15 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all ${
-                    activeSection === link.href.replace('#', '')
-                      ? 'text-teal-400 mobile-nav-active'
+                  transition={{ delay: index * 0.03 }}
+                  className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    currentPage === link.key
+                      ? 'text-teal-400 bg-teal-500/10 border-l-2 border-teal-400'
                       : 'text-slate-300 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   {link.label}
-                </motion.a>
+                </motion.button>
               ))}
-              <div className="border-t border-teal-500/10 pt-3 mt-3 flex items-center justify-between px-4">
-                <span className="text-sm text-slate-400">Theme</span>
-                <ThemeToggle />
-              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </nav>
   );
 }
