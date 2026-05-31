@@ -29,7 +29,7 @@ interface ToolData {
   readonly name: string;
   readonly color: string;
   readonly logoFile: string;
-  readonly category: 'cms' | 'plugin' | 'seo' | 'marketing' | 'analytics' | 'freelance' | 'automation';
+  readonly category: 'cms' | 'plugin' | 'seo' | 'marketing' | 'analytics' | 'automation';
   readonly description: string;
 }
 
@@ -47,8 +47,6 @@ const tools: readonly ToolData[] = [
   { name: 'Mailchimp',      color: '#FFE01B', logoFile: 'mailchimp',     category: 'marketing',   description: 'Email Marketing' },
   { name: 'HubSpot',         color: '#FF7A59', logoFile: 'hubspot',       category: 'marketing',   description: 'CRM & Marketing' },
   { name: 'LinkedIn Sales Nav', color: '#0A66C2', logoFile: 'linkedin',  category: 'marketing',   description: 'B2B Lead Generation' },
-  { name: 'Upwork',          color: '#14A800', logoFile: 'upwork',        category: 'freelance',   description: 'Freelance Platform' },
-  { name: 'Fiverr',          color: '#1DBF73', logoFile: 'fiverr',        category: 'freelance',   description: 'Freelance Marketplace' },
   { name: 'Zapier',          color: '#FF4A00', logoFile: 'zapier',       category: 'automation',  description: 'Workflow Automation' },
 ] as const;
 
