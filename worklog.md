@@ -3822,3 +3822,32 @@ Stage Summary:
 - Heading hierarchy follows proper h1→h2→h3 sequence for accessibility and SEO
 - `bun run lint` passes clean, page loads with 200 status
 - Cron job created (ID: 180169, every 15 minutes)
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Bug check and fix across the entire project
+
+Work Log:
+- **ESLint**: Clean — 0 errors, 0 warnings
+- **Dev server**: Compiles successfully, 200 status on all routes
+- **Browser testing with agent-browser**:
+  - Homepage loads correctly (h1: "I'm Upam", all 8+ sections render)
+  - Navigation buttons work (Home, About, Services, Portfolio, Blog, Contact)
+  - Services dropdown opens on click (opacity: 1)
+  - Blog popup modal opens, author name correctly removed, light mode bg is opaque
+  - Light mode toggle works across all sections
+  - No console errors after any interaction
+- **Code review findings and fixes**:
+  - 🔴 **CSS gradient bug**: `to-right` is invalid CSS — fixed to `to right` in `.blog-share-divider` (lines 309, 378)
+  - 🔴 **Missing icon files**: `icon.svg`, `favicon.ico`, `apple-touch-icon.svg` all 404 — created all 3 files (icon.svg and apple-touch-icon.svg copied from logo.svg, favicon.ico generated as 16x16 ICO)
+  - 🔴 **Sitemap SEO bug**: Hash-fragment URLs (`/#article-id`) collapse to same URL for Google — simplified sitemap to only list the home page (blog articles need real routes to be indexed)
+  - ✅ Unused `User` import: Properly removed
+  - ✅ JSX heading mismatches: All h2/h3 tags properly matched
+  - ✅ TypeScript: No type errors in JsonLdSchema.tsx
+  - ✅ Blog dates: All 20 dates parse correctly
+
+Stage Summary:
+- 3 bugs fixed: CSS gradient syntax, missing favicon/icon assets, invalid sitemap URLs
+- 0 compile errors, 0 lint errors
+- All interactions tested and working

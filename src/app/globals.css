@@ -306,7 +306,7 @@ body::before {
 
 /* Share bar text */
 .blog-share-title { color: #ffffff; }
-.blog-share-divider { background: linear-gradient(to-right, rgba(6, 182, 212, 0.3), transparent); }
+.blog-share-divider { background: linear-gradient(to right, rgba(6, 182, 212, 0.3), transparent); }
 
 /* Tip box */
 .blog-tip-box {
@@ -375,7 +375,7 @@ body::before {
 .light .blog-related-time { color: #64748b; }
 
 .light .blog-share-title { color: #0f172a; }
-.light .blog-share-divider { background: linear-gradient(to-right, rgba(8, 145, 178, 0.2), transparent); }
+.light .blog-share-divider { background: linear-gradient(to right, rgba(8, 145, 178, 0.2), transparent); }
 
 .light .blog-tip-box {
   background: rgba(8, 145, 178, 0.06);
