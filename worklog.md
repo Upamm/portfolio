@@ -3784,3 +3784,41 @@ Stage Summary:
 - Author name completely removed from both blog cards and article modal popup
 - `bun run lint` passes clean
 - Page loads with 200 status
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Add JSON-LD schema, fix SEO metadata, fix heading hierarchy for Google ranking factors
+
+Work Log:
+- **Comprehensive SEO audit** performed on blog content, layout metadata, and site structure
+- **layout.tsx** updated with:
+  - `metadataBase: new URL('https://upam1721.com')` — required for OG/canonical URL resolution
+  - `alternates.canonical` — prevents duplicate content issues
+  - `openGraph.images` — 1200x630 OG image for social sharing previews
+  - `openGraph.url` and `openGraph.locale` — complete OG metadata
+  - `twitter.images` — matching Twitter card image
+  - `robots` with `googleBot` directives (`max-image-preview: large`, `max-snippet: -1`) for rich results
+- **sitemap.ts** created (`src/app/sitemap.ts`) — Next.js dynamic sitemap listing all 15+ blog articles with `lastModified`, `changeFrequency`, and `priority`
+- **JsonLdSchema component** created (`src/components/portfolio/JsonLdSchema.tsx`) with structured data for:
+  - `Person` schema (Upam, with Fiverr/Twitter/LinkedIn profiles and `knowsAbout`)
+  - `WebSite` schema with `publisher` reference
+  - `BreadcrumbList` schema for blog section
+  - `ItemList` schema for the blog article collection
+  - `BlogPosting` schema for EVERY article (headline, description, image, datePublished, dateModified, author, publisher, wordCount, articleSection, keywords, articleBody)
+  - Per-article `BreadcrumbList` (Home → Blog → Article)
+  - `Organization` schema for publisher reference
+- **Heading hierarchy fixed** in `BlogArticleModal.tsx`:
+  - Content headings: `<motion.h3>` → `<motion.h2>` (proper h1→h2 sequence)
+  - Related article titles: `<h4>` → `<h3>` (proper h2→h3 sequence)
+- **OG image generated** (`/public/og-image.png`, 1200x630px) — navy-to-teal gradient with "Upam" branding
+- **ISO date parsing** handled in JSON-LD schema (human-readable dates auto-converted for schema.org)
+
+Stage Summary:
+- All 15+ blog articles now have full `BlogPosting` JSON-LD structured data discoverable by Google
+- Site has Person, WebSite, Organization, BreadcrumbList, and ItemList schemas
+- Metadata fully configured: metadataBase, canonical, OG images, Twitter cards, robots directives
+- Dynamic sitemap generates article entries automatically
+- Heading hierarchy follows proper h1→h2→h3 sequence for accessibility and SEO
+- `bun run lint` passes clean, page loads with 200 status
+- Cron job created (ID: 180169, every 15 minutes)

@@ -56,7 +56,7 @@ function openShareWindow(url: string) {
 function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; index: number; articleList?: BlogArticle[] }) {
   if (block.type === 'heading') {
     return (
-      <motion.h3
+      <motion.h2
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.03 }}
@@ -64,7 +64,7 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
       >
         <span className="w-1 h-6 rounded-full bg-gradient-to-b from-teal-400 to-emerald-400 flex-shrink-0 mt-0.5" />
         <span>{block.text}</span>
-      </motion.h3>
+      </motion.h2>
     );
   }
 
@@ -200,9 +200,9 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-semibold blog-related-reading-link-title transition-colors line-clamp-1">
+                  <h3 className="text-sm font-semibold blog-related-reading-link-title transition-colors line-clamp-1">
                     {link.title}
-                  </h4>
+                  </h3>
                   <p className="text-xs blog-related-reading-link-desc mt-0.5 line-clamp-2 leading-relaxed">
                     {link.description}
                   </p>
@@ -477,9 +477,9 @@ function RelatedPosts({
             </span>
 
             {/* Title */}
-            <h4 className="text-sm font-semibold blog-related-title leading-snug line-clamp-2 mb-1.5 transition-colors duration-200">
+            <h3 className="text-sm font-semibold blog-related-title leading-snug line-clamp-2 mb-1.5 transition-colors duration-200">
               {relatedArticle.title}
-            </h4>
+            </h3>
 
             {/* Shared tags indicator for cross-category */}
             {relatedArticle.category !== article.category && (() => {
