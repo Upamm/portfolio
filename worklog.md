@@ -3970,3 +3970,90 @@ User reported console errors. Systematic audit and fix of all bugs found across 
 
 ### Known Issues
 - In-memory session storage will lose sessions on server restart (acceptable for dev; consider DB-backed sessions for production)
+
+---
+
+## Phase N - OTP Email Verification & Login Fix (2026-06-01)
+
+### Current Project Status Assessment
+- **Overall**: Portfolio website with Client Portal, 20+ components, multiple API routes, full Prisma schema
+- **Build**: Zero lint errors, zero compilation errors
+- **Issues Fixed**: Admin login password hash was corrupted/mismatched, causing 401 errors
+
+### Completed Work
+
+#### 1. Admin Login Password Reset
+- Master admin (`mailupamm@gmail.com`) password hash didn't match `Admin@123`
+- Reset password to `Admin@123` using bcrypt hash
+- All demo client passwords reset to `Client@123`
+- Verified login API returns 200 OK with valid session token
+
+#### 2. 4-Digit OTP Email Verification for Registration
+- **New File: `src/lib/otp.ts`** — In-memory OTP storage with:
+  - 4-digit random code generation
+  - 5-minute expiry timer
+  - Max 5 verification attempts per OTP
+  - Resend OTP capability (resets timer and attempts)
+  - Automatic cleanup every 2 minutes
+
+- **New File: `src/app/api/auth/otp/send/route.ts`** — OTP send endpoint:
+  - Validates name, email, password format
+  - Checks if email already exists in database
+  - Generates 4-digit OTP, stores in memory
+  - Sends professional HTML email via nodemailer/Gmail SMTP
+  - Supports resend with `resend: true` parameter
+
+- **New File: `src/app/api/auth/otp/verify/route.ts`** — OTP verification endpoint:
+  - Validates 4-digit OTP format
+  - Verifies OTP from in-memory store
+  - Tracks remaining attempts (returns count to user)
+  - Creates account on success (hashes password, creates DB record)
+  - Creates welcome notification for new user
+  - Sends admin notification email (fire-and-forget)
+  - Returns session token and user data for auto-login
+
+- **Modified: `src/lib/email.ts`** — Added OTP email template:
+  - Professional gradient email matching site theme
+  - Large styled OTP code (36px, monospace, gradient background)
+  - Expiry warning, security notice
+  - Subject line includes the OTP code
+
+- **Modified: `src/components/portfolio/PortalLogin.tsx`** — Complete OTP flow UI:
+  - 3-step registration: Form → OTP Verification → Auto-login
+  - 4 individual digit input boxes with auto-advance
+  - Auto-submit when all 4 digits entered
+  - Paste support (pastes 4 digits into all boxes)
+  - Backspace navigation between boxes
+  - 2-minute resend cooldown timer with countdown
+  - Resend button with cooldown display (mm:ss format)
+  - Attempts remaining counter display
+  - "Back to registration form" link
+  - Loading states for both send and verify
+  - Error handling for wrong OTP, expired OTP, too many attempts
+  - Smooth Framer Motion animations between steps
+
+### Registration Flow
+1. User fills registration form (name, email, company, password, confirm)
+2. Clicks "Create Account" → frontend calls `/api/auth/otp/send`
+3. Backend generates 4-digit OTP, stores in memory, sends email to user
+4. Frontend shows OTP step with 4 digit boxes
+5. User enters code → frontend auto-calls `/api/auth/otp/verify`
+6. Backend verifies OTP, creates account, returns session token
+7. Frontend auto-logs user in
+
+### Files Created
+- `src/lib/otp.ts` — OTP storage module
+- `src/app/api/auth/otp/send/route.ts` — OTP send API
+- `src/app/api/auth/otp/verify/route.ts` — OTP verify API
+
+### Files Modified
+- `src/lib/email.ts` — Added OTP email template and `sendOTPToUser` function
+- `src/components/portfolio/PortalLogin.tsx` — Complete rewrite with OTP flow
+
+### Technical Notes
+- `bun run lint` passes with 0 errors
+- OTP storage uses `globalThis` for Turbopack compatibility (same pattern as session store)
+- OTP emails use existing Gmail SMTP setup (nodemailer)
+- Tested via curl: send → verify → account creation all return correct responses
+- Cleanup timer prevents memory leaks from expired OTPs
+- Rate limiting handled by existing middleware

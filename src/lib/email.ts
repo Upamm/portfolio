@@ -279,6 +279,63 @@ export async function sendNewMessageNotification(data: {
 }
 
 // ───────────────────────────────────────────────────────────────
+// PRIVATE: Send OTP Email to User (NOT to admin, to the registering user)
+// ───────────────────────────────────────────────────────────────
+
+function generateOTPEmailHTML(otp: string, name: string): string {
+  const bodyHTML = `
+    <div class="field-group">
+      <div class="field-label">Hello, ${name}!</div>
+      <div class="field-value" style="margin-bottom: 20px;">Thank you for registering on the Client Portal. Please use the verification code below to complete your registration:</div>
+    </div>
+    <div style="text-align: center; margin: 32px 0;">
+      <div style="display: inline-block; background: linear-gradient(135deg, #06b6d4, #10b981); color: #fff; font-size: 36px; font-weight: 800; letter-spacing: 12px; padding: 16px 40px; border-radius: 16px; font-family: 'Courier New', monospace;">${otp}</div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Important</div>
+      <div class="field-value" style="color: #94a3b8; font-size: 13px;">
+        • This code expires in <strong style="color: #e2e8f0;">5 minutes</strong>.<br />
+        • Do not share this code with anyone.<br />
+        • If you did not request this code, please ignore this email.
+      </div>
+    </div>`;
+  return generateEmailWrapper('Email Verification', 'Verify Your Email', '🔐', bodyHTML);
+}
+
+async function sendOTPEmail(toEmail: string, name: string, otp: string): Promise<{ success: boolean; error?: string }> {
+  if (!isSMTPConfigured()) {
+    console.log('[Email] SMTP not configured — skipping OTP email.');
+    return { success: true }; // Don't fail the request
+  }
+
+  try {
+    const transporter = createTransporter();
+    const htmlContent = generateOTPEmailHTML(otp, name);
+    const textContent = `Your verification code is: ${otp}\n\nThis code expires in 5 minutes. Do not share this code with anyone.`;
+
+    await transporter.sendMail({
+      from: `"Upam Portfolio" <${process.env.SMTP_USER}>`,
+      to: toEmail,
+      subject: `🔐 Verify Your Email — Code: ${otp}`,
+      html: htmlContent,
+      text: textContent,
+    });
+    console.log(`[Email] OTP sent to ${toEmail}: ${otp}`);
+    return { success: true };
+  } catch (error) {
+    console.error(`[Email] Failed to send OTP to ${toEmail}:`, error);
+    return { success: false, error: 'OTP email delivery failed' };
+  }
+}
+
+// ───────────────────────────────────────────────────────────────
+// PUBLIC: Send OTP to a registering user
+// ───────────────────────────────────────────────────────────────
+export async function sendOTPToUser(email: string, name: string, otp: string): Promise<{ success: boolean; error?: string }> {
+  return sendOTPEmail(email, name, otp);
+}
+
+// ───────────────────────────────────────────────────────────────
 // PUBLIC: Send New Support Ticket Notification
 // ───────────────────────────────────────────────────────────────
 export async function sendNewTicketNotification(data: {
