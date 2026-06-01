@@ -85,6 +85,14 @@ export async function DELETE(request: NextRequest) {
       if (match) token = match[1];
     }
 
+    // Also check Authorization header
+    if (!token) {
+      const authHeader = request.headers.get('Authorization');
+      if (authHeader?.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+    }
+
     if (token) {
       destroySession(token);
     }
