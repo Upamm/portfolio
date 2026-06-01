@@ -237,7 +237,10 @@ export default function ClientPortal({ onBack }: ClientPortalProps) {
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-white text-sm font-medium truncate">{user.name || 'Client'}</p>
+              <div className="flex items-center gap-1.5 min-w-0">
+                <p className="text-white text-sm font-medium truncate">{user.name || 'Client'}</p>
+                <svg className="w-3.5 h-3.5 text-teal-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" title="Verified"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/></svg>
+              </div>
               <p className="text-slate-500 text-xs truncate">{user.email}</p>
             </div>
           </div>
@@ -283,6 +286,7 @@ export default function ClientPortal({ onBack }: ClientPortalProps) {
                 </h1>
                 <p className="text-slate-500 text-xs hidden sm:block">
                   Welcome, {user.name || 'Client'}
+                  <svg className="w-3 h-3 text-teal-400 inline-block ml-1" viewBox="0 0 24 24" fill="currentColor" title="Verified"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/></svg>
                 </p>
               </div>
             </div>

@@ -254,6 +254,7 @@ export default function PortalDashboard({
       <motion.div variants={itemVariants}>
         <h1 className="text-2xl font-bold text-white">
           Welcome back, <span className="gradient-text">{userName}</span>
+          <svg className="w-5 h-5 text-teal-400 inline-block ml-1.5 -mt-0.5" viewBox="0 0 24 24" fill="currentColor" title="Verified"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/></svg>
         </h1>
         <p className="text-slate-400 text-sm mt-1">
           Here&apos;s an overview of your account activity.
