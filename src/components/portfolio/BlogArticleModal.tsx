@@ -8,7 +8,6 @@ import {
   Clock,
   ArrowRight,
   X,
-  User,
   Lightbulb,
   BookOpen,
   Twitter,
@@ -133,7 +132,7 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
         {block.stats?.map((stat) => (
           <div
             key={stat.label}
-            className="text-center p-3 sm:p-4 rounded-xl bg-gradient-to-br from-teal-500/5 to-emerald-500/5 border border-teal-500/10"
+            className="text-center p-3 sm:p-4 rounded-xl blog-stat-card border border-teal-500/10"
           >
             <div className="text-xl sm:text-2xl font-bold gradient-text mb-1">
               {stat.value}
@@ -166,7 +165,7 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.03 }}
-        className="my-8 p-5 sm:p-6 rounded-xl bg-gradient-to-br from-teal-500/5 to-emerald-500/5 border border-teal-500/15"
+        className="my-8 p-5 sm:p-6 rounded-xl blog-related-reading-section border border-teal-500/15"
       >
         <div className="flex items-center gap-2 mb-4">
           <BookOpen className="w-4 h-4 text-teal-400" />
@@ -181,7 +180,7 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
               <a
                 key={link.articleId}
                 href={`#blog-${link.articleId}`}
-                className="flex items-start gap-3 p-3 rounded-lg bg-white/[0.02] hover:bg-teal-500/5 border border-white/5 hover:border-teal-500/20 transition-all duration-200 group cursor-pointer"
+                className="flex items-start gap-3 p-3 rounded-lg blog-related-card hover:bg-teal-500/5 border hover:border-teal-500/20 transition-all duration-200 group cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
                   // Navigate to related article — dispatch custom event for parent to handle
@@ -238,7 +237,7 @@ function StickyShareSidebar({
   const encodedTitle = encodeURIComponent(articleTitle);
 
   const buttonClass =
-    'w-9 h-9 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-teal-500/20 hover:border-teal-500/30 transition-all duration-200 hover:scale-110';
+    'w-9 h-9 rounded-full blog-share-btn backdrop-blur-md border flex items-center justify-center text-slate-400 hover:text-white hover:bg-teal-500/20 hover:border-teal-500/30 transition-all duration-200 hover:scale-110';
 
   return (
     <motion.div
@@ -318,7 +317,7 @@ function ShareBar({
   const encodedTitle = encodeURIComponent(articleTitle);
 
   const shareButtonClass =
-    'inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 hover:scale-105';
+    'inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 hover:scale-105 blog-share-bar-btn';
 
   return (
     <motion.div
@@ -458,7 +457,7 @@ function RelatedPosts({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: idx * 0.08 }}
             onClick={() => onNavigate?.(relatedArticle.id)}
-            className="group text-left p-3 sm:p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-teal-500/20 hover:bg-teal-500/[0.04] transition-all duration-300"
+            className="group text-left p-3 sm:p-4 rounded-xl blog-related-post-card border hover:border-teal-500/20 hover:bg-teal-500/[0.04] transition-all duration-300"
           >
             {/* Image */}
             <div className="relative w-full h-24 sm:h-28 rounded-lg overflow-hidden mb-3">
@@ -629,7 +628,7 @@ export default function BlogArticleModal({
             className="fixed inset-0 z-[10000] flex items-center justify-center p-2 sm:p-4 md:p-6 lg:p-8 pointer-events-none"
           >
             <div
-              className="relative z-[10001] w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl max-h-[92vh] sm:max-h-[94vh] md:max-h-[95vh] rounded-2xl overflow-hidden pointer-events-auto glass-card border border-white/10 shadow-2xl shadow-black/40 flex flex-col mx-auto"
+              className="relative z-[10001] w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl max-h-[92vh] sm:max-h-[94vh] md:max-h-[95vh] rounded-2xl overflow-hidden pointer-events-auto blog-modal-glass glass-card border border-white/10 shadow-2xl shadow-black/40 flex flex-col mx-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Image Header - shrinks on scroll */}
@@ -715,10 +714,6 @@ export default function BlogArticleModal({
                     <Calendar className="w-3.5 h-3.5 text-teal-400" />
                     {article.date}
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-teal-400" />
-                    {article.author}
-                  </span>
                 </div>
 
                 {/* Full title */}
@@ -769,7 +764,7 @@ export default function BlogArticleModal({
                 <RelatedPosts article={article} onNavigate={handleNavigate} allArticles={articleList} />
 
                 {/* Share Bar */}
-                <div className="mt-8 sm:mt-10 pt-6 border-t border-white/5">
+                <div className="mt-8 sm:mt-10 pt-6 border-t blog-modal-border">
                   <ShareBar
                     articleTitle={article.title}
                     onCopied={handleCopyLink}
@@ -778,7 +773,7 @@ export default function BlogArticleModal({
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-4 pb-2">
+                <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t blog-modal-border flex flex-col sm:flex-row items-center sm:items-center gap-3 sm:gap-4 pb-2">
                   <button
                     onClick={() => onClose()}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-teal-500 to-emerald-500 text-white hover:from-teal-400 hover:to-emerald-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-teal-500/25"

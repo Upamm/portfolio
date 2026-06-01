@@ -2063,6 +2063,49 @@ button:hover .logo-text-group {
   box-shadow: 0 8px 32px rgba(8, 145, 178, 0.08), 0 2px 8px rgba(19, 78, 111, 0.06);
 }
 
+/* Blog modal - more opaque background for better readability in light mode */
+.light .blog-modal-glass {
+  background: rgba(250, 252, 253, 0.96) !important;
+  border: 1px solid rgba(8, 145, 178, 0.15);
+  box-shadow: 0 25px 60px rgba(8, 145, 178, 0.12), 0 8px 24px rgba(19, 78, 111, 0.08), 0 0 0 1px rgba(8, 145, 178, 0.06);
+}
+.light .blog-modal-glass .blog-modal-heading { color: #0c1a2e; }
+.light .blog-modal-glass .blog-modal-paragraph { color: #334155; }
+.light .blog-modal-glass .blog-modal-list { color: #334155; }
+
+/* Light mode modal inner borders */
+.blog-modal-border { border-color: rgba(255, 255, 255, 0.05); }
+.light .blog-modal-border { border-color: rgba(8, 145, 178, 0.12); }
+
+/* Light mode share sidebar buttons */
+.blog-share-btn { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+.light .blog-share-btn { background: rgba(8, 145, 178, 0.06); border-color: rgba(8, 145, 178, 0.15); color: #475569; }
+.light .blog-share-btn:hover { background: rgba(8, 145, 178, 0.12); color: #0e7490; }
+
+/* Light mode share bar buttons */
+.blog-share-bar-btn { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); color: #cbd5e1; }
+.light .blog-share-bar-btn { background: rgba(8, 145, 178, 0.06); border-color: rgba(8, 145, 178, 0.15); color: #334155; }
+.light .blog-share-bar-btn:hover { background: rgba(8, 145, 178, 0.12); color: #0e7490; border-color: rgba(8, 145, 178, 0.3); }
+
+/* Light mode related reading section */
+.blog-related-reading-section { background: rgba(6, 182, 212, 0.04); }
+.light .blog-related-reading-section { background: rgba(8, 145, 178, 0.05); border-color: rgba(8, 145, 178, 0.12); }
+
+/* Light mode related reading cards */
+.blog-related-card { background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.05); }
+.light .blog-related-card { background: rgba(8, 145, 178, 0.04); border-color: rgba(8, 145, 178, 0.1); }
+
+/* Light mode related posts cards */
+.blog-related-post-card { background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.06); }
+.light .blog-related-post-card { background: rgba(8, 145, 178, 0.04); border-color: rgba(8, 145, 178, 0.1); }
+
+/* Light mode stat card */
+.blog-stat-card { background: rgba(6, 182, 212, 0.04); }
+.light .blog-stat-card { background: rgba(8, 145, 178, 0.06); border-color: rgba(8, 145, 178, 0.12); }
+
+/* Light mode modal content meta */
+.light .blog-modal-glass .text-slate-500 { color: #64748b; }
+
 .light .glass-nav {
   background: rgba(240, 250, 251, 0.9);
   border-bottom: 1px solid rgba(8, 145, 178, 0.1);

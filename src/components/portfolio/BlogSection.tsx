@@ -108,7 +108,6 @@ function BlogCard({
             <Calendar className="w-3.5 h-3.5" />
             {article.date}
           </span>
-          <span className="blog-card-meta">by {article.author}</span>
         </div>
 
         {/* Title */}

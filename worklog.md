@@ -3761,3 +3761,26 @@ In light mode, the Services dropdown (desktop) and mobile menu dropdown backgrou
 - `bun run lint` passes with 0 errors
 - Dev server compiles successfully
 - All notifications are async (non-blocking)
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix blog popup background on light mode for better visibility + remove author name
+
+Work Log:
+- Analyzed blog modal component (`BlogArticleModal.tsx`) and blog cards (`BlogSection.tsx`)
+- Identified glass-card light mode background at `rgba(224,242,248,0.65)` was too transparent
+- Added `blog-modal-glass` class to modal container with `rgba(250,252,253,0.96)` background in light mode
+- Created custom CSS classes for modal inner elements: `blog-share-btn`, `blog-share-bar-btn`, `blog-related-card`, `blog-related-post-card`, `blog-related-reading-section`, `blog-stat-card`, `blog-modal-border`
+- Added proper dark mode base styles and light mode overrides for each class
+- Removed author name from blog cards (line 111 in BlogSection.tsx)
+- Removed author name and User icon from modal popup (lines 718-721 in BlogArticleModal.tsx)
+- Removed unused `User` import from lucide-react in BlogArticleModal.tsx
+- Created webDevReview cron job (Job ID: 180154, every 15 minutes)
+
+Stage Summary:
+- Blog popup now has a near-opaque white background (`rgba(250,252,253,0.96)`) in light mode for much better text readability
+- All modal inner elements (share buttons, related cards, borders, stat cards) have proper light mode styling
+- Author name completely removed from both blog cards and article modal popup
+- `bun run lint` passes clean
+- Page loads with 200 status
