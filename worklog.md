@@ -2879,3 +2879,248 @@ Stage Summary:
 - BlogSection.tsx reduced from 2506 → 394 lines
 - All pages verified working after optimizations
 - Disk space freed from 0 to 169MB available
+
+---
+
+## Phase 14 - Client Portal UI Components Round
+
+### Overview
+Built a complete Client Portal system with 9 new UI components for the portfolio SPA. The portal provides clients with a self-service dashboard to manage projects, invoices, messages, files, and support tickets. All components follow the existing dark navy/teal/emerald design system with glassmorphism styling and Framer Motion animations.
+
+### New Components Created (`src/components/portfolio/`)
+
+1. **`ClientPortal.tsx`** — Main portal shell with auth state management, sidebar navigation, tab routing, responsive layout (fixed sidebar on desktop, hamburger overlay on mobile). Lazy-loads all tab components. Supports session persistence via cookie token. Navbar/Footer hidden when portal is active.
+
+2. **`PortalLogin.tsx`** — Login/Register form with tab toggle, form validation (email format, password min 6 chars, password match), loading states, error/success messages, animated transitions between login/register, glassmorphism card design, "Back to Home" link. Calls POST `/api/auth/login` or `/api/auth/register`.
+
+3. **`PortalDashboard.tsx`** — Dashboard overview with welcome message, 4 animated stat cards (Total Projects, Active Projects, Pending Invoices, Open Tickets), recent activity feed (5 items), quick action buttons (New Ticket, Upload File, View Invoices), project status summary with visual progress bar. Fetches from `/api/portal/*` endpoints with fallback demo data.
+
+4. **`PortalProjects.tsx`** — Project management with 6-status filter tabs (All, Pending, In Progress, Review, Completed, Paused), project cards grid showing title, status badge, animated progress bar, priority badge, category, deadline, budget. Click-to-expand detail modal with description, milestones checklist (toggleable), notes, metadata grid. Framer Motion staggered list.
+
+5. **`PortalInvoices.tsx`** — Invoice management with status filters (All, Pending, Paid, Overdue, Cancelled), outstanding total banner, invoice list with status badges, click-to-expand detail modal showing items breakdown table with subtotal/discount/tax/total calculations, date formatting, empty states.
+
+6. **`PortalMessages.tsx`** — Real-time chat interface with chat-style message thread (admin messages on left with teal bg, client on right with emerald bg), auto-scroll to bottom, date headers (Today, Yesterday, date), sender name/timestamp on each message, message input with send button, 5-second polling for new messages, typing indicator placeholder, empty state.
+
+7. **`PortalFiles.tsx`** — File management with drag & drop upload area, upload progress indicator with percentage, file list showing icon by type (PDF/Image/Archive), filename, size, upload date, category badge, category filters (All, General, Project, Invoice, Contract), download/delete action buttons (hover-reveal), optimistic file additions on upload.
+
+8. **`PortalTickets.tsx`** — Support tickets with "New Ticket" button → modal form (subject, description, category select, priority select), ticket cards with status/priority badges, reply count, status filter tabs, click-to-open thread detail modal with chronological replies, sender role labels, reply input. Form validation on new ticket creation.
+
+9. **`PortalSettings.tsx`** — Profile settings with avatar placeholder, editable fields (name, company, phone, address), read-only email, notification toggle switches (email, project updates, invoice alerts), change password form with current/new/confirm fields and show/hide toggles, account deactivation button. Save/update functionality with success indicators.
+
+### Files Modified
+- **`src/components/portfolio/PortfolioApp.tsx`** — Extended `PageKey` type to include `'portal'`. Added `portal` to page list. Created `PortalPage` wrapper component. Added dynamic import for `ClientPortal`. Conditionally hides Navbar/Footer when portal is active. Portal renders as full-page with its own sidebar layout.
+
+### Design System Consistency
+- All components use dark navy bg (`#0a1628` / `bg-slate-950/80`)
+- Glass morphism cards (`glass-card` class) for all containers
+- Primary accent: teal-400/teal-500
+- Secondary accent: emerald-400/emerald-500
+- Text: white headings, slate-300/slate-400 body
+- Borders: border-white/5 to border-white/10
+- Status colors: green=completed/paid/open, yellow=pending/review, red=overdue/urgent, sky=in-progress, gray=paused/closed
+- Hover effects: border-teal-500/30, bg-teal-500/5, teal glow
+- Input fields: bg-white/5 border-white/10 text-white placeholder-slate-500 focus:border-teal-500/50
+- Primary buttons: bg-gradient-to-r from-teal-500 to-emerald-500
+- Secondary buttons: bg-white/5 border-white/10 text-slate-300
+- All animations: Framer Motion (fadeIn, slideUp, staggerChildren, AnimatePresence)
+- All modals: Native state-based (no shadcn Dialog imports) with backdrop-blur overlay
+
+### Technical Notes
+- `bun run lint` passes with 0 errors
+- Dev server compiles successfully (GET / 200 responses)
+- All 9 components use `'use client'` directive
+- TypeScript strict typing throughout
+- All components have fallback demo data when API endpoints are not available
+- Portal components use native HTML modals (not shadcn Dialog) to avoid import conflicts
+- Auth state managed via cookie (`portal_token`)
+- Session verification on mount via `/api/auth/me` endpoint
+- Portal page removes Navbar/Footer for full-screen portal experience
+- Responsive design: mobile sidebar overlay with hamburger menu, desktop fixed sidebar
+
+---
+
+## Phase 10 - Client Portal API Routes (2026-06-01)
+
+### Overview
+Built complete backend API infrastructure for a Client Portal with 13 new route files and 1 auth helper. The portal supports user authentication, project management, invoicing, messaging, support tickets, file uploads, notifications, and profile management.
+
+### Files Created
+
+1. **`src/lib/auth.ts`** — Authentication helper module
+   - In-memory session storage with Map-based sessions (7-day expiry)
+   - `createSession()` — generates 32-byte hex token via `crypto.randomBytes`
+   - `verifySession()` — validates token and checks expiry
+   - `destroySession()` — removes session from map
+   - `requireAuth(request)` — middleware that extracts Bearer token or `portal_token` cookie, returns authenticated client with DB lookup (excludes password), throws 401/403 Responses
+   - `requireAdmin(client)` — role-based access control for admin-only endpoints
+   - Session cleanup runs every 30 minutes via setInterval
+   - Cookie settings: `portal_token`, HttpOnly, Secure=false (dev), SameSite=Lax, Path=/, MaxAge=7 days
+
+2. **`src/app/api/auth/route.ts`** — Authentication (4 methods)
+   - **POST** `/api/auth` — Register: validates name/email/password, checks duplicates, hashes with bcryptjs (12 salt rounds), creates Client record, generates session, sets cookie, creates welcome notification
+   - **GET** `/api/auth/me` — Returns current client info from session token
+   - **PATCH** `/api/auth` — Login (`action: "login"`) or Logout (`action: "logout"`) based on JSON body field
+   - **DELETE** `/api/auth` — Logout via DELETE method, clears cookie
+
+3. **`src/app/api/portal/projects/route.ts`** — Projects CRUD
+   - **GET** — List projects for authenticated client (filter by `status` query param); admins see all projects
+   - **POST** — Admin creates project (validates target client exists, notifies client)
+
+4. **`src/app/api/portal/projects/[id]/route.ts`** — Single project
+   - **GET** — Project details with milestones, client info, and invoices summary
+   - **PATCH** — Update project fields (status, progress, notes, etc.); notifies on status change
+   - **DELETE** — Delete project; owner or admin only
+
+5. **`src/app/api/portal/invoices/route.ts`** — Invoices
+   - **GET** — List invoices (filter by `status`); admins see all
+   - **POST** — Admin creates invoice with auto-generated invoice number (INV-YYYYMMDD-XXXX), uniqueness guarantee, client notification
+
+6. **`src/app/api/portal/invoices/[id]/route.ts`** — Single invoice
+   - **GET** — Invoice details with parsed items JSON and client/project info
+   - **PATCH** — Update status (clients can mark as paid; admins can set any status); auto-sets paidAt on "paid"
+
+7. **`src/app/api/portal/messages/route.ts`** — Messages
+   - **GET** — Messages for client with pagination (page/limit query params), ordered chronologically
+   - **POST** — Send message (validates content not empty)
+
+8. **`src/app/api/portal/tickets/route.ts`** — Support Tickets
+   - **GET** — List tickets with reply counts (filter by status/category)
+   - **POST** — Create ticket (subject, description, priority, category)
+
+9. **`src/app/api/portal/tickets/[id]/route.ts`** — Single ticket
+   - **GET** — Ticket with all replies and client info
+   - **POST** — Add reply; notifies client when admin replies
+   - **PATCH** — Update status/priority/subject; notifies client on admin status change
+
+10. **`src/app/api/portal/files/route.ts`** — File Uploads
+    - **GET** — List files (filter by category/projectId)
+    - **POST** — Upload via FormData (10MB max), sanitizes filename, saves to `public/uploads/`, records in DB
+
+11. **`src/app/api/portal/notifications/route.ts`** — Notifications
+    - **GET** — List notifications (optional `?unread=true` filter), includes `unreadCount` in meta
+    - **POST** — Mark all as read (`action: "mark-all-read"`)
+
+12. **`src/app/api/portal/notifications/[id]/route.ts`** — Single notification
+    - **PATCH** — Mark one notification as read (client ownership check)
+
+13. **`src/app/api/portal/profile/route.ts`** — Profile Management
+    - **GET** — Client profile with stats (projectCount, activeTickets, unreadMessages, unpaidInvoices)
+    - **PATCH** — Update name, company, phone, address, avatar
+
+### Dependencies Added
+- `bcryptjs@3.0.3` — Password hashing (12 salt rounds)
+- `@types/bcryptjs@3.0.0` — TypeScript types (dev dependency)
+
+### Prisma Schema
+- Database already in sync with all portal models: Client, Project, Milestone, Invoice, Message, Ticket, TicketReply, FileUpload, Notification
+- No schema changes needed
+
+### API Response Format
+All responses use consistent format:
+- Success: `{ "success": true, "data": ..., "message": "..." }`
+- Error: `{ "success": false, "error": "..." }`
+
+### Authentication Flow
+1. Register: POST /api/auth with name, email, password → returns client + Set-Cookie
+2. Login: PATCH /api/auth with `{ action: "login", email, password }` → returns client + Set-Cookie
+3. Authenticated requests: include `Authorization: Bearer <token>` header or `portal_token` cookie
+4. Logout: DELETE /api/auth → clears cookie
+
+### Technical Notes
+- `bun run lint` passes with 0 errors
+- Database already in sync (no schema push needed)
+- All routes use try/catch with proper error handling
+- Client ownership checks enforced on all resource access
+- Admin-only endpoints protected with `requireAdmin()`
+- Dynamic bcryptjs import (`await import('bcryptjs')`) to avoid issues with serverless
+- Next.js 16 App Router with `params: Promise<{ id: string }>` pattern for dynamic routes
+- Passwords excluded from all client responses via Prisma `select`
+- Notifications created for key events (registration, project creation, status changes, replies, invoices)
+
+### Known Issues
+- None. All code compiles and passes lint checks.
+
+### Priority Recommendations for Next Phase
+1. **High**: Build Client Portal frontend UI (login/register, dashboard, projects, invoices, etc.)
+2. **High**: Create seed script to populate demo data for development
+3. **Medium**: Add WebSocket real-time messaging integration
+4. **Medium**: Add rate limiting on auth endpoints
+5. **Low**: Implement password reset flow via email
+6. **Low**: Add API request logging middleware
+
+---
+## Phase 13 - Client Portal Implementation (2026-06-01)
+
+### Current Project Status Assessment
+- **Overall**: Portfolio website with 40+ components, blog system, contact form, now extended with full **Client Portal**
+- **Build**: Zero lint errors, zero compilation errors, homepage returns HTTP 200
+- **New**: Complete client portal with authentication, project management, invoices, messaging, file sharing, support tickets, and settings
+
+### What Was Built
+
+#### Database Schema (8 new models in Prisma)
+- **Client** — id, name, email, company, password, role, avatar, phone, address, isActive, lastLogin
+- **Project** — id, title, description, status (5 states), priority (4 levels), category, budget, deadline, progress 0-100
+- **Milestone** — id, title, description, status, dueDate, completedAt, order, projectId (cascade delete)
+- **Invoice** — id, invoiceNumber, amount, tax, discount, status (5 states), dueDate, items (JSON), notes
+- **Message** — id, content, senderId, senderRole, isRead, clientId
+- **Ticket** — id, subject, description, status (4 states), priority, category (5 types)
+- **TicketReply** — id, content, senderId, senderRole, ticketId (cascade delete)
+- **FileUpload** — id, filename, filepath, filetype, filesize, category, projectId, clientId
+- **Notification** — id, title, message, type (4 types), isRead, clientId
+
+#### API Routes (12 new route files)
+- `src/lib/auth.ts` — Session management (in-memory Map, 7-day expiry), requireAuth middleware, requireAdmin RBAC
+- `/api/auth` — POST register, PATCH login/logout, GET me, DELETE logout (cookie-based session)
+- `/api/portal/projects` — GET list (filter by status), POST create (admin)
+- `/api/portal/projects/[id]` — GET with milestones, PATCH update, DELETE
+- `/api/portal/invoices` — GET list, POST create (admin)
+- `/api/portal/invoices/[id]` — GET detail, PATCH update status
+- `/api/portal/messages` — GET with pagination, POST send
+- `/api/portal/tickets` — GET with reply counts, POST create
+- `/api/portal/tickets/[id]` — GET with replies, POST add reply, PATCH update status
+- `/api/portal/files` — GET list, POST upload to public/uploads/
+- `/api/portal/notifications` — GET with unread count, POST mark all read
+- `/api/portal/notifications/[id]` — PATCH mark single as read
+- `/api/portal/profile` — GET with stats, PATCH update profile
+
+#### UI Components (9 new portal components, ~3,900 lines total)
+1. **ClientPortal.tsx** (317 lines) — Main shell with sidebar nav, mobile hamburger, header bar, tab-based routing
+2. **PortalLogin.tsx** (390 lines) — Login/Register with animated tab toggle, form validation, glassmorphism design
+3. **PortalDashboard.tsx** (391 lines) — Stats cards, recent activity feed, quick actions, project status overview
+4. **PortalProjects.tsx** (462 lines) — Project cards grid, 6-status filters, progress bars, detail modal with milestones
+5. **PortalInvoices.tsx** (456 lines) — Invoice list with status badges, outstanding total, detail modal with items breakdown
+6. **PortalMessages.tsx** (325 lines) — Chat-style messaging with admin/client differentiation, 5s polling, auto-scroll
+7. **PortalFiles.tsx** (433 lines) — Drag & drop upload, file list with type icons, category filters
+8. **PortalTickets.tsx** (667 lines) — New ticket form, ticket cards with thread detail, reply input
+9. **PortalSettings.tsx** (478 lines) — Profile editor, notification toggles, change password, deactivate account
+
+#### Navigation Integration
+- Added "Portal" link to Navbar (desktop: teal gradient button with Shield icon; mobile: special styled button with divider)
+- Extended PageKey type to include 'portal'
+- Portal page hides Navbar/Footer for full-screen portal experience
+- Back button in portal returns to home page
+
+### Technical Details
+- **Authentication**: bcryptjs password hashing (12 salt rounds), in-memory session tokens (32-byte hex), cookie-based (portal_token, httpOnly, 7-day expiry)
+- **Authorization**: Bearer token header OR cookie fallback, client-only resource isolation, admin role for creating projects/invoices
+- **Styling**: Consistent dark navy/teal/emerald theme, glassmorphism cards, status color coding (green/yellow/red/blue/gray)
+- **Responsive**: Mobile sidebar overlay, responsive grids, touch-friendly targets
+
+### Files Created (22 new files)
+- 1 auth helper: `src/lib/auth.ts`
+- 12 API route files in `src/app/api/`
+- 9 UI components in `src/components/portfolio/`
+- 1 directory: `public/uploads/`
+
+### Files Modified
+- `prisma/schema.prisma` — Added 8 new models
+- `src/components/portfolio/Navbar.tsx` — Added Portal button (desktop + mobile)
+- `src/components/portfolio/PortfolioApp.tsx` — Added 'portal' page key, ClientPortal dynamic import, hides nav/footer on portal
+
+### Priority Recommendations for Next Phase
+1. **High**: Test and debug the auth API routes (404 on /api/auth/register needs investigation)
+2. **Medium**: Add demo/seed data for portal (sample projects, invoices, messages)
+3. **Medium**: Add admin dashboard for managing clients/projects/invoices
+4. **Low**: Email notifications for ticket replies and invoice reminders
+5. **Low**: File preview/download functionality

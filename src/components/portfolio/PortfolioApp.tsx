@@ -33,9 +33,12 @@ const ContactSection = dynamic(() => import('./ContactSection'), { ssr: false })
 import CookieConsent from './CookieConsent';
 import ScrollToTop from './ScrollToTop';
 
-export type PageKey = 'home' | 'about' | 'services' | 'portfolio' | 'pricing' | 'blog' | 'faq' | 'contact';
+// Portal is loaded dynamically (only when accessed)
+const ClientPortal = dynamic(() => import('./ClientPortal'), { ssr: false });
 
-const pageList: PageKey[] = ['home', 'about', 'services', 'portfolio', 'pricing', 'blog', 'faq', 'contact'];
+export type PageKey = 'home' | 'about' | 'services' | 'portfolio' | 'pricing' | 'blog' | 'faq' | 'contact' | 'portal';
+
+const pageList: PageKey[] = ['home', 'about', 'services', 'portfolio', 'pricing', 'blog', 'faq', 'contact', 'portal'];
 
 // Loading spinner for lazy-loaded pages
 function PageLoader() {
@@ -102,6 +105,10 @@ function ContactPage() {
   return <ContactSection />;
 }
 
+function PortalPage({ onNavigate }: { onNavigate: (page: PageKey) => void }) {
+  return <ClientPortal onBack={() => onNavigate('home')} />;
+}
+
 const getPages = (onNavigate: (page: PageKey) => void): Record<PageKey, () => React.ReactNode> => ({
   home: () => <HomePage onNavigate={onNavigate} />,
   about: () => <AboutPage />,
@@ -111,6 +118,7 @@ const getPages = (onNavigate: (page: PageKey) => void): Record<PageKey, () => Re
   blog: () => <BlogPage />,
   faq: () => <FAQPage />,
   contact: () => <ContactPage />,
+  portal: () => <PortalPage onNavigate={onNavigate} />,
 });
 
 export default function PortfolioApp() {
@@ -224,9 +232,12 @@ export default function PortfolioApp() {
   const pages = useMemo(() => getPages(navigateTo), [navigateTo]);
   const PageComponent = pages[currentPage];
 
+  // Portal page has its own full layout (sidebar, header), no navbar/footer needed
+  const isPortal = currentPage === 'portal';
+
   return (
     <>
-      <Navbar currentPage={currentPage} onNavigate={navigateTo} />
+      {!isPortal && <Navbar currentPage={currentPage} onNavigate={navigateTo} />}
 
       <main className="min-h-screen flex flex-col">
         <AnimatePresence mode="wait">
@@ -237,7 +248,7 @@ export default function PortfolioApp() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
-              className="flex-1"
+              className={isPortal ? '' : 'flex-1'}
             >
               <Suspense fallback={<PageLoader />}>
                 <PageComponent />
@@ -247,7 +258,7 @@ export default function PortfolioApp() {
         </AnimatePresence>
       </main>
 
-      <Footer onNavigate={navigateTo} />
+      {!isPortal && <Footer onNavigate={navigateTo} />}
       <ScrollToTop />
       <CookieConsent />
     </>

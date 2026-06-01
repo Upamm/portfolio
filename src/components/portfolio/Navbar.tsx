@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Shield } from 'lucide-react';
 import type { PageKey } from './PortfolioApp';
 import ThemeToggle from './ThemeToggle';
 import Logo from './Logo';
@@ -29,6 +29,8 @@ const navLinks: NavLinkItem[] = [
   { label: 'Blog', key: 'blog' },
   { label: 'Contact', key: 'contact' },
 ];
+
+const portalLink: NavLinkItem = { label: 'Client Portal', key: 'portal' };
 
 interface NavbarProps {
   currentPage: PageKey;
@@ -220,6 +222,20 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                 </button>
               )
             )}
+            {/* Client Portal — special highlighted button (desktop) */}
+            <button
+              onClick={() => handleClick('portal')}
+              className="relative px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-teal-500/15 to-emerald-500/15 border border-teal-500/25 text-teal-300 hover:text-teal-200 hover:border-teal-500/40 hover:from-teal-500/25 hover:to-emerald-500/25 transition-all duration-200 flex items-center gap-1.5 ml-1"
+              style={{
+                fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
+                fontWeight: 500,
+                fontSize: '0.78rem',
+                letterSpacing: '0.04em',
+              }}
+            >
+              <Shield className="w-3.5 h-3.5" />
+              <span>Portal</span>
+            </button>
           </div>
 
           {/* Mobile: Theme Toggle + Menu Button */}
@@ -340,6 +356,25 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                   </motion.button>
                 )
               )}
+              {/* Divider before portal */}
+              <div className="border-t border-white/5 my-2" />
+              {/* Client Portal mobile */}
+              <motion.button
+                onClick={() => handleClick('portal')}
+                initial={{ opacity: 0, x: -15 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: navLinks.length * 0.03 }}
+                className="w-full text-left px-4 py-2.5 rounded-lg bg-gradient-to-r from-teal-500/10 to-emerald-500/10 border border-teal-500/20 text-teal-300 hover:text-teal-200 transition-all duration-200 flex items-center gap-2"
+                style={{
+                  fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
+                  fontWeight: 500,
+                  fontSize: '0.82rem',
+                  letterSpacing: '0.04em',
+                }}
+              >
+                <Shield className="w-4 h-4" />
+                <span>Client Portal</span>
+              </motion.button>
             </div>
           </motion.div>
         )}
