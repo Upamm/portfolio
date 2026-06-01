@@ -239,7 +239,7 @@ export default function ClientPortal({ onBack }: ClientPortalProps) {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 min-w-0">
                 <p className="text-white text-sm font-medium truncate">{user.name || 'Client'}</p>
-                <svg className="w-3.5 h-3.5 text-teal-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" title="Verified"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/></svg>
+                <svg className="w-4 h-4 flex-shrink-0 verified-sticker" viewBox="0 0 24 24" title="Verified Account"><defs><linearGradient id="vs1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#06b6d4"/><stop offset="100%" stopColor="#10b981"/></linearGradient><filter id="vs1s"><feDropShadow dx="0" dy="0.5" stdDeviation="0.5" flood-color="#06b6d4" flood-opacity="0.4"/></filter></defs><circle cx="12" cy="12" r="11" fill="url(#vs1)" stroke="#0a1628" strokeWidth="2" filter="url(#vs1s)"/><path d="M7.5 12.5L10.5 15.5L17 8.5" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
               <p className="text-slate-500 text-xs truncate">{user.email}</p>
             </div>
@@ -285,8 +285,8 @@ export default function ClientPortal({ onBack }: ClientPortalProps) {
                   {navItems.find(n => n.key === activeTab)?.label || 'Dashboard'}
                 </h1>
                 <p className="text-slate-500 text-xs hidden sm:block">
-                  Welcome, {user.name || 'Client'}
-                  <svg className="w-3 h-3 text-teal-400 inline-block ml-1" viewBox="0 0 24 24" fill="currentColor" title="Verified"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/></svg>
+                  <span className="flex items-center gap-1">Welcome, {user.name || 'Client'}
+                  <svg className="w-3.5 h-3.5 verified-sticker" viewBox="0 0 24 24" title="Verified Account"><defs><linearGradient id="vs2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#06b6d4"/><stop offset="100%" stopColor="#10b981"/></linearGradient><filter id="vs2s"><feDropShadow dx="0" dy="0.5" stdDeviation="0.5" flood-color="#06b6d4" flood-opacity="0.4"/></filter></defs><circle cx="12" cy="12" r="11" fill="url(#vs2)" stroke="#0a1628" strokeWidth="2" filter="url(#vs2s)"/><path d="M7.5 12.5L10.5 15.5L17 8.5" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
                 </p>
               </div>
             </div>
