@@ -59,50 +59,11 @@ export default function PortalMessages() {
         );
       }
     } catch {
-      // Fallback demo data - only set if no messages loaded yet
-      if (messages.length === 0) {
-        setMessages([
-          {
-            id: '1',
-            sender: 'Upam',
-            senderRole: 'admin',
-            content: 'Hi! Thanks for reaching out. I\'ve reviewed the project brief and have a few questions before we get started.',
-            timestamp: '2025-06-20T10:30:00Z',
-          },
-          {
-            id: '2',
-            sender: 'Client',
-            senderRole: 'client',
-            content: 'Sure, feel free to ask! I\'m available to discuss anything you need.',
-            timestamp: '2025-06-20T11:15:00Z',
-          },
-          {
-            id: '3',
-            sender: 'Upam',
-            senderRole: 'admin',
-            content: 'Great! First, about the color scheme — do you have any specific brand colors you\'d like me to use, or should I stick with the teal/emerald palette from the mockup?',
-            timestamp: '2025-06-20T11:20:00Z',
-          },
-          {
-            id: '4',
-            sender: 'Client',
-            senderRole: 'client',
-            content: 'I really like the teal theme from the mockup. Let\'s go with that. Also, can we add a blog section later?',
-            timestamp: '2025-06-20T14:00:00Z',
-          },
-          {
-            id: '5',
-            sender: 'Upam',
-            senderRole: 'admin',
-            content: 'Absolutely! I\'ll design it to be blog-ready from the start. I\'ll have the initial wireframes ready for your review by Friday.',
-            timestamp: '2025-06-20T14:05:00Z',
-          },
-        ]);
-      }
+      // Silently fail — loading state handles empty state
     } finally {
       setLoading(false);
     }
-  }, [messages.length]);
+  }, []);
 
   useEffect(() => {
     fetchMessages();
@@ -151,13 +112,14 @@ export default function PortalMessages() {
       if (res.ok) {
         await fetchMessages();
       } else {
-        // Optimistically add message
+        const errorData = await res.json().catch(() => ({}));
+        // Optimistically add message only on network error, not API rejection
         setMessages(prev => [
           ...prev,
           {
             id: Date.now().toString(),
             sender: 'You',
-            senderRole: 'client',
+            senderRole: 'client' as const,
             content: messageText,
             timestamp: new Date().toISOString(),
           },

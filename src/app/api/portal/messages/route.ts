@@ -20,14 +20,26 @@ export async function GET(request: NextRequest) {
         orderBy: { createdAt: 'asc' },
         skip,
         take: limit,
+        include: {
+          client: {
+            select: { name: true, email: true, avatar: true },
+          },
+        },
       }),
       db.message.count({ where }),
     ]);
 
+    // Flatten sender info into each message
+    const mappedMessages = messages.map(m => ({
+      ...m,
+      senderName: m.senderRole === 'admin' ? 'Upam' : (m.client?.name || 'Unknown'),
+      senderAvatar: m.client?.avatar || '',
+    }));
+
     return NextResponse.json({
       success: true,
       data: {
-        messages,
+        messages: mappedMessages,
         pagination: {
           page,
           limit,
@@ -69,6 +81,13 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Build response with sender name
+    const responseMessage = {
+      ...message,
+      senderName: client.role === 'admin' ? 'Upam' : client.name,
+      senderAvatar: client.avatar || '',
+    };
+
     // Email notification to master admin when a client sends a message (fire-and-forget)
     if (client.role === 'client') {
       sendNewMessageNotification({
@@ -79,7 +98,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { success: true, data: message, message: 'Message sent successfully' },
+      { success: true, data: responseMessage, message: 'Message sent successfully' },
       { status: 201 }
     );
   } catch (error) {
