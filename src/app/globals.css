@@ -435,8 +435,8 @@ body::before {
 }
 
 .light .mobile-menu-dropdown {
-  background: rgba(255, 255, 255, 0.96);
-  border-bottom-color: rgba(6, 182, 212, 0.1);
+  background: rgba(224, 242, 248, 0.95);
+  border-bottom-color: rgba(8, 145, 178, 0.18);
 }
 
 /* Glow Effects */
@@ -1464,9 +1464,9 @@ button:hover .logo-text-group {
 }
 
 .light .services-dropdown {
-  background: rgba(255, 255, 255, 0.96) !important;
-  border: 1px solid rgba(6, 182, 212, 0.1) !important;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03) inset !important;
+  background: rgba(224, 242, 248, 0.92) !important;
+  border: 1px solid rgba(8, 145, 178, 0.2) !important;
+  box-shadow: 0 20px 60px rgba(8, 145, 178, 0.12), 0 0 0 1px rgba(8, 145, 178, 0.06) inset !important;
 }
 
 /* ==================== */
@@ -1924,8 +1924,9 @@ button:hover .logo-text-group {
 }
 
 .light .mobile-menu-dropdown {
-  background: rgba(240, 250, 251, 0.96);
-  border-top-color: rgba(8, 145, 178, 0.12);
+  background: rgba(224, 242, 248, 0.95);
+  border-top-color: rgba(8, 145, 178, 0.18);
+  box-shadow: 0 -4px 20px rgba(8, 145, 178, 0.08);
 }
 
 /* Light background patterns */

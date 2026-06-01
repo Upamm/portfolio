@@ -3701,3 +3701,23 @@ All admin routes properly verify `requireAuth()` + `requireAdmin()` before proce
 ### Files Modified
 - `src/app/globals.css` — Added `.services-dropdown`, `.light .services-dropdown`, `.light .mobile-menu-dropdown`, `.light .nav-scrolled-enhanced`, 20+ light mode text color classes
 - `src/components/portfolio/Navbar.tsx` — Full theme-aware rewrite with `isThemeDark()` integration, CSS class-based dropdown, dynamic text colors
+
+---
+
+## Light Mode Submenu Background Fix
+
+### Issue
+In light mode, the Services dropdown (desktop) and mobile menu dropdown backgrounds were nearly invisible because they used colors too similar to the page background:
+- Desktop `.light .services-dropdown`: `rgba(255, 255, 255, 0.96)` — white on `#f0fafb` page = almost invisible
+- Mobile `.light .mobile-menu-dropdown`: `rgba(240, 250, 251, 0.96)` — same as body background = invisible
+- Duplicate `.light .mobile-menu-dropdown` definitions at lines 437 and 1926 with different values
+
+### Fix Applied (globals.css)
+1. **Desktop services-dropdown** (line 1466): Changed from `rgba(255, 255, 255, 0.96)` to `rgba(224, 242, 248, 0.92)` (teal-tinted glass matching design system). Enhanced border to `rgba(8, 145, 178, 0.2)` and shadow to teal-tinted.
+2. **Mobile menu-dropdown** (line 1926): Changed from `rgba(240, 250, 251, 0.96)` to `rgba(224, 242, 248, 0.95)`. Added `box-shadow: 0 -4px 20px rgba(8, 145, 178, 0.08)`.
+3. **Duplicate mobile-menu-dropdown** (line 437): Updated to match the consistent teal-tinted values `rgba(224, 242, 248, 0.95)`.
+
+### Verification
+- `bun run lint` passes with 0 errors
+- Dev server compiles successfully
+- Active cron job (ID: 180096) running every 15 minutes for continued development
