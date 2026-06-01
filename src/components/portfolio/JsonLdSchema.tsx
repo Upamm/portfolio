@@ -1,9 +1,14 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useSyncExternalStore } from 'react';
 import { hardcodedArticles } from '@/lib/blog-data';
 
 const SITE_URL = 'https://upam1721.com';
+
+// useSyncExternalStore for client-only rendering (avoids hydration mismatch)
+const subscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 /**
  * Parses a human-readable date string like "May 15, 2025" to ISO 8601.
@@ -17,7 +22,7 @@ function parseDateToISO(dateStr: string): string {
   } catch {
     // fallback
   }
-  return new Date().toISOString();
+  return '2026-06-01T00:00:00.000Z';
 }
 
 /**
@@ -44,6 +49,9 @@ function countWords(text: string): number {
 }
 
 export function JsonLdSchema() {
+  const mounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+  // Pre-compute schemas (deterministic data, no Date randomness)
   const schemas = useMemo(() => {
     const result: object[] = [];
 
@@ -235,6 +243,10 @@ export function JsonLdSchema() {
 
     return result;
   }, []);
+
+  // Only render JSON-LD scripts on the client side to avoid hydration mismatch
+  // caused by Date parsing differences between server and client environments
+  if (!mounted) return null;
 
   return (
     <>
