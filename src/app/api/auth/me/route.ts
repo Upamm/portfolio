@@ -1,22 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { verifySession, destroySession, SESSION_COOKIE } from '@/lib/auth';
+import { verifySession } from '@/lib/auth';
 
 // GET /api/auth/me — Get current authenticated user
 export async function GET(request: NextRequest) {
   try {
-    const cookieHeader = request.headers.get('Cookie');
+    // Try Bearer token from Authorization header first
+    const authHeader = request.headers.get('Authorization');
     let token: string | null = null;
-    if (cookieHeader) {
-      const match = cookieHeader.match(/(?:^|;\s*)portal_token=([^;]*)/);
-      if (match) token = match[1];
+
+    if (authHeader?.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
     }
 
-    // Also check Authorization header
+    // Fall back to cookie
     if (!token) {
-      const authHeader = request.headers.get('Authorization');
-      if (authHeader?.startsWith('Bearer ')) {
-        token = authHeader.substring(7);
+      const cookieHeader = request.headers.get('Cookie');
+      if (cookieHeader) {
+        const match = cookieHeader.match(/(?:^|;\s*)portal_token=([^;]*)/);
+        if (match) token = match[1];
       }
     }
 
@@ -68,40 +70,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Auth me error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE /api/auth — Logout
-export async function DELETE(request: NextRequest) {
-  try {
-    const cookieHeader = request.headers.get('Cookie');
-    let token: string | null = null;
-    if (cookieHeader) {
-      const match = cookieHeader.match(/(?:^|;\s*)portal_token=([^;]*)/);
-      if (match) token = match[1];
-    }
-
-    if (token) {
-      destroySession(token);
-    }
-
-    const response = NextResponse.json(
-      { success: true, message: 'Logged out successfully' },
-      { status: 200 }
-    );
-
-    response.cookies.set(SESSION_COOKIE.name, '', {
-      ...SESSION_COOKIE,
-      maxAge: 0,
-    });
-
-    return response;
-  } catch (error) {
-    console.error('Logout error:', error);
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
       { status: 500 }

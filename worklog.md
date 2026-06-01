@@ -3148,3 +3148,35 @@ Two issues:
 - `GET /` returns 200 in ~50ms
 - `GET /api/blog` returns 200
 - Zero compilation errors
+
+---
+
+## Client Portal Auth Fix (2026-06-01)
+
+### Issues Found
+1. **404 on register**: Frontend calls `POST /api/auth/register` but only `/api/auth/route.ts` existed (no `/api/auth/register/route.ts`)
+2. **404 on login**: Frontend calls `POST /api/auth/login` but no route file existed
+3. **404 on /api/auth/me**: Frontend calls `GET /api/auth/me` but only `GET /api/auth` existed in route.ts
+4. **Response format mismatch**: Frontend expects `{ token, user }` but API returned `{ data, message }`
+5. **httpOnly cookie conflict**: Backend set httpOnly cookie but frontend needs to read token from `document.cookie`
+
+### Fixes Applied
+1. Created `src/app/api/auth/login/route.ts` — POST handler for login, returns `{ success, token, user, message }`
+2. Created `src/app/api/auth/register/route.ts` — POST handler for registration, returns `{ success, token, user, message }`
+3. Created `src/app/api/auth/me/route.ts` — GET handler returning `{ success, user, data }` (supports both `data.user` and `data.name` access patterns)
+4. Created `src/app/api/auth/logout/route.ts` — DELETE handler for logout
+5. Updated `src/app/api/auth/route.ts` — kept GET(me) and DELETE(logout), removed POST and PATCH
+6. Updated `src/lib/auth.ts` — changed `SESSION_COOKIE.httpOnly` from `true` to `false` so frontend can read token from `document.cookie`
+7. All portal API routes verified working: projects, invoices, messages, tickets, notifications, profile
+
+### Verification
+- `POST /api/auth/register` → 201 ✅ (returns token + user)
+- `POST /api/auth/login` → 200 ✅ (returns token + user)
+- `GET /api/auth/me` → 200 ✅ (returns user data)
+- `GET /api/portal/projects` → 200 ✅
+- `GET /api/portal/invoices` → 200 ✅
+- `GET /api/portal/messages` → 200 ✅
+- `GET /api/portal/tickets` → 200 ✅
+- `GET /api/portal/notifications` → 200 ✅ (1 welcome notification)
+- `GET /api/portal/profile` → 200 ✅
+- Lint: 0 errors ✅

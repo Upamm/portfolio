@@ -45,7 +45,7 @@ export function destroySession(token: string) {
 // ── Cookie Settings ──
 export const SESSION_COOKIE = {
   name: 'portal_token',
-  httpOnly: true,
+  httpOnly: false, // frontend needs to read token from document.cookie
   secure: false, // dev environment
   sameSite: 'lax' as const,
   path: '/',
