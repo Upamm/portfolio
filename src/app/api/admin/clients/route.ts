@@ -93,6 +93,7 @@ export async function GET(request: NextRequest) {
     if (status === 'active') where.isActive = true;
     if (status === 'inactive') where.isActive = false;
     if (search) where.OR = [{ name: { contains: search } }, { email: { contains: search } }, { company: { contains: search } }];
+
     const [clients, total] = await Promise.all([
       db.client.findMany({
         where,
@@ -103,7 +104,31 @@ export async function GET(request: NextRequest) {
       }),
       db.client.count({ where }),
     ]);
-    return NextResponse.json({ success: true, data: clients, meta: { page, limit, total, totalPages: Math.ceil(total / limit) } });
+
+    // Fetch total budget per client (sum of project budgets)
+    const clientBudgets = await db.project.groupBy({
+      by: ['clientId'],
+      where: { budget: { gt: 0 } },
+      _sum: { budget: true },
+    });
+    const budgetMap = new Map(clientBudgets.map(b => [b.clientId, b._sum.budget || 0]));
+
+    // Fetch unread message counts per client
+    const unreadCounts = await db.message.groupBy({
+      by: ['clientId'],
+      where: { isRead: false, senderRole: 'client' },
+      _count: { id: true },
+    });
+    const unreadMap = new Map(unreadCounts.map(u => [u.clientId, u._count.id]));
+
+    // Enrich clients with budget and unread count
+    const enrichedClients = clients.map(c => ({
+      ...c,
+      totalBudget: budgetMap.get(c.id) || 0,
+      unreadMessages: unreadMap.get(c.id) || 0,
+    }));
+
+    return NextResponse.json({ success: true, data: enrichedClients, meta: { page, limit, total, totalPages: Math.ceil(total / limit) } });
   } catch (error) {
     if (error instanceof Response) return error;
     console.error('Admin clients list error:', error);

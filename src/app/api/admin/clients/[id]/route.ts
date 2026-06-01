@@ -12,13 +12,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       select: {
         id: true, name: true, email: true, company: true, role: true, avatar: true, phone: true, address: true, isActive: true, lastLogin: true, createdAt: true, updatedAt: true,
         _count: { select: { projects: true, invoices: true, messages: true, tickets: true, notifications: true, uploads: true } },
-        projects: { select: { id: true, title: true, status: true, priority: true, progress: true, createdAt: true, deadline: true }, orderBy: { createdAt: 'desc' }, take: 10 },
+        projects: { select: { id: true, title: true, status: true, priority: true, progress: true, budget: true, createdAt: true, deadline: true }, orderBy: { createdAt: 'desc' }, take: 10 },
         invoices: { select: { id: true, invoiceNumber: true, amount: true, tax: true, discount: true, status: true, dueDate: true, createdAt: true }, orderBy: { createdAt: 'desc' }, take: 10 },
         tickets: { select: { id: true, subject: true, status: true, priority: true, category: true, createdAt: true }, orderBy: { createdAt: 'desc' }, take: 10 },
       },
     });
     if (!c) return NextResponse.json({ success: false, error: 'Client not found' }, { status: 404 });
-    return NextResponse.json({ success: true, data: c });
+    const totalBudget = c.projects.reduce((sum, p) => sum + (p.budget ?? 0), 0);
+    return NextResponse.json({ success: true, data: { ...c, _sum: { totalBudget } } });
   } catch (error) {
     if (error instanceof Response) return error;
     console.error('Admin client detail error:', error);

@@ -43,6 +43,10 @@ import {
   ChevronDown,
   CalendarDays,
   Flame,
+  Download,
+  LayoutGrid,
+  List,
+  MapPin,
 } from 'lucide-react';
 import {
   Dialog,
@@ -68,6 +72,8 @@ interface AdminClient {
   lastLogin: string | null;
   createdAt: string;
   updatedAt: string;
+  totalBudget: number;
+  unreadMessages: number;
   _count: {
     projects: number;
     invoices: number;
@@ -142,6 +148,7 @@ interface AdminDashboardProps {
 }
 
 type AdminView = 'overview' | 'clients' | 'clientDetail' | 'messages' | 'invoices' | 'projects';
+type ClientsViewMode = 'card' | 'table';
 
 /* ─────────────────────── Helpers ─────────────────────── */
 
@@ -186,6 +193,15 @@ function getPriorityColor(priority: string): string {
   return map[priority] || 'bg-white/10 text-slate-300';
 }
 
+function escapeCSV(value: string | null | undefined): string {
+  if (value == null) return '';
+  const str = String(value);
+  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
+}
+
 /* ─────────────────────── Component ─────────────────────── */
 
 export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboardProps) {
@@ -201,10 +217,11 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
   const [clientDetail, setClientDetail] = useState<Record<string, unknown> | null>(null);
   const [recentClients, setRecentClients] = useState<AdminClient[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [clientsViewMode, setClientsViewMode] = useState<ClientsViewMode>('table');
 
   // Create client modal
   const [showCreateClient, setShowCreateClient] = useState(false);
-  const [createClientForm, setCreateClientForm] = useState({ name: '', email: '', password: '', company: '', phone: '' });
+  const [createClientForm, setCreateClientForm] = useState({ name: '', email: '', password: '', company: '', phone: '', address: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [createClientLoading, setCreateClientLoading] = useState(false);
 
@@ -421,7 +438,7 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
       });
       if (res.ok) {
         setShowCreateClient(false);
-        setCreateClientForm({ name: '', email: '', password: '', company: '', phone: '' });
+        setCreateClientForm({ name: '', email: '', password: '', company: '', phone: '', address: '' });
         fetchClients(searchQuery, filterStatus);
         fetchStats();
       } else {
@@ -433,6 +450,37 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
     }
     finally { setCreateClientLoading(false); }
   };
+
+  // CSV Export
+  const handleExportCSV = useCallback(() => {
+    const headers = [
+      'Name', 'Email', 'Company', 'Phone', 'Address', 'Status',
+      'Last Login', 'Total Projects', 'Total Invoices', 'Joined Date',
+    ];
+    const rows = clients.map(c => [
+      escapeCSV(c.name),
+      escapeCSV(c.email),
+      escapeCSV(c.company),
+      escapeCSV(c.phone),
+      escapeCSV(c.address),
+      c.isActive ? 'Active' : 'Inactive',
+      c.lastLogin ? formatDate(c.lastLogin) : 'Never',
+      String(c._count.projects),
+      String(c._count.invoices),
+      formatDate(c.createdAt),
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `clients-export-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }, [clients]);
 
   // Send Message (from chat)
   const handleSendMessage = async () => {
@@ -804,7 +852,7 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: i * 0.05 }}
                           className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-colors cursor-pointer"
-                          onClick={() => handleViewClient(c)}
+                          onClick={() => handleViewClient(c as AdminClient)}
                         >
                           <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${c.isActive ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/20 text-red-400 border border-red-500/20'}`}>
                             {c.name.charAt(0).toUpperCase()}
@@ -872,20 +920,32 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
           {/* ═══════════════ ALL CLIENTS ═══════════════ */}
           {activeView === 'clients' && (
             <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+              {/* Header with actions */}
               <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                   <h2 className="text-xl font-bold text-white">All Registered Clients</h2>
                   <p className="text-slate-400 text-sm mt-1">View and manage all client accounts</p>
                 </div>
-                <button
-                  onClick={() => setShowCreateClient(true)}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg shadow-amber-500/20"
-                >
-                  <UserPlus className="w-4 h-4" /> Create Client
-                </button>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* CSV Export */}
+                  <button
+                    onClick={handleExportCSV}
+                    disabled={clients.length === 0}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Download className="w-4 h-4" /> Export CSV
+                  </button>
+                  {/* Create Client */}
+                  <button
+                    onClick={() => setShowCreateClient(true)}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg shadow-amber-500/20"
+                  >
+                    <UserPlus className="w-4 h-4" /> Create Client
+                  </button>
+                </div>
               </motion.div>
 
-              {/* Search & Filter */}
+              {/* Search & Filter & View Toggle */}
               <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
@@ -908,9 +968,26 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
                     </button>
                   ))}
                 </div>
+                {/* View Mode Toggle */}
+                <div className="flex bg-white/5 rounded-xl p-1 border border-white/5">
+                  <button
+                    onClick={() => setClientsViewMode('table')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${clientsViewMode === 'table' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white' : 'text-slate-400 hover:text-white'}`}
+                    title="Table View"
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setClientsViewMode('card')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${clientsViewMode === 'card' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white' : 'text-slate-400 hover:text-white'}`}
+                    title="Card View"
+                  >
+                    <LayoutGrid className="w-4 h-4" />
+                  </button>
+                </div>
               </motion.div>
 
-              {/* Client Table */}
+              {/* Client Listing */}
               {loading ? (
                 <div className="flex items-center justify-center py-12">
                   <Loader2 className="w-8 h-8 text-amber-400 animate-spin" />
@@ -925,69 +1002,211 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
                 </div>
               ) : (
                 <motion.div variants={itemVariants}>
-                  <div className="glass-card rounded-xl overflow-hidden">
-                    <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-3 bg-white/5 border-b border-white/5 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                      <div className="col-span-3">Client</div>
-                      <div className="col-span-2">Company</div>
-                      <div className="col-span-1">Status</div>
-                      <div className="col-span-2">Last Login</div>
-                      <div className="col-span-2">Stats</div>
-                      <div className="col-span-2 text-right">Actions</div>
+                  {/* ═══ TABLE VIEW (spreadsheet-style) ═══ */}
+                  {clientsViewMode === 'table' && (
+                    <div className="glass-card rounded-xl overflow-hidden">
+                      <div className="overflow-x-auto">
+                        <table className="w-full min-w-[1100px]">
+                          <thead>
+                            <tr className="px-6 py-3 bg-white/5 border-b border-white/5 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                              <th className="text-left px-6 py-3">Client</th>
+                              <th className="text-left px-4 py-3">Company</th>
+                              <th className="text-left px-4 py-3">Status</th>
+                              <th className="text-left px-4 py-3">Phone</th>
+                              <th className="text-left px-4 py-3">Address</th>
+                              <th className="text-right px-4 py-3">Budget</th>
+                              <th className="text-center px-4 py-3">Unread</th>
+                              <th className="text-left px-4 py-3">Last Login</th>
+                              <th className="text-left px-4 py-3">Joined</th>
+                              <th className="text-left px-4 py-3">Stats</th>
+                              <th className="text-right px-6 py-3">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {clients.map((client, i) => (
+                              <motion.tr
+                                key={client.id}
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.03 }}
+                                className="border-b border-white/5 last:border-b-0 hover:bg-white/[0.02] transition-colors"
+                              >
+                                {/* Client */}
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleViewClient(client)}>
+                                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${client.isActive ? 'bg-amber-500/20 text-amber-400 border border-amber-500/20' : 'bg-slate-500/20 text-slate-400 border border-slate-500/20'}`}>
+                                      {client.name.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div className="min-w-0">
+                                      <p className="text-white text-sm font-medium truncate hover:text-amber-400 transition-colors">{client.name}</p>
+                                      <p className="text-slate-500 text-xs truncate flex items-center gap-1">
+                                        <Mail className="w-3 h-3 flex-shrink-0" /> {client.email}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                {/* Company */}
+                                <td className="px-4 py-4">
+                                  <p className="text-slate-400 text-sm truncate max-w-[140px]">{client.company || '—'}</p>
+                                </td>
+                                {/* Status */}
+                                <td className="px-4 py-4">
+                                  <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${client.isActive ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                                    <span className={`w-1.5 h-1.5 rounded-full ${client.isActive ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                                    {client.isActive ? 'Active' : 'Inactive'}
+                                  </span>
+                                </td>
+                                {/* Phone */}
+                                <td className="px-4 py-4">
+                                  <p className="text-slate-400 text-xs flex items-center gap-1">
+                                    {client.phone ? <><Phone className="w-3 h-3 flex-shrink-0" /> {client.phone}</> : <span className="text-slate-600">—</span>}
+                                  </p>
+                                </td>
+                                {/* Address */}
+                                <td className="px-4 py-4">
+                                  <p className="text-slate-400 text-xs truncate max-w-[140px] flex items-center gap-1">
+                                    {client.address ? <><MapPin className="w-3 h-3 flex-shrink-0" /> {client.address}</> : <span className="text-slate-600">—</span>}
+                                  </p>
+                                </td>
+                                {/* Total Budget */}
+                                <td className="px-4 py-4 text-right">
+                                  <span className={`text-sm font-semibold ${(client.totalBudget || 0) > 0 ? 'text-emerald-400' : 'text-slate-600'}`}>
+                                    ${(client.totalBudget || 0).toFixed(2)}
+                                  </span>
+                                </td>
+                                {/* Unread Messages */}
+                                <td className="px-4 py-4 text-center">
+                                  {client.unreadMessages > 0 ? (
+                                    <span className="inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-bold">
+                                      {client.unreadMessages}
+                                    </span>
+                                  ) : (
+                                    <span className="text-slate-600 text-xs">0</span>
+                                  )}
+                                </td>
+                                {/* Last Login */}
+                                <td className="px-4 py-4">
+                                  <p className="text-slate-400 text-xs flex items-center gap-1">
+                                    <Clock className="w-3 h-3 flex-shrink-0" /> {formatDate(client.lastLogin)}
+                                  </p>
+                                </td>
+                                {/* Joined Date */}
+                                <td className="px-4 py-4">
+                                  <p className="text-slate-400 text-xs flex items-center gap-1">
+                                    <CalendarDays className="w-3 h-3 flex-shrink-0" /> {formatDate(client.createdAt)}
+                                  </p>
+                                </td>
+                                {/* Stats */}
+                                <td className="px-4 py-4">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-400">{client._count.projects}P</span>
+                                    <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-400">{client._count.invoices}I</span>
+                                    <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-400">{client._count.tickets}T</span>
+                                  </div>
+                                </td>
+                                {/* Actions */}
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center justify-end gap-2">
+                                    <button onClick={() => handleViewClient(client)} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors" title="View">
+                                      <Eye className="w-3.5 h-3.5" />
+                                    </button>
+                                    <button onClick={() => handleToggleActive(client)} disabled={actionLoading === client.id} className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${client.isActive ? 'bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400' : 'bg-red-500/10 text-red-400 hover:bg-emerald-500/10 hover:text-emerald-400'}`} title={client.isActive ? 'Deactivate' : 'Activate'}>
+                                      {actionLoading === client.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : client.isActive ? <Ban className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+                                    </button>
+                                    <button onClick={() => handleDeleteClient(client)} disabled={actionLoading === client.id} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors" title="Delete">
+                                      {actionLoading === client.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                                    </button>
+                                  </div>
+                                </td>
+                              </motion.tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
+                  )}
 
-                    {clients.map((client, i) => (
-                      <motion.div
-                        key={client.id}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.03 }}
-                        className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-4 px-6 py-4 border-b border-white/5 last:border-b-0 hover:bg-white/[0.02] transition-colors"
-                      >
-                        <div className="sm:col-span-3 flex items-center gap-3 cursor-pointer" onClick={() => handleViewClient(client)}>
-                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${client.isActive ? 'bg-amber-500/20 text-amber-400 border border-amber-500/20' : 'bg-slate-500/20 text-slate-400 border border-slate-500/20'}`}>
-                            {client.name.charAt(0).toUpperCase()}
+                  {/* ═══ CARD VIEW (responsive mobile-friendly) ═══ */}
+                  {clientsViewMode === 'card' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {clients.map((client, i) => (
+                        <motion.div
+                          key={client.id}
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.04 }}
+                          className="glass-card rounded-xl p-5 border border-white/5 hover:border-amber-500/20 transition-all group cursor-pointer"
+                          onClick={() => handleViewClient(client)}
+                        >
+                          {/* Card Header */}
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 ${client.isActive ? 'bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/20 text-amber-400' : 'bg-slate-500/20 border border-slate-500/20 text-slate-400'}`}>
+                                {client.name.charAt(0).toUpperCase()}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-white text-sm font-semibold truncate">{client.name}</p>
+                                <p className="text-slate-500 text-xs truncate">{client.email}</p>
+                              </div>
+                            </div>
+                            <span className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${client.isActive ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${client.isActive ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                              {client.isActive ? 'Active' : 'Inactive'}
+                            </span>
                           </div>
-                          <div className="min-w-0">
-                            <p className="text-white text-sm font-medium truncate hover:text-amber-400 transition-colors">{client.name}</p>
-                            <p className="text-slate-500 text-xs truncate flex items-center gap-1">
-                              <Mail className="w-3 h-3 flex-shrink-0" /> {client.email}
-                            </p>
+
+                          {/* Card Info */}
+                          <div className="space-y-2 mb-4">
+                            {client.company && (
+                              <p className="text-slate-400 text-xs flex items-center gap-1.5">
+                                <Building2 className="w-3 h-3 flex-shrink-0 text-slate-500" />
+                                <span className="truncate">{client.company}</span>
+                              </p>
+                            )}
+                            {client.phone && (
+                              <p className="text-slate-400 text-xs flex items-center gap-1.5">
+                                <Phone className="w-3 h-3 flex-shrink-0 text-slate-500" />
+                                <span className="truncate">{client.phone}</span>
+                              </p>
+                            )}
+                            {client.address && (
+                              <p className="text-slate-400 text-xs flex items-center gap-1.5">
+                                <MapPin className="w-3 h-3 flex-shrink-0 text-slate-500" />
+                                <span className="truncate">{client.address}</span>
+                              </p>
+                            )}
                           </div>
-                        </div>
-                        <div className="sm:col-span-2 flex items-center">
-                          <p className="text-slate-400 text-sm truncate">{client.company || '—'}</p>
-                        </div>
-                        <div className="sm:col-span-1 flex items-center">
-                          <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${client.isActive ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${client.isActive ? 'bg-emerald-400' : 'bg-red-400'}`} />
-                            {client.isActive ? 'Active' : 'Inactive'}
-                          </span>
-                        </div>
-                        <div className="sm:col-span-2 flex items-center">
-                          <p className="text-slate-400 text-xs flex items-center gap-1">
-                            <Clock className="w-3 h-3 flex-shrink-0" /> {formatDate(client.lastLogin)}
-                          </p>
-                        </div>
-                        <div className="sm:col-span-2 flex items-center gap-2">
-                          <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-400">{client._count.projects}P</span>
-                          <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-400">{client._count.invoices}I</span>
-                          <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-400">{client._count.tickets}T</span>
-                          <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-400">{client._count.messages}M</span>
-                        </div>
-                        <div className="sm:col-span-2 flex items-center justify-end gap-2">
-                          <button onClick={() => handleViewClient(client)} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors" title="View">
-                            <Eye className="w-3.5 h-3.5" />
-                          </button>
-                          <button onClick={() => handleToggleActive(client)} disabled={actionLoading === client.id} className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${client.isActive ? 'bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400' : 'bg-red-500/10 text-red-400 hover:bg-emerald-500/10 hover:text-emerald-400'}`} title={client.isActive ? 'Deactivate' : 'Activate'}>
-                            {actionLoading === client.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : client.isActive ? <Ban className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
-                          </button>
-                          <button onClick={() => handleDeleteClient(client)} disabled={actionLoading === client.id} className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-colors" title="Delete">
-                            {actionLoading === client.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
-                          </button>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
+
+                          {/* Card Stats Row */}
+                          <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] bg-white/5 px-2 py-1 rounded-lg text-slate-400 font-medium">{client._count.projects} Projects</span>
+                              <span className="text-[10px] bg-white/5 px-2 py-1 rounded-lg text-slate-400 font-medium">{client._count.invoices} Invoices</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              {(client.totalBudget || 0) > 0 && (
+                                <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-lg font-medium">${client.totalBudget.toFixed(0)}</span>
+                              )}
+                              {client.unreadMessages > 0 && (
+                                <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-bold flex items-center justify-center">{client.unreadMessages}</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Card Actions */}
+                          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/5" onClick={e => e.stopPropagation()}>
+                            <button onClick={() => handleViewClient(client)} className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg bg-white/5 text-slate-400 text-xs font-medium hover:text-amber-400 hover:bg-amber-500/10 transition-all">
+                              <Eye className="w-3 h-3" /> View
+                            </button>
+                            <button onClick={() => handleToggleActive(client)} disabled={actionLoading === client.id} className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-medium transition-all ${client.isActive ? 'bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400' : 'bg-red-500/10 text-red-400 hover:bg-emerald-500/10 hover:text-emerald-400'}`}>
+                              {actionLoading === client.id ? <Loader2 className="w-3 h-3 animate-spin" /> : client.isActive ? <Ban className="w-3 h-3" /> : <CheckCircle2 className="w-3 h-3" />}
+                              {client.isActive ? 'Deactivate' : 'Activate'}
+                            </button>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
                 </motion.div>
               )}
             </motion.div>
@@ -1495,7 +1714,7 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
             </DialogTitle>
             <DialogDescription className="text-slate-400">Create a new client account for the portal.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-3 mt-2">
+          <div className="space-y-3 mt-2 max-h-[60vh] overflow-y-auto pr-1">
             <div>
               <label className="text-xs text-slate-400 mb-1 block">Full Name *</label>
               <input type="text" value={createClientForm.name} onChange={e => setCreateClientForm(p => ({ ...p, name: e.target.value }))} placeholder="John Doe" className={inputClass} />
@@ -1507,7 +1726,7 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
             <div>
               <label className="text-xs text-slate-400 mb-1 block">Password *</label>
               <div className="relative">
-                <input type={showPassword ? 'text' : 'password'} value={createClientForm.password} onChange={e => setCreateClientForm(p => ({ ...p, password: e.target.value }))} placeholder="Min. 8 characters" className={`${inputClass} pr-10`} />
+                <input type={showPassword ? 'text' : 'password'} value={createClientForm.password} onChange={e => setCreateClientForm(p => ({ ...p, password: e.target.value }))} placeholder="Min. 6 characters" className={`${inputClass} pr-10`} />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -1520,6 +1739,10 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
             <div>
               <label className="text-xs text-slate-400 mb-1 block">Phone</label>
               <input type="tel" value={createClientForm.phone} onChange={e => setCreateClientForm(p => ({ ...p, phone: e.target.value }))} placeholder="+1 (555) 000-0000" className={inputClass} />
+            </div>
+            <div>
+              <label className="text-xs text-slate-400 mb-1 block">Address</label>
+              <input type="text" value={createClientForm.address} onChange={e => setCreateClientForm(p => ({ ...p, address: e.target.value }))} placeholder="123 Main St, City, State" className={inputClass} />
             </div>
           </div>
           <DialogFooter className="mt-4">

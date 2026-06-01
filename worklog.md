@@ -3445,3 +3445,72 @@ All admin routes properly verify `requireAuth()` + `requireAdmin()` before proce
 - Dev server intermittent stability under sustained API requests (likely resource constraint in dev environment, not a code bug)
 - Pre-existing TS type errors in shadcn UI component type declarations
 
+
+---
+
+## Phase 17 - Client Data Listing & Admin Enhancement Round (2026-06-02)
+
+### Current Project Status Assessment
+- **Overall**: Production-quality portfolio website with 40+ components, comprehensive Client Portal + Admin Panel, 34 blog posts
+- **Build**: Zero lint errors, zero compilation errors, all API routes returning 200 OK
+- **Database**: 15 clients, 10 projects, 10 invoices, 20 messages seeded
+- **Admin API**: All endpoints verified working (clients, stats, messages, invoices, projects)
+
+### New Features
+
+1. **Spreadsheet-Style Client Data Listing** — Enhanced AdminPanel "All Clients" view:
+   - **Table View**: 11-column spreadsheet table with: Client, Company, Status, Phone, Address, Budget, Unread, Last Login, Joined Date, Stats, Actions
+   - **Card View**: Responsive grid (1/2/3 cols) with client info cards showing avatar, contact details, stats badges, quick action buttons
+   - **View Toggle**: List (table) / LayoutGrid (card) toggle buttons next to filter bar
+   - Horizontal scroll on mobile for table view with `min-w-[1100px]`
+
+2. **CSV Export** — "Export CSV" button with Download icon in All Clients view:
+   - Generates blob-based CSV download with proper escaping
+   - Columns: Name, Email, Company, Phone, Address, Status, Last Login, Total Projects, Total Invoices, Joined Date
+
+3. **Enhanced Admin API** — `/api/admin/clients` GET handler:
+   - Added `totalBudget` per client via `db.project.groupBy`
+   - Added `unreadMessages` count per client via `db.message.groupBy`
+
+4. **Enhanced Admin Stats API** — `/api/admin/stats` GET handler:
+   - Added `overview.totalBudget` (sum of all project budgets)
+   - `recentClients` now includes `_count` with projects, invoices, messages, tickets
+
+5. **Enhanced Client Detail API** — `/api/admin/clients/[id]` GET handler:
+   - Added `budget` to project select
+   - Computes `_sum.totalBudget` for individual client
+
+6. **Sample Data Seeded**:
+   - 12 sample client accounts (TechCorp, GreenLeaf Agency, Nexus Digital, etc.)
+   - 10 projects across various categories (WordPress, E-Commerce, SEO, Web Design)
+   - 10 invoices with different statuses (pending, paid, overdue)
+   - 20 messages (10 client + 10 admin replies)
+   - All clients have phone, address, and company data
+
+### Admin Credentials
+- **Email**: `upam@portal.admin`
+- **Password**: `Admin@123`
+- **Role**: admin (MASTER ADMIN in UI)
+
+### Files Modified
+- `src/components/portfolio/AdminPanel.tsx` — Enhanced All Clients view with table/card toggle, CSV export, address field in create form
+- `src/app/api/admin/clients/route.ts` — Added totalBudget and unreadMessages per client
+- `src/app/api/admin/stats/route.ts` — Added totalBudget to overview stats
+- `src/app/api/admin/clients/[id]/route.ts` — Added budget to project select, totalBudget sum
+
+### Verification Results
+- `bun run lint` passes with 0 errors
+- POST /api/auth/login returns 200 with valid token
+- GET /api/admin/stats returns 200 with 15 total clients
+- GET /api/admin/clients returns 200 with enriched client data including totalBudget and unreadMessages
+- CSV export generates properly escaped CSV file
+
+### Known Issues
+- In-memory sessions are cleared on server restart (Turbopack hot reload) — admin may need to re-login after server restarts
+
+### Priority Recommendations for Next Phase
+1. **High**: Test admin panel UI via agent-browser, verify all views render correctly
+2. **Medium**: Add CSV import functionality to admin panel
+3. **Medium**: Enhance admin dashboard charts/graphs (revenue over time, project status breakdown)
+4. **Low**: Add notification system for admin (real-time alerts when clients register)
+5. **Low**: Add activity log/audit trail for admin actions

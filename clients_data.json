@@ -1,0 +1,31 @@
+{
+  "code": 200,
+  "data": {
+    "description": "",
+    "html": "<!DOCTYPE html>\n\n<html>\n<head>\n\t\n\t<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"/>\n\t<title></title>\n\t<meta name=\"generator\" content=\"LibreOffice 7.4.7.2 (Linux)\"/>\n\t<meta name=\"created\" content=\"00:00:00\"/>\n\t<meta name=\"changed\" content=\"00:00:00\"/>\n\t\n\t<style type=\"text/css\">\n\t\tbody,div,table,thead,tbody,tfoot,tr,th,td,p { font-family:\"Arial\"; font-size:x-small }\n\t\ta.comment-indicator:hover + comment { background:#ffd; position:absolute; display:block; border:1px solid black; padding:0.5em;  } \n\t\ta.comment-indicator { background:red; display:inline-block; border:1px solid black; width:0.5em; height:0.5em;  } \n\t\tcomment { display:none;  } \n\t</style>\n\t\n</head>\n\n<body>\n</body>\n\n</html>\n",
+    "metadata": {
+      "CreationDate": "D:20260601162104Z'",
+      "Creator": "Calc",
+      "EncryptFilterName": null,
+      "IsAcroFormPresent": false,
+      "IsCollectionPresent": false,
+      "IsLinearized": false,
+      "IsSignaturesPresent": false,
+      "IsXFAPresent": false,
+      "Language": null,
+      "PDFFormatVersion": "1.6",
+      "Producer": "LibreOffice 7.4"
+    },
+    "title": "AllUserDataforPortfolioWebsite.xlsx",
+    "url": "https://docs.google.com/spreadsheets/d/1WB4BUkpg1WcAs8R6Ui5xykwPsWFFrj2VrLNS34i4C78/export",
+    "usage": {
+      "tokens": 218
+    }
+  },
+  "meta": {
+    "usage": {
+      "tokens": 218
+    }
+  },
+  "status": 20000
+}

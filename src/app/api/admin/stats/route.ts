@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
     const [
       totalClients, activeClients, totalProjects, activeProjects, completedProjects,
       totalInvoices, pendingInvoices, paidInvoices, totalRevenue,
+      totalBudget,
       openTickets, resolvedTickets, totalMessages, unreadMessages,
     ] = await Promise.all([
       db.client.count({ where: { role: 'client' } }),
@@ -20,6 +21,7 @@ export async function GET(request: NextRequest) {
       db.invoice.count({ where: { status: 'pending' } }),
       db.invoice.count({ where: { status: 'paid' } }),
       db.invoice.aggregate({ where: { status: 'paid' }, _sum: { amount: true } }),
+      db.project.aggregate({ _sum: { budget: true } }),
       db.ticket.count({ where: { status: 'open' } }),
       db.ticket.count({ where: { status: 'resolved' } }),
       db.message.count(),
@@ -27,7 +29,10 @@ export async function GET(request: NextRequest) {
     ]);
     const recentClients = await db.client.findMany({
       where: { role: 'client' },
-      select: { id: true, name: true, email: true, company: true, isActive: true, lastLogin: true, createdAt: true },
+      select: {
+        id: true, name: true, email: true, company: true, isActive: true, lastLogin: true, createdAt: true,
+        _count: { select: { projects: true, invoices: true, messages: true, tickets: true } },
+      },
       orderBy: { createdAt: 'desc' },
       take: 5,
     });
@@ -39,7 +44,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        overview: { totalClients, activeClients, totalProjects, activeProjects, completedProjects, totalInvoices, pendingInvoices, paidInvoices, totalRevenue: totalRevenue._sum.amount || 0, openTickets, resolvedTickets, totalMessages, unreadMessages },
+        overview: { totalClients, activeClients, totalProjects, activeProjects, completedProjects, totalInvoices, pendingInvoices, paidInvoices, totalRevenue: totalRevenue._sum.amount || 0, totalBudget: totalBudget._sum.budget || 0, openTickets, resolvedTickets, totalMessages, unreadMessages },
         recentClients,
         recentTickets,
       },
