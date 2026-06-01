@@ -100,7 +100,7 @@ export default function PortalFiles() {
       const res = await fetch('/api/portal/files', { headers });
       if (res.ok) {
         const data = await res.json();
-        const list = Array.isArray(data) ? data : data.files || [];
+        const list = data.data || (Array.isArray(data) ? data : []);
         setFiles(
           list.map((f: Record<string, unknown>, i: number) => ({
             id: String(f.id || i),

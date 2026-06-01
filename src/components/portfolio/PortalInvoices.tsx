@@ -78,7 +78,7 @@ export default function PortalInvoices() {
       const res = await fetch('/api/portal/invoices', { headers });
       if (res.ok) {
         const data = await res.json();
-        const list = Array.isArray(data) ? data : data.invoices || [];
+        const list = data.data || (Array.isArray(data) ? data : []);
         setInvoices(
           list.map((inv: Record<string, unknown>) => ({
             id: String(inv.id || Math.random().toString(36).slice(2)),

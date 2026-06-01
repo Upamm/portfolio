@@ -90,7 +90,7 @@ export default function PortalProjects() {
       const res = await fetch('/api/portal/projects', { headers });
       if (res.ok) {
         const data = await res.json();
-        const list = Array.isArray(data) ? data : data.projects || [];
+        const list = data.data || (Array.isArray(data) ? data : []);
         setProjects(
           list.map((p: Record<string, unknown>) => ({
             id: String(p.id || Math.random().toString(36).slice(2)),

@@ -534,7 +534,7 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
 
   // Create Project
   const handleCreateProject = async () => {
-    if (!projectForm.title || !selectedClient) return;
+    if (!projectForm.title || !projectForm.description || !selectedClient) return;
     setCreatingProject(true);
     try {
       const res = await fetch('/api/portal/projects', {

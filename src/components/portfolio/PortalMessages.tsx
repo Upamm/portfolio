@@ -46,14 +46,15 @@ export default function PortalMessages() {
       const res = await fetch('/api/portal/messages', { headers });
       if (res.ok) {
         const data = await res.json();
-        const list = Array.isArray(data) ? data : data.messages || [];
+        // API returns { success, data: { messages: [...] } }
+        const raw = data.data?.messages || data.messages || (Array.isArray(data) ? data : []);
         setMessages(
-          list.map((m: Record<string, unknown>, i: number) => ({
+          raw.map((m: Record<string, unknown>, i: number) => ({
             id: String(m.id || i),
-            sender: (m.sender as string) || (m.sender_name as string) || 'Unknown',
+            sender: (m.senderName as string) || (m.sender as string) || (m.sender_name as string) || 'Unknown',
             senderRole: (m.senderRole as string) || (m.sender_role as string) || 'admin',
             content: (m.content as string) || (m.message as string) || (m.text as string) || '',
-            timestamp: (m.timestamp as string) || (m.createdAt as string) || (m.created_at as string) || '',
+            timestamp: (m.createdAt as string) || (m.timestamp as string) || (m.created_at as string) || '',
           }))
         );
       }

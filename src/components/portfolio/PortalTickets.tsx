@@ -115,7 +115,7 @@ export default function PortalTickets() {
       const res = await fetch('/api/portal/tickets', { headers });
       if (res.ok) {
         const data = await res.json();
-        const list = Array.isArray(data) ? data : data.tickets || [];
+        const list = data.data || (Array.isArray(data) ? data : []);
         setTickets(
           list.map((t: Record<string, unknown>, i: number) => ({
             id: String(t.id || i),

@@ -92,7 +92,7 @@ export default function PortalDashboard({
 
         if (projectsRes.status === 'fulfilled' && projectsRes.value.ok) {
           const data = await projectsRes.value.json();
-          const list = Array.isArray(data) ? data : data.projects || [];
+          const list = data.data || (Array.isArray(data) ? data : []);
           totalProjects = list.length;
           list.forEach((p: Record<string, string>) => {
             const s = (p.status || 'unknown').toLowerCase();
@@ -103,7 +103,7 @@ export default function PortalDashboard({
 
         if (invoicesRes.status === 'fulfilled' && invoicesRes.value.ok) {
           const data = await invoicesRes.value.json();
-          const list = Array.isArray(data) ? data : data.invoices || [];
+          const list = data.data || (Array.isArray(data) ? data : []);
           pendingInvoices = list.filter(
             (inv: Record<string, string>) =>
               (inv.status || '').toLowerCase() === 'pending'
@@ -112,7 +112,7 @@ export default function PortalDashboard({
 
         if (ticketsRes.status === 'fulfilled' && ticketsRes.value.ok) {
           const data = await ticketsRes.value.json();
-          const list = Array.isArray(data) ? data : data.tickets || [];
+          const list = data.data || (Array.isArray(data) ? data : []);
           openTickets = list.filter(
             (t: Record<string, string>) =>
               ['open', 'in progress'].includes((t.status || '').toLowerCase())
@@ -121,7 +121,7 @@ export default function PortalDashboard({
 
         if (notificationsRes.status === 'fulfilled' && notificationsRes.value.ok) {
           const data = await notificationsRes.value.json();
-          const list = Array.isArray(data) ? data : data.notifications || data.messages || [];
+          const list = data.data || (Array.isArray(data) ? data : []);
           setActivities(
             list.slice(0, 5).map((n: Record<string, unknown>, i: number) => ({
               id: String(n.id || i),
