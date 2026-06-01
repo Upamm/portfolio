@@ -302,8 +302,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                   <div key={link.key}>
                     <motion.button
                       onClick={() => {
-                        handleClick(link.key);
-                        setMobileServicesOpen(!mobileServicesOpen);
+                        setMobileServicesOpen((prev) => !prev);
                       }}
                       initial={{ opacity: 0, x: -15 }}
                       animate={{ opacity: 1, x: 0 }}
