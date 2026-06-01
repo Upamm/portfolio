@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { sanitizeInput } from '@/lib/security';
 
 // GET /api/blog — fetch all published blog posts
 export async function GET(request: NextRequest) {
@@ -42,6 +43,24 @@ export async function GET(request: NextRequest) {
 // POST /api/blog — create a new blog post
 export async function POST(request: NextRequest) {
   try {
+    // Simple auth check — require admin role via authorization header
+    const authHeader = request.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 },
+      );
+    }
+    const token = authHeader.substring(7);
+    const { verifySession } = await import('@/lib/auth');
+    const session = verifySession(token);
+    if (!session || session.role !== 'admin') {
+      return NextResponse.json(
+        { error: 'Admin access required' },
+        { status: 403 },
+      );
+    }
+
     const body = await request.json();
     const { title, slug, excerpt, content, category, tags, readTime, author, image, gradient } = body;
 
@@ -52,8 +71,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Sanitize inputs
+    const sanitizedTitle = sanitizeInput(typeof title === 'string' ? title : '');
+    const sanitizedSlug = sanitizeInput(typeof slug === 'string' ? slug : '').replace(/\s+/g, '-').toLowerCase();
+
     // Check if slug already exists
-    const existing = await db.blogPost.findUnique({ where: { slug } });
+    const existing = await db.blogPost.findUnique({ where: { slug: sanitizedSlug } });
     if (existing) {
       return NextResponse.json(
         { error: 'A post with this slug already exists' },
@@ -63,16 +86,16 @@ export async function POST(request: NextRequest) {
 
     const post = await db.blogPost.create({
       data: {
-        title,
-        slug,
-        excerpt: excerpt || '',
-        content: typeof content === 'string' ? content : JSON.stringify(content),
-        category: category || 'General',
+        title: sanitizedTitle,
+        slug: sanitizedSlug,
+        excerpt: sanitizeInput(excerpt || ''),
+        content: typeof content === 'string' ? sanitizeInput(content) : JSON.stringify(content),
+        category: sanitizeInput(category || 'General'),
         tags: typeof tags === 'string' ? tags : JSON.stringify(tags || []),
-        readTime: readTime || '5 min read',
-        author: author || 'Upam',
-        image: image || '/blog/default.png',
-        gradient: gradient || 'from-teal-500 to-cyan-500',
+        readTime: sanitizeInput(readTime || '5 min read'),
+        author: sanitizeInput(author || 'Upam'),
+        image: sanitizeInput(image || '/blog/default.png'),
+        gradient: sanitizeInput(gradient || 'from-teal-500 to-cyan-500'),
         published: true,
       },
     });

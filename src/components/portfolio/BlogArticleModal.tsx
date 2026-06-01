@@ -435,8 +435,6 @@ function RelatedPosts({
 
   if (allRelated.length === 0) return null;
 
-  const hasCrossCategory = crossCategory.length > 0 && sameCategory.length < 3;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}

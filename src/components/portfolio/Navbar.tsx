@@ -30,8 +30,6 @@ const navLinks: NavLinkItem[] = [
   { label: 'Contact', key: 'contact' },
 ];
 
-const portalLink: NavLinkItem = { label: 'Client Portal', key: 'portal' };
-
 interface NavbarProps {
   currentPage: PageKey;
   onNavigate: (page: PageKey) => void;

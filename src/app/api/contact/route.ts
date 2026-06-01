@@ -145,6 +145,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check Content-Type BEFORE parsing body
+    const contentType = request.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      logSecurityEvent('CONTACT_INVALID_CT', ip, '/api/contact', userAgent, `CT: ${contentType}`);
+      return NextResponse.json(
+        { success: false, error: 'Invalid content type.' },
+        { status: 415 }
+      );
+    }
+
     // CSRF token validation
     const csrfToken = request.headers.get('x-csrf-token') || '';
     if (!csrfToken) {
@@ -183,16 +193,6 @@ export async function POST(request: NextRequest) {
         success: true,
         message: 'Your message has been sent successfully!',
       });
-    }
-
-    // Check Content-Type
-    const contentType = request.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      logSecurityEvent('CONTACT_INVALID_CT', ip, '/api/contact', userAgent, `CT: ${contentType}`);
-      return NextResponse.json(
-        { success: false, error: 'Invalid content type.' },
-        { status: 415 }
-      );
     }
 
     // Validate with Zod

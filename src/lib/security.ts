@@ -77,18 +77,6 @@ export function validateCSRFToken(
 }
 
 /**
- * Hash a token using SHA-256 for server-side storage.
- */
-async function hashTokenAsync(token: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(token + '_csrf_salt_upam_2025');
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-/**
  * Simple synchronous hash for CSRF (non-crypto, but sufficient for token lookup).
  */
 function hashToken(token: string): string {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, Send, Loader2, MessageSquare } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -24,25 +24,34 @@ export default function ContactFormModal({
     email: '',
     subject: prefillSubject,
     message: '',
+    website: '',
   });
   const { toast } = useToast();
 
-  // Reset subject when prefill changes
-  useState(() => {
+  // Sync subject when prefill changes
+  useEffect(() => {
     if (prefillSubject) {
       setFormData((prev) => ({ ...prev, subject: prefillSubject }));
     }
-  });
+  }, [prefillSubject]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
+      // Fetch CSRF token
+      const csrfRes = await fetch('/api/csrf');
+      const csrfData = await csrfRes.json();
+      const csrfToken = csrfData.token || '';
+
       const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify({ ...formData, website: '' }),
       });
 
       const data = await res.json();
@@ -52,7 +61,7 @@ export default function ContactFormModal({
           title: 'Message sent!',
           description: "Thank you for reaching out. I'll get back to you within 24 hours.",
         });
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setFormData({ name: '', email: '', subject: '', message: '', website: '' });
         onClose();
       } else {
         toast({
@@ -122,6 +131,18 @@ export default function ContactFormModal({
                   </button>
                 </div>
               </div>
+
+              {/* Honeypot - hidden from real users */}
+              <input
+                type="text"
+                name="website"
+                autoComplete="off"
+                tabIndex={-1}
+                aria-hidden="true"
+                style={{ position: 'absolute', left: '-9999px', opacity: 0 }}
+                value={formData.website || ''}
+                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+              />
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-4">

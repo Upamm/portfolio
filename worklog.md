@@ -3851,3 +3851,71 @@ Stage Summary:
 - 3 bugs fixed: CSS gradient syntax, missing favicon/icon assets, invalid sitemap URLs
 - 0 compile errors, 0 lint errors
 - All interactions tested and working
+
+---
+
+## Phase N - Bug Fix & Console Error Resolution Round
+
+### Task
+User reported console errors. Systematic audit and fix of all bugs found across the codebase.
+
+### Issues Found & Fixed
+
+#### 🔴 Critical (Fixed)
+1. **ContactFormModal.tsx: `useState()` misused as `useEffect()`** (Line 31-35)
+   - `useState(() => { setFormData(...) })` only runs once on mount and returns `undefined` as state
+   - Fixed: Changed to `useEffect(() => {...}, [prefillSubject])` for proper reactive sync
+
+2. **ContactFormModal.tsx: Missing CSRF token** (Line 42-46)
+   - Modal form submitted to `/api/contact` without `X-CSRF-Token` header → all submissions got 403
+   - Fixed: Added CSRF token fetch from `/api/csrf` before submission, passed in headers
+
+3. **ContactFormModal.tsx: Missing honeypot field**
+   - Unlike ContactSection, modal form had no anti-spam honeypot
+   - Fixed: Added hidden honeypot input + `website` field in form data
+
+#### 🟠 High (Fixed)
+4. **api/blog/route.ts: Unauthenticated POST endpoint** (Line 43-88)
+   - Anyone could create blog posts without authentication
+   - Fixed: Added auth check using `verifySession()` with admin role requirement, added input sanitization via `sanitizeInput()`
+
+5. **prisma/schema.prisma: Orphaned User/Post models** (Lines 13-29)
+   - `User` and `Post` models with no relations, never used in any code
+   - Fixed: Removed both models, ran `bun run db:push`
+
+#### 🟡 Medium (Fixed)
+6. **api/contact/route.ts: Content-Type check after body parse**
+   - `request.json()` called at line 169 before Content-Type check at line 189
+   - Fixed: Moved Content-Type validation before body parsing, removed duplicate check
+
+7. **api/auth/logout/route.ts: Session not destroyed**
+   - Logout endpoint returned success without destroying session or clearing cookie
+   - Fixed: Added token extraction from cookie/Authorization header, `destroySession()` call, and cookie clear
+
+#### 🔵 Low (Fixed)
+8. **Navbar.tsx: Unused variable `portalLink`** — Removed dead code
+9. **BlogArticleModal.tsx: Unused variable `hasCrossCategory`** — Removed dead code
+10. **PortfolioApp.tsx: Unused variable `isPending`** — Changed to `[, startTransition]`
+11. **security.ts: Dead code `hashTokenAsync()`** — Removed unused async function
+12. **favicon.ico: 404 error** — Copied icon.svg as favicon.ico (now returns 200)
+
+### Verification
+- `bun run lint` — 0 errors
+- Dev server — compiles successfully, zero errors in log
+- Agent-browser — 0 console errors after fresh page load
+- Light mode switch — 0 errors
+- Blog section navigation — 0 errors
+- Blog article modal open — 0 errors
+- All API endpoints responding correctly
+
+### Files Modified
+- `src/components/portfolio/ContactFormModal.tsx` — useEffect fix, CSRF token, honeypot
+- `src/app/api/blog/route.ts` — Auth check, input sanitization
+- `src/app/api/contact/route.ts` — Content-Type check order fix
+- `src/app/api/auth/logout/route.ts` — Proper session destruction
+- `src/components/portfolio/Navbar.tsx` — Removed unused variable
+- `src/components/portfolio/BlogArticleModal.tsx` — Removed unused variable
+- `src/components/portfolio/PortfolioApp.tsx` — Removed unused variable
+- `src/lib/security.ts` — Removed dead code
+- `prisma/schema.prisma` — Removed orphaned models
+- `public/favicon.ico` — Added (copied from icon.svg)

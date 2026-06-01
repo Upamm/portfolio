@@ -125,7 +125,7 @@ export default function PortfolioApp() {
   // Default to home; cookie/hash sync happens in useEffect on mount
   const [currentPage, setCurrentPage] = useState<PageKey>('home');
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const navTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Restore last visited page from cookie or URL hash on mount (avoids hydration mismatch)
