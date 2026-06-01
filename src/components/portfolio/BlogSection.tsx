@@ -41,7 +41,8 @@ export interface BlogContentBlock {
 }
 
 // Blog articles loaded from separate data module for better code splitting
-export { articles } from '@/lib/blog-data';
+import { hardcodedArticles as articles } from '@/lib/blog-data';
+export { articles };
 
 
 /* ------------------------------------------------------------------ */
