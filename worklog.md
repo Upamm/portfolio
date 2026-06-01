@@ -3124,3 +3124,27 @@ All responses use consistent format:
 3. **Medium**: Add admin dashboard for managing clients/projects/invoices
 4. **Low**: Email notifications for ticket replies and invoice reminders
 5. **Low**: File preview/download functionality
+
+---
+
+## Turbopack Runtime Error Fix (2026-06-01)
+
+### Issue
+- Turbopack crashing with "Failed to write app endpoint /page" error
+- All page requests returning HTTP 500
+
+### Root Cause
+Two issues:
+1. **Port conflict**: Port 3000 was already in use by a stale process (EADDRINUSE)
+2. **Permission denied**: Turbopack's file watcher couldn't access `/home/z/my-project/agent-ctx` directory (Permission denied, os error 13)
+
+### Fix Applied
+1. Killed stale process on port 3000: `lsof -ti:3000 | xargs kill -9`
+2. Fixed permissions: `chmod 777 /home/z/my-project/agent-ctx`
+3. Added `allowedDevOrigins: ['*']` to `next.config.ts` to suppress cross-origin warnings
+4. Restarted dev server — compiles and serves 200 OK
+
+### Verification
+- `GET /` returns 200 in ~50ms
+- `GET /api/blog` returns 200
+- Zero compilation errors

@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://web.archive.org",
+    "name": "Wayback Machine - Internet Archive",
+    "snippet": "The Wayback Machine is an initiative of the Internet Archive, a 501(c)(3) non-profit, building a digital library of Internet sites and other cultural artifacts ...",
+    "host_name": "web.archive.org",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://wayback.archive.org",
+    "name": "Wayback Machine - Internet Archive",
+    "snippet": "Search the history of more than 1 trillion web pages. Search the Wayback Machine An illustration of a magnifying glass.",
+    "host_name": "wayback.archive.org",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://help.archive.org/help/using-the-wayback-machine",
+    "name": "Using the Wayback Machine - Internet Archive Help Center",
+    "snippet": "Whatever archives we have are viewable in the Wayback Machine. The best way to see all the files we have archived of the site is: http://web.archive.org/*/www.",
+    "host_name": "help.archive.org",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://archive.org/post/1102943/pc-mag-how-to-view-a-cached-version-of-a-website",
+    "name": "PC Mag: How to View a Cached Version of a Website",
+    "snippet": "Not all websites are indexed by Google or saved in a cache, but for those that are, here's how to access them. Read full text.",
+    "host_name": "archive.org",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://archivedweb.com",
+    "name": "Archived Web - Visit offline websites by searching cached pages",
+    "snippet": "ArchivedWeb.com allows you to visit temporarily offline or archived versions of websites via popular search engines, like Google and Bing.",
+    "host_name": "archivedweb.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

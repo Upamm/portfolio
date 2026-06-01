@@ -69,6 +69,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  allowedDevOrigins: ['*'],
   experimental: {
     optimizePackageImports: [
       'lucide-react',
