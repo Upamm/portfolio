@@ -29,10 +29,17 @@ export async function GET(request: NextRequest) {
       db.message.count({ where }),
     ]);
 
+    // Look up admin name for proper sender display
+    const adminUser = await db.client.findFirst({
+      where: { role: 'admin' },
+      select: { name: true },
+    });
+    const adminName = adminUser?.name || 'Admin';
+
     // Flatten sender info into each message
     const mappedMessages = messages.map(m => ({
       ...m,
-      senderName: m.senderRole === 'admin' ? 'Upam' : (m.client?.name || 'Unknown'),
+      senderName: m.senderRole === 'admin' ? adminName : (m.client?.name || 'Unknown'),
       senderAvatar: m.client?.avatar || '',
     }));
 
@@ -84,7 +91,7 @@ export async function POST(request: NextRequest) {
     // Build response with sender name
     const responseMessage = {
       ...message,
-      senderName: client.role === 'admin' ? 'Upam' : client.name,
+      senderName: client.name,
       senderAvatar: client.avatar || '',
     };
 

@@ -146,7 +146,7 @@ function cleanupRateLimits() {
 }
 
 const API_RATE_LIMIT_WINDOW = 60_000; // 1 minute
-const API_RATE_LIMIT_MAX = 30; // 30 requests per minute for API
+const API_RATE_LIMIT_MAX = 120; // 120 requests per minute for API (supports polling)
 const PAGE_RATE_LIMIT_WINDOW = 60_000; // 1 minute
 const PAGE_RATE_LIMIT_MAX = 120; // 120 requests per minute for pages
 

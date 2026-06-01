@@ -250,9 +250,9 @@ export default function PortalMessages() {
           </div>
         )}
 
-        {/* Typing indicator area */}
-        <div className="px-4 py-1">
-          <span className="text-slate-600 text-xs italic opacity-0" id="typing-indicator">
+        {/* Typing indicator area (reserved for future real-time typing detection) */}
+        <div className="px-4 py-1" aria-hidden="true">
+          <span className="text-slate-600 text-xs italic opacity-0 hidden" id="typing-indicator">
             Someone is typing...
           </span>
         </div>

@@ -307,8 +307,8 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
     finally { setConversationsLoading(false); }
   }, [getAuthHeaders]);
 
-  const fetchMessages = useCallback(async (clientId: string) => {
-    setMessagesLoading(true);
+  const fetchMessages = useCallback(async (clientId: string, silent = false) => {
+    if (!silent) setMessagesLoading(true);
     try {
       const params = new URLSearchParams();
       params.set('clientId', clientId);
@@ -323,9 +323,9 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
         headers: getAuthHeaders(),
         body: JSON.stringify({ clientId }),
       });
-      fetchStats();
+      if (!silent) fetchStats();
     } catch { /* fallback */ }
-    finally { setMessagesLoading(false); }
+    finally { if (!silent) setMessagesLoading(false); }
   }, [getAuthHeaders, fetchStats]);
 
   const fetchInvoices = useCallback(async (status = 'all') => {
@@ -364,6 +364,21 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
+
+  // Auto-poll messages & conversations when on messages view
+  useEffect(() => {
+    if (activeView !== 'messages') return;
+    // Initial fetch
+    fetchConversations();
+    const pollRef = setInterval(() => {
+      fetchConversations();
+      // Also refresh active chat messages (silent mode to avoid loading spinners)
+      if (selectedConversation) {
+        fetchMessages(selectedConversation.clientId, true);
+      }
+    }, 5000);
+    return () => clearInterval(pollRef);
+  }, [activeView, selectedConversation, fetchConversations, fetchMessages]);
 
   /* ──── Handlers ──── */
   const handleToggleActive = async (client: AdminClient) => {

@@ -2,11 +2,28 @@ import crypto from 'crypto';
 import { db } from '@/lib/db';
 
 // ── In-Memory Session Storage ──
-const sessions = new Map<string, { clientId: string; role: string; createdAt: number }>();
+// Use globalThis to ensure a single shared Map instance across all Turbopack module copies
+const _sessionsKey = '__portal_sessions__';
+const _cleanupKey = '__portal_sessions_cleanup__';
+
+interface SessionData {
+  clientId: string;
+  role: string;
+  createdAt: number;
+}
+
+function getSessions(): Map<string, SessionData> {
+  if (!(globalThis as Record<string, unknown>)[_sessionsKey]) {
+    (globalThis as Record<string, unknown>)[_sessionsKey] = new Map<string, SessionData>();
+  }
+  return (globalThis as Record<string, unknown>)[_sessionsKey] as Map<string, SessionData>;
+}
+
 const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 // Clean expired sessions periodically
 function cleanExpiredSessions() {
+  const sessions = getSessions();
   const now = Date.now();
   for (const [token, session] of sessions.entries()) {
     if (now - session.createdAt > SESSION_DURATION) {
@@ -15,19 +32,23 @@ function cleanExpiredSessions() {
   }
 }
 
-// Run cleanup every 30 minutes
-setInterval(cleanExpiredSessions, 30 * 60 * 1000);
+// Run cleanup every 30 minutes (ensure only one interval)
+if (!(globalThis as Record<string, unknown>)[_cleanupKey]) {
+  (globalThis as Record<string, unknown>)[_cleanupKey] = true;
+  setInterval(cleanExpiredSessions, 30 * 60 * 1000);
+}
 
 // ── Session Helpers ──
 export function createSession(clientId: string, role: string): string {
   cleanExpiredSessions();
   const token = crypto.randomBytes(32).toString('hex');
-  sessions.set(token, { clientId, role, createdAt: Date.now() });
+  getSessions().set(token, { clientId, role, createdAt: Date.now() });
   return token;
 }
 
 export function verifySession(token: string) {
   if (!token) return null;
+  const sessions = getSessions();
   const session = sessions.get(token);
   if (!session) return null;
   // Check expiry
@@ -39,7 +60,7 @@ export function verifySession(token: string) {
 }
 
 export function destroySession(token: string) {
-  sessions.delete(token);
+  getSessions().delete(token);
 }
 
 // ── Cookie Settings ──

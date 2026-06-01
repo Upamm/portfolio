@@ -3919,3 +3919,54 @@ User reported console errors. Systematic audit and fix of all bugs found across 
 - `src/lib/security.ts` — Removed dead code
 - `prisma/schema.prisma` — Removed orphaned models
 - `public/favicon.ico` — Added (copied from icon.svg)
+
+---
+
+## Phase N - Client Portal Messaging System Fix (2026-06-02)
+
+### Current Project Status Assessment
+- **Overall**: Portfolio site with Client Portal, Admin Panel, blog, and 25+ components
+- **Build**: Zero lint errors, zero compilation errors
+- **Console**: Zero runtime errors after fixes
+
+### Bug Fixes
+
+1. **CRITICAL: Session Storage Module Isolation (auth.ts)** — The in-memory `sessions` Map was a module-level variable causing Turbopack to create separate instances across different route modules. This caused `/api/admin/messages` to return 401 even when the user was logged in (other routes like `/api/admin/stats` worked fine). Fixed by storing the sessions Map in `globalThis` with unique key `__portal_sessions__`, ensuring all route modules share the same Map instance.
+
+2. **CRITICAL: API Field Mapping Mismatch (admin/messages API)** — The conversation list API returned raw DB fields (`id`, `name`, `email`, `lastMessage` as object) but the frontend `Conversation` interface expected `clientId`, `clientName`, `clientEmail`, `lastMessage` (string), `lastMessageAt`. This caused the admin messages panel to show no conversations or "undefined" values. Fixed by transforming the API response to match the frontend interface.
+
+3. **No Auto-Polling for Admin Messages (AdminPanel.tsx)** — The client's PortalMessages polled every 5s but the admin had no auto-refresh. Added a `useEffect` polling hook that refreshes conversations and active chat messages every 5s when the admin is on the Messages view. Uses silent mode to avoid loading spinners during polls.
+
+4. **Rate Limiting Blocking Messages (middleware.ts)** — The admin messages view polled 3 API calls every 5s (36 requests/min) which exceeded the 30 requests/min rate limit, causing 429 errors after ~40 seconds. Increased `API_RATE_LIMIT_MAX` from 30 to 120 to support polling.
+
+5. **Hardcoded Admin Name (portal/messages API)** — The portal messages API hardcoded admin sender name as `'Upam'`. Fixed to look up admin name from database dynamically.
+
+6. **Typing Indicator Ghost Text (PortalMessages.tsx)** — "Someone is typing..." text was visible in accessibility tree even with `opacity-0`. Added `aria-hidden="true"` and `hidden` attributes.
+
+### Demo Accounts Created
+- **John Carter**: john.carter@example.com / demo1234 (Carter Digital Agency)
+- **Sarah Mitchell**: sarah.mitchell@example.com / demo1234 (Mitchell Web Solutions)
+- Pre-seeded conversations with admin for testing
+
+### Files Modified
+- `src/lib/auth.ts` — globalThis session storage to fix Turbopack module isolation
+- `src/app/api/admin/messages/route.ts` — Fixed conversation list field mapping
+- `src/app/api/portal/messages/route.ts` — Dynamic admin name lookup, removed hardcoded 'Upam'
+- `src/components/portfolio/AdminPanel.tsx` — Added auto-polling (5s), silent fetch mode
+- `src/components/portfolio/PortalMessages.tsx` — Fixed typing indicator accessibility
+- `src/middleware.ts` — Increased API rate limit to 120/min
+
+### QA Results (Agent-Browser)
+1. ✅ Admin login works (mailupamm@gmail.com / admin123)
+2. ✅ Admin Messages view shows conversations with correct client names
+3. ✅ Admin can send messages to clients
+4. ✅ Client login works for both demo accounts
+5. ✅ Client sees admin replies in real-time (5s polling)
+6. ✅ Client can send replies to admin
+7. ✅ Cross-account messaging works bidirectionally
+8. ✅ Unread count badges update correctly
+9. ✅ Zero console errors, zero 401/429 errors
+10. ✅ Zero "undefined" text in UI
+
+### Known Issues
+- In-memory session storage will lose sessions on server restart (acceptable for dev; consider DB-backed sessions for production)

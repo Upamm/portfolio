@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Get last message and unread count for each client
-    const conversations = await Promise.all(
+    const conversationsRaw = await Promise.all(
       clientsWithMessages.map(async (c) => {
         const lastMessage = await db.message.findFirst({
           where: { clientId: c.id },
@@ -67,24 +67,32 @@ export async function GET(request: NextRequest) {
           where: { clientId: c.id, isRead: false, senderRole: 'client' },
         });
         return {
-          ...c,
-          lastMessage,
+          clientId: c.id,
+          clientName: c.name,
+          clientEmail: c.email,
+          clientCompany: c.company,
+          clientAvatar: c.avatar,
+          clientActive: c.isActive,
+          totalMessages: c._count.messages,
+          lastMessage: lastMessage?.content || '',
+          lastMessageAt: lastMessage?.createdAt?.toISOString() || '',
+          lastMessageRole: lastMessage?.senderRole || '',
           unreadCount,
         };
       })
     );
 
     // Sort by most recent message first, clients with messages on top
-    conversations.sort((a, b) => {
-      const aTime = a.lastMessage?.createdAt ? new Date(a.lastMessage.createdAt).getTime() : 0;
-      const bTime = b.lastMessage?.createdAt ? new Date(b.lastMessage.createdAt).getTime() : 0;
+    conversationsRaw.sort((a, b) => {
+      const aTime = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0;
+      const bTime = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0;
       if (aTime === 0 && bTime === 0) return 0;
       if (aTime === 0) return 1;
       if (bTime === 0) return -1;
       return bTime - aTime;
     });
 
-    return NextResponse.json({ success: true, data: conversations });
+    return NextResponse.json({ success: true, data: conversationsRaw });
   } catch (error) {
     if (error instanceof Response) return error;
     console.error('Admin messages error:', error);
