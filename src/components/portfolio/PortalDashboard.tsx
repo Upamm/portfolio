@@ -255,7 +255,7 @@ export default function PortalDashboard({
       <motion.div variants={itemVariants}>
         <h1 className="text-2xl font-bold text-white">
           Welcome back, <span className="gradient-text">{userName}</span>
-          <span className="inline-block ml-1.5 -mt-0.5"><VerifiedSticker size="lg" /></span>
+          <span className="inline-flex items-center ml-1"><VerifiedSticker size="lg" /></span>
         </h1>
         <p className="text-slate-400 text-sm mt-1">
           Here&apos;s an overview of your account activity.

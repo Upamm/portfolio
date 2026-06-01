@@ -759,7 +759,7 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
               {userName.charAt(0).toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5 min-w-0">
+              <div className="flex items-center gap-1 min-w-0">
                 <p className="text-white text-sm font-medium truncate">{userName}</p>
                 <VerifiedSticker size="sm" variant="amber" />
               </div>
@@ -826,7 +826,7 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
               <motion.div variants={itemVariants}>
                 <h2 className="text-2xl font-bold text-white">
                   Welcome, <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">{userName}</span>
-                  <span className="inline-block ml-1.5 -mt-0.5"><VerifiedSticker size="lg" variant="amber" /></span>
+                  <span className="inline-flex items-center ml-1"><VerifiedSticker size="lg" variant="amber" /></span>
                 </h2>
                 <p className="text-slate-400 text-sm mt-1">Here&apos;s your admin overview.</p>
               </motion.div>
