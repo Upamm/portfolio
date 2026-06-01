@@ -18,6 +18,7 @@ import {
   Loader2,
   Shield,
 } from 'lucide-react';
+import VerifiedSticker from './VerifiedSticker';
 
 // Lazy-load tab components for performance
 const PortalLogin = lazy(() => import('./PortalLogin'));
@@ -239,7 +240,7 @@ export default function ClientPortal({ onBack }: ClientPortalProps) {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 min-w-0">
                 <p className="text-white text-sm font-medium truncate">{user.name || 'Client'}</p>
-                <svg className="w-4 h-4 flex-shrink-0 verified-sticker" viewBox="0 0 24 24" title="Verified Account"><defs><linearGradient id="vs1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#06b6d4"/><stop offset="100%" stopColor="#10b981"/></linearGradient><filter id="vs1s"><feDropShadow dx="0" dy="0.5" stdDeviation="0.5" flood-color="#06b6d4" flood-opacity="0.4"/></filter></defs><circle cx="12" cy="12" r="11" fill="url(#vs1)" stroke="#0a1628" strokeWidth="2" filter="url(#vs1s)"/><path d="M7.5 12.5L10.5 15.5L17 8.5" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <VerifiedSticker size="sm" />
               </div>
               <p className="text-slate-500 text-xs truncate">{user.email}</p>
             </div>
@@ -286,7 +287,7 @@ export default function ClientPortal({ onBack }: ClientPortalProps) {
                 </h1>
                 <p className="text-slate-500 text-xs hidden sm:block">
                   <span className="flex items-center gap-1">Welcome, {user.name || 'Client'}
-                  <svg className="w-3.5 h-3.5 verified-sticker" viewBox="0 0 24 24" title="Verified Account"><defs><linearGradient id="vs2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#06b6d4"/><stop offset="100%" stopColor="#10b981"/></linearGradient><filter id="vs2s"><feDropShadow dx="0" dy="0.5" stdDeviation="0.5" flood-color="#06b6d4" flood-opacity="0.4"/></filter></defs><circle cx="12" cy="12" r="11" fill="url(#vs2)" stroke="#0a1628" strokeWidth="2" filter="url(#vs2s)"/><path d="M7.5 12.5L10.5 15.5L17 8.5" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg></span>
+                  <VerifiedSticker size="sm" /></span>
                 </p>
               </div>
             </div>

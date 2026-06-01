@@ -15,6 +15,7 @@ import {
   AlertCircle,
   Plus,
 } from 'lucide-react';
+import VerifiedSticker from './VerifiedSticker';
 
 interface DashboardStats {
   totalProjects: number;
@@ -254,7 +255,7 @@ export default function PortalDashboard({
       <motion.div variants={itemVariants}>
         <h1 className="text-2xl font-bold text-white">
           Welcome back, <span className="gradient-text">{userName}</span>
-          <svg className="w-6 h-6 inline-block ml-1.5 -mt-0.5 verified-sticker" viewBox="0 0 24 24" title="Verified Account"><defs><linearGradient id="vs3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#06b6d4"/><stop offset="100%" stopColor="#10b981"/></linearGradient><filter id="vs3s"><feDropShadow dx="0" dy="0.5" stdDeviation="0.5" flood-color="#06b6d4" flood-opacity="0.4"/></filter></defs><circle cx="12" cy="12" r="11" fill="url(#vs3)" stroke="#0a1628" strokeWidth="2" filter="url(#vs3s)"/><path d="M7.5 12.5L10.5 15.5L17 8.5" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <span className="inline-block ml-1.5 -mt-0.5"><VerifiedSticker size="lg" /></span>
         </h1>
         <p className="text-slate-400 text-sm mt-1">
           Here&apos;s an overview of your account activity.
