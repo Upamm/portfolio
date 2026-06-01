@@ -14,18 +14,12 @@ const COLOR_MAP = {
     gradMid: '#14b8a6',
     gradEnd: '#10b981',
     shadowColor: '#06b6d4',
-    shadowOpacity: 0.5,
-    hoverShadowColor: '#06b6d4',
-    hoverShadowOpacity: 0.7,
   },
   amber: {
     gradStart: '#f59e0b',
     gradMid: '#f97316',
     gradEnd: '#ef4444',
     shadowColor: '#f59e0b',
-    shadowOpacity: 0.5,
-    hoverShadowColor: '#f59e0b',
-    hoverShadowOpacity: 0.7,
   },
 };
 
@@ -42,7 +36,7 @@ export default function VerifiedSticker({ size = 'sm', variant = 'teal', classNa
     setMounted(true);
   }, []);
 
-  const s = { sm: 18, md: 20, lg: 28 }[size];
+  const s = { sm: 16, md: 18, lg: 24 }[size];
   const c = COLOR_MAP[variant];
 
   // Scalloped edge circle path — 12 bumps
@@ -59,7 +53,7 @@ export default function VerifiedSticker({ size = 'sm', variant = 'teal', classNa
 
   return (
     <span
-      className={`inline-flex items-center justify-center verified-sticker-badge verified-sticker-badge-${size} verified-sticker-badge-${variant} ${mounted ? 'sticker-visible' : 'sticker-hidden'} ${className}`}
+      className={`verified-sticker-badge ${mounted ? 'sticker-visible' : 'sticker-hidden'} ${className}`}
       title="Verified Account"
       role="img"
       aria-label="Verified Account"
@@ -72,33 +66,25 @@ export default function VerifiedSticker({ size = 'sm', variant = 'teal', classNa
             <stop offset="100%" stopColor={c.gradEnd} />
           </linearGradient>
           <linearGradient id={`${id}-shine`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="rgba(255,255,255,0.35)" />
+            <stop offset="0%" stopColor="rgba(255,255,255,0.3)" />
             <stop offset="100%" stopColor="rgba(255,255,255,0)" />
           </linearGradient>
           <filter id={`${id}-shadow`}>
-            <feDropShadow dx="0" dy="1" stdDeviation="1.2" floodColor={c.shadowColor} floodOpacity={c.shadowOpacity} />
-          </filter>
-          <filter id={`${id}-inner`}>
-            <feDropShadow dx="0" dy="0.5" stdDeviation="0.5" floodColor="#000" floodOpacity="0.3" />
+            <feDropShadow dx="0" dy="0.5" stdDeviation="1" floodColor={c.shadowColor} floodOpacity="0.45" />
           </filter>
         </defs>
 
         {/* Scalloped outer shape */}
-        <path d={scallopedPath} fill={`url(#${id}-grad)`} stroke="rgba(255,255,255,0.25)" strokeWidth="0.5" filter={`url(#${id}-shadow)`} />
+        <path d={scallopedPath} fill={`url(#${id}-grad)`} stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" filter={`url(#${id}-shadow)`} />
 
         {/* Shine overlay */}
-        <path d={scallopedPath} fill={`url(#${id}-shine)`} opacity="0.6" />
+        <path d={scallopedPath} fill={`url(#${id}-shine)`} opacity="0.5" />
 
-        {/* Inner circle */}
-        <circle cx="16" cy="16" r="8.5" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.5" strokeDasharray="1.5 1" />
+        {/* Inner ring */}
+        <circle cx="16" cy="16" r="8.5" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="0.5" strokeDasharray="1.5 1" />
 
         {/* Checkmark */}
-        <path d="M10.5 16.5L14.5 20.5L22 12" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" filter={`url(#${id}-inner)`} />
-
-        {/* Sparkle dots */}
-        <circle cx="8" cy="8" r="0.8" fill="white" opacity="0.7" />
-        <circle cx="24" cy="8" r="0.6" fill="white" opacity="0.5" />
-        <circle cx="8" cy="24" r="0.5" fill="white" opacity="0.4" />
+        <path d="M10.5 16.5L14.5 20.5L22 12" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </span>
   );
