@@ -64,7 +64,7 @@ export async function PATCH(
 
     return NextResponse.json({ success: true, data: project, message: 'Project updated successfully' });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin project update error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }

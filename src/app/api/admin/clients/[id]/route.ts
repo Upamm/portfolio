@@ -20,7 +20,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (!c) return NextResponse.json({ success: false, error: 'Client not found' }, { status: 404 });
     return NextResponse.json({ success: true, data: c });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin client detail error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
@@ -46,7 +46,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     });
     return NextResponse.json({ success: true, data: updated, message: 'Client updated successfully' });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin client update error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
@@ -73,7 +73,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     await db.client.delete({ where: { id } });
     return NextResponse.json({ success: true, message: 'Client and all associated data deleted successfully' });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin client delete error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }

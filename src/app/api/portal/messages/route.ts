@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
   try {
     const { client } = await requireAuth(request);
     const body = await request.json();
-    const { content, senderRole } = body;
+    const { content } = body;
 
     if (!content || !content.trim()) {
       return NextResponse.json(
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       data: {
         content: content.trim(),
         senderId: client.id,
-        senderRole: senderRole || client.role,
+        senderRole: client.role, // Always use authenticated user's role — no spoofing
         clientId: client.id,
       },
     });

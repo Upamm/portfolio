@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin create client error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
     ]);
     return NextResponse.json({ success: true, data: clients, meta: { page, limit, total, totalPages: Math.ceil(total / limit) } });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin clients list error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }

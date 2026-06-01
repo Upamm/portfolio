@@ -12,17 +12,35 @@ export async function GET(request: NextRequest) {
     const clientId = searchParams.get('clientId');
 
     if (clientId) {
-      // Get all messages for a specific client conversation
+      // Get all messages for a specific client conversation with sender info
       const messages = await db.message.findMany({
         where: { clientId },
         orderBy: { createdAt: 'asc' },
       });
-      return NextResponse.json({ success: true, data: messages });
+      // Fetch admin info for sender names
+      const adminClient = await db.client.findFirst({
+        where: { role: 'admin' },
+        select: { id: true, name: true },
+      });
+      const clientUser = await db.client.findUnique({
+        where: { id: clientId },
+        select: { id: true, name: true },
+      });
+      const enrichedMessages = messages.map(msg => ({
+        ...msg,
+        senderName: msg.senderRole === 'admin'
+          ? (adminClient?.name || 'Admin')
+          : (clientUser?.name || 'Client'),
+      }));
+      return NextResponse.json({ success: true, data: enrichedMessages });
     }
 
-    // Get conversation list - all clients with messages + last message + unread count
+    // Get conversation list - only clients who have messages
     const clientsWithMessages = await db.client.findMany({
-      where: { role: 'client' },
+      where: {
+        role: 'client',
+        messages: { some: {} },
+      },
       select: {
         id: true,
         name: true,
@@ -68,7 +86,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: conversations });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin messages error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
@@ -130,7 +148,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin send message error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }

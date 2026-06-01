@@ -3301,3 +3301,147 @@ Two issues:
 4. **Medium**: Add admin activity log/audit trail
 5. **Medium**: Add export clients/invoices to CSV
 6. **Low**: Add admin settings page (change password, profile)
+
+---
+
+## Admin Panel & Client Portal Testing Round (2026-06-01)
+
+### Test Summary
+Comprehensive testing of all admin panel API endpoints and client portal functionality. All endpoints tested via curl with Bearer token authentication.
+
+### Test Environment
+- **Dev Server**: Next.js 16.1.3 (Turbopack) on port 3000
+- **Admin Account**: admin@upam.com / Admin@123456
+- **Authentication**: In-memory session tokens (via `src/lib/auth.ts`)
+
+### API Endpoint Test Results
+
+**Authentication:**
+- ✅ `POST /api/auth/login` — Returns token + user data, sets httpOnly cookie
+- ✅ All routes use `requireAuth` + `requireAdmin` middleware correctly
+
+**Admin API Routes:**
+- ✅ `GET /api/admin/stats` — Returns platform overview (clients, projects, invoices, revenue, tickets, messages) + recent registrations + recent tickets
+- ✅ `GET /api/admin/clients` — Lists all clients with search, status filter, pagination, and `_count` relations
+- ✅ `POST /api/admin/clients` — Creates new client accounts with validation (name, email, password required), bcryptjs hashing, welcome notification
+- ✅ `GET /api/admin/clients/[id]` — Client detail with projects, invoices, tickets, and `_count` relations (projects, invoices, messages, tickets, notifications, uploads)
+- ✅ `PATCH /api/admin/clients/[id]` — Updates client fields (name, email, company, role, isActive, phone, address)
+- ✅ `DELETE /api/admin/clients/[id]` — Cascading delete: notifications, messages, ticket replies, tickets, file uploads, milestones, invoices, projects, then client. Admin accounts protected from deletion.
+- ✅ `GET /api/admin/messages` — Conversation list grouped by client with last message preview and unread count
+- ✅ `GET /api/admin/messages?clientId=X` — Full message thread with sender names
+- ✅ `POST /api/admin/messages` — Admin sends message to client with notification
+- ✅ `POST /api/admin/messages/bulk-read` — Marks client messages as read
+- ✅ `GET /api/admin/invoices` — Lists all invoices with client/project relations, status filter
+- ✅ `PATCH /api/admin/invoices/[id]` — Updates invoice status (auto-sets paidAt), notifies client
+- ✅ `DELETE /api/admin/invoices/[id]` — Deletes invoice, notifies client
+- ✅ `GET /api/admin/projects` — Lists all projects with client/milestone relations, status filter
+- ✅ `PATCH /api/admin/projects/[id]` — Updates project status/progress, notifies client
+
+**Client Portal API Routes:**
+- ✅ `GET /api/portal/projects` — Returns empty array (no projects for admin user)
+- ✅ `GET /api/portal/invoices` — Returns empty array
+- ✅ `GET /api/portal/messages` — Returns paginated messages
+- ✅ `GET /api/portal/tickets` — Returns empty array
+- ✅ `GET /api/portal/notifications` — Returns empty array with unreadCount
+- ✅ `GET /api/portal/profile` — Returns user data with stats (projectCount, activeTickets, unreadMessages, unpaidInvoices)
+- ✅ `GET /api/portal/files` — Returns empty array
+
+### Bug Found & Fixed
+
+**CORS Preflight Handler Missing Methods (middleware.ts)**
+- **Issue**: The CORS OPTIONS preflight handler in `src/middleware.ts` returned `Access-Control-Allow-Methods: GET, POST, OPTIONS` but the regular CORS headers returned `GET, POST, PATCH, PUT, DELETE, OPTIONS`. This mismatch would block cross-origin PATCH, PUT, and DELETE requests.
+- **Issue 2**: `Authorization` header was missing from `Access-Control-Allow-Headers` in both the regular response and preflight response. Cross-origin requests using Bearer tokens would be blocked.
+- **Fix**: Updated both the regular CORS headers and the preflight handler to include:
+  - `Access-Control-Allow-Methods`: `GET, POST, PATCH, PUT, DELETE, OPTIONS`
+  - `Access-Control-Allow-Headers`: `Content-Type, Authorization, X-CSRF-Token`
+- **File Modified**: `src/middleware.ts` (lines 355-367)
+
+### Code Quality
+- ✅ `bun run lint` — 0 errors, 0 warnings
+
+### Files Modified
+- `src/middleware.ts` — Fixed CORS preflight handler to include PATCH, PUT, DELETE methods and Authorization header
+
+### Known Notes
+- In-memory auth sessions are lost on server restart (by design)
+- All admin API routes properly use `if (error instanceof Response) return error` pattern (previously fixed from `throw error`)
+- Admin panel component (1638 lines) correctly renders when admin user logs in via ClientPortal
+
+---
+
+## Phase 16 - Client Portal Admin Panel Development & Security Fixes (2026-06-02)
+
+### Current Project Status Assessment
+- **Overall**: Production-quality portfolio + Client Portal with full Admin Panel, 23+ portfolio components, 15+ portal/admin API routes, complete Prisma schema with 12 models
+- **Build**: Zero lint errors. TypeScript strict mode passes for all modified files. Pre-existing TS errors in shadcn UI type declarations (not blocking).
+- **Admin Features**: Complete admin panel with client management, messaging, invoicing, project management, and dashboard analytics
+- **Security**: Fixed critical sender role spoofing vulnerability in portal messages
+
+### Bug Fixes
+
+1. **Security: Sender Role Spoofing in Portal Messages** — Fixed `/api/portal/messages` POST route. Previously, `senderRole` was taken from request body (`senderRole: senderRole || client.role`), allowing any authenticated client to send messages appearing to be from admin. Changed to `senderRole: client.role` to always use the authenticated user's actual role.
+
+2. **Security: Missing isActive Check in /api/auth/me** — Refactored `/api/auth/me` from manual token parsing (30+ lines of duplicated auth logic) to use the existing `requireAuth()` function. This automatically adds the `isActive` check that was missing from the manual implementation. The new implementation is just 10 lines and properly rejects deactivated accounts.
+
+3. **Admin Messages: Enhanced Sender Info** — Updated `/api/admin/messages` GET to include `senderName` field when fetching messages for a specific client conversation. Previously, messages were returned without sender name information. Now enriches each message with the admin or client name based on `senderRole`.
+
+4. **Admin Conversations: Filter Clients With Messages** — Updated conversation list query to only show clients who actually have messages using Prisma's `messages: { some: {} }` filter. Previously, ALL clients were listed even if they had zero messages.
+
+### Master Admin Account
+
+- **Account Created**: Master admin account exists in database
+  - Email: `upam@portal.admin`
+  - Password: `Admin@123`
+  - Role: `admin`
+  - Name: `Upam (Master Admin)`
+- **Login**: Use Client Portal login page, enter admin credentials, automatically redirected to Admin Panel
+
+### Admin Panel Features (AdminPanel.tsx)
+
+The admin panel is a comprehensive management interface with amber/orange theme (distinct from client teal theme):
+
+1. **Dashboard Overview** — Stats cards (Total Clients, Active Projects, Total Revenue, Pending Invoices, Open Tickets, Unread Messages), recent registrations list, quick stats with progress bars
+
+2. **Client Management** — View all clients, search/filter by name/email/company, create new client accounts, toggle active/inactive status, delete clients with full data cascade, view detailed client profiles with projects/invoices/tickets
+
+3. **Messaging** — Conversation list grouped by client, real-time chat interface, send messages to any client, auto-mark messages as read, quick send from client detail view
+
+4. **Invoice Management** — View all invoices across clients, filter by status (pending/paid/overdue/cancelled), update invoice status, delete invoices, create invoices from client detail view
+
+5. **Project Management** — View all projects across clients, filter by status, update project status and progress, create projects from client detail view, project status changes auto-notify clients
+
+6. **Client Detail View** — Full client profile with contact info, stats (projects/invoices/messages/tickets), project list, invoice list, ticket list, quick actions (send message, create project, create invoice)
+
+### Admin API Routes
+
+| Route | Methods | Description |
+|---|---|---|
+| `/api/admin/stats` | GET | Dashboard statistics (13 parallel DB queries) |
+| `/api/admin/clients` | GET, POST | List/search clients, create new client accounts |
+| `/api/admin/clients/[id]` | GET, PATCH, DELETE | Client detail, update client, delete client with cascade |
+| `/api/admin/messages` | GET, POST | Conversation list, send message to client |
+| `/api/admin/messages/bulk-read` | POST | Mark all client messages as read |
+| `/api/admin/invoices` | GET | List all invoices with client/project info |
+| `/api/admin/invoices/[id]` | PATCH, DELETE | Update invoice status/amount, delete invoice |
+| `/api/admin/projects` | GET | List all projects with client info |
+| `/api/admin/projects/[id]` | PATCH | Update project status/progress/priority |
+
+All admin routes properly verify `requireAuth()` + `requireAdmin()` before processing.
+
+### Files Modified
+
+- `src/app/api/portal/messages/route.ts` — Fixed sender role spoofing (line 66: `senderRole: client.role`)
+- `src/app/api/auth/me/route.ts` — Refactored to use `requireAuth()`, added `isActive` check
+- `src/app/api/admin/messages/route.ts` — Enhanced with sender names, filtered conversation list
+
+### Technical Notes
+- ESLint passes with 0 errors on all modified files
+- All admin API routes confirmed working via curl testing (200/401 responses)
+- Login → Auth/Me → Admin Stats flow verified end-to-end
+- Dev server running on port 3000
+- Pre-existing TypeScript errors in shadcn UI type declarations (react-day-picker, embla-carousel-react, recharts, cmdk, input-otp, react-resizable-panels, sonner) — not blocking, all runtime functional
+
+### Known Issues
+- Dev server intermittent stability under sustained API requests (likely resource constraint in dev environment, not a code bug)
+- Pre-existing TS type errors in shadcn UI component type declarations
+

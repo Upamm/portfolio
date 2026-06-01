@@ -353,7 +353,7 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith('/api/')) {
     response.headers.set('Access-Control-Allow-Origin', request.headers.get('origin') || '');
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, X-CSRF-Token');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-CSRF-Token');
     response.headers.set('Access-Control-Max-Age', '86400');
     response.headers.set('Vary', 'Origin');
 
@@ -363,8 +363,8 @@ export function middleware(request: NextRequest) {
         status: 204,
         headers: {
           'Access-Control-Allow-Origin': request.headers.get('origin') || '',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, X-CSRF-Token',
+          'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-CSRF-Token',
           'Access-Control-Max-Age': '86400',
         },
       });

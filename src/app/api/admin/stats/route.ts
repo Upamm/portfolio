@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin stats error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }

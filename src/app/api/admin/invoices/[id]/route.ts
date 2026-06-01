@@ -55,7 +55,7 @@ export async function PATCH(
 
     return NextResponse.json({ success: true, data: invoice, message: 'Invoice updated successfully' });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin invoice update error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
@@ -89,7 +89,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: 'Invoice deleted successfully' });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin invoice delete error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }

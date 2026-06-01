@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: invoices });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Admin invoices list error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }

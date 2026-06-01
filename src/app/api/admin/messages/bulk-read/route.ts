@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, message: 'Messages marked as read' });
   } catch (error) {
-    if (error instanceof Response) throw error;
+    if (error instanceof Response) return error;
     console.error('Bulk read error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
