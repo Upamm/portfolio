@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
+import { sendNewTicketNotification } from '@/lib/email';
 
 // GET /api/portal/tickets — List tickets for client
 export async function GET(request: NextRequest) {
@@ -58,6 +59,17 @@ export async function POST(request: NextRequest) {
         clientId: client.id,
       },
     });
+
+    // Email notification to master admin when a client creates a ticket (fire-and-forget)
+    if (client.role === 'client') {
+      sendNewTicketNotification({
+        clientName: client.name,
+        subject: subject.trim(),
+        description: description.trim(),
+        priority: priority || 'medium',
+        category: category || 'general',
+      }).catch(() => {});
+    }
 
     return NextResponse.json(
       { success: true, data: ticket, message: 'Ticket created successfully' },

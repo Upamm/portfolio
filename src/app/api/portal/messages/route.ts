@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
+import { sendNewMessageNotification } from '@/lib/email';
 
 // GET /api/portal/messages — Get messages for client (with pagination)
 export async function GET(request: NextRequest) {
@@ -67,6 +68,15 @@ export async function POST(request: NextRequest) {
         clientId: client.id,
       },
     });
+
+    // Email notification to master admin when a client sends a message (fire-and-forget)
+    if (client.role === 'client') {
+      sendNewMessageNotification({
+        senderName: client.name,
+        senderRole: 'client',
+        content: content.trim(),
+      }).catch(() => {});
+    }
 
     return NextResponse.json(
       { success: true, data: message, message: 'Message sent successfully' },

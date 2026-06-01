@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { createSession, SESSION_COOKIE } from '@/lib/auth';
+import { sendNewClientNotification } from '@/lib/email';
 
 const SALT_ROUNDS = 12;
 
@@ -83,6 +84,9 @@ export async function POST(request: NextRequest) {
 
     // Create session token
     const token = createSession(client.id, client.role);
+
+    // Send email notification to master admin (fire-and-forget)
+    sendNewClientNotification({ name, email, company: company || null }).catch(() => {});
 
     const response = NextResponse.json(
       {

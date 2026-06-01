@@ -3721,3 +3721,43 @@ In light mode, the Services dropdown (desktop) and mobile menu dropdown backgrou
 - `bun run lint` passes with 0 errors
 - Dev server compiles successfully
 - Active cron job (ID: 180096) running every 15 minutes for continued development
+
+---
+
+## Master Admin Email & Notification System Setup
+
+### Changes Made
+
+1. **Master Admin Account Updated**
+   - Email changed from `upam@upam.com` to `mailupamm@gmail.com` in the database
+   - Login credentials remain the same (password unchanged)
+
+2. **Central Email Notification System** (`src/lib/email.ts`)
+   - Added `MASTER_ADMIN_EMAIL = 'mailupamm@gmail.com'` constant — ALL notifications route here
+   - Refactored into modular email generator system with consistent branded HTML templates
+   - New notification functions:
+     - `sendContactNotification()` — Contact form submissions (already existed, now uses constant)
+     - `sendNewClientNotification()` — New client registrations (NEW)
+     - `sendNewMessageNotification()` — Portal messages from clients (NEW)
+     - `sendNewTicketNotification()` — New support tickets from clients (NEW)
+   - All emails use professional dark-themed HTML templates matching the site design
+   - All notifications are fire-and-forget (`.catch(() => {})`) so they never block API responses
+
+3. **API Route Integrations**
+   - `src/app/api/auth/register/route.ts` — Sends email to master admin when new client registers
+   - `src/app/api/portal/messages/route.ts` — Sends email to master admin when client sends a message
+   - `src/app/api/portal/tickets/route.ts` — Sends email to master admin when client creates a support ticket
+   - `src/app/api/contact/route.ts` — Already sends contact form notifications (unchanged)
+
+4. **Email Notification Triggers Summary**
+   | Event | API Route | Email Sent To |
+   |-------|-----------|---------------|
+   | Contact form submission | POST /api/contact | mailupamm@gmail.com |
+   | New client registration | POST /api/auth/register | mailupamm@gmail.com |
+   | Client sends portal message | POST /api/portal/messages | mailupamm@gmail.com |
+   | Client creates support ticket | POST /api/portal/tickets | mailupamm@gmail.com |
+
+### Verification
+- `bun run lint` passes with 0 errors
+- Dev server compiles successfully
+- All notifications are async (non-blocking)
