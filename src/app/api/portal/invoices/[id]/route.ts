@@ -124,6 +124,8 @@ export async function PATCH(
           title: 'Invoice Status Updated',
           message: `Invoice ${existing.invoiceNumber} status changed to "${status}".`,
           type: status === 'paid' ? 'success' : 'info',
+          category: 'invoice',
+          link: 'invoices',
         },
       });
     }

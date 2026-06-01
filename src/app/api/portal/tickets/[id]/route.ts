@@ -105,6 +105,8 @@ export async function POST(
           title: 'Ticket Reply Received',
           message: `A new reply has been added to ticket "${ticket.subject}".`,
           type: 'info',
+          category: 'ticket',
+          link: 'tickets',
         },
       });
     }
@@ -175,6 +177,8 @@ export async function PATCH(
           title: 'Ticket Status Updated',
           message: `Ticket "${ticket.subject}" status changed to "${status}".`,
           type: 'info',
+          category: 'ticket',
+          link: 'tickets',
         },
       });
     }

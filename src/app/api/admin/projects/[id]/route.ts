@@ -49,6 +49,8 @@ export async function PATCH(
           title: 'Project Status Updated',
           message: `Project "${project.title}" status changed to "${status}".`,
           type: 'info',
+          category: 'project',
+          link: 'projects',
         },
       });
     } else if (progress !== undefined && progress !== existing.progress) {
@@ -58,6 +60,8 @@ export async function PATCH(
           title: 'Project Progress Updated',
           message: `Project "${project.title}" is now ${progress}% complete.`,
           type: 'info',
+          category: 'project',
+          link: 'projects',
         },
       });
     }

@@ -90,6 +90,8 @@ export async function POST(request: NextRequest) {
         title: 'Welcome to the Client Portal!',
         message: 'Your account has been created successfully. Explore your dashboard to get started.',
         type: 'success',
+        category: 'general',
+        link: 'dashboard',
       },
     });
 

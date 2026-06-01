@@ -49,6 +49,8 @@ export async function PATCH(
           title: 'Invoice Updated',
           message: `Invoice ${existing.invoiceNumber} status changed to "${status}".`,
           type: status === 'paid' ? 'success' : 'info',
+          category: 'invoice',
+          link: 'invoices',
         },
       });
     }
@@ -84,6 +86,8 @@ export async function DELETE(
         title: 'Invoice Deleted',
         message: `Invoice ${existing.invoiceNumber} has been deleted.`,
         type: 'warning',
+        category: 'invoice',
+        link: 'invoices',
       },
     });
 

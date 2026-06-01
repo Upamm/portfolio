@@ -114,6 +114,8 @@ export async function PATCH(
           title: 'Project Status Updated',
           message: `Project "${project.title}" status changed from "${existing.status}" to "${status}".`,
           type: 'info',
+          category: 'project',
+          link: 'projects',
         },
       });
     }
@@ -165,6 +167,8 @@ export async function DELETE(
         title: 'Project Deleted',
         message: `Project "${existing.title}" has been deleted.`,
         type: 'warning',
+        category: 'project',
+        link: 'projects',
       },
     });
 

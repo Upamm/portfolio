@@ -4078,3 +4078,35 @@ Stage Summary:
 - Lint passes cleanly, dev server compiles without errors
 - Files modified: Preloader.tsx, ClientPortal.tsx, PortalDashboard.tsx, globals.css
 - Files created: VerifiedSticker.tsx
+
+---
+Task ID: Bell notification system
+Agent: Main Agent
+Task: Make bell icon clickable with notification preview dropdown, linked to specific sections
+
+Work Log:
+- Added `category` and `link` fields to Notification model in Prisma schema
+- Pushed schema to DB (db:push) — new columns with defaults for existing records
+- Updated all 15 notification.create calls across 11 API route files with proper category+link values
+- Created NotificationDropdown.tsx component with:
+  - Animated dropdown with Framer Motion (scale + fade)
+  - Fetches notifications from /api/portal/notifications
+  - Shows unread count badge on bell icon (teal pill, 9+ cap)
+  - Lists all notifications with type icon (info/success/warning/error), category label, relative time
+  - Unread notifications highlighted with teal background + blue dot
+  - Per-notification "mark as read" button (checkmark icon, appears on hover)
+  - "Mark all read" button in header
+  - Click notification → marks as read + navigates to linked section (projects/invoices/tickets/messages)
+  - Auto-polls every 15s when dropdown is open
+  - Close on outside click
+  - Empty state with bell icon placeholder
+  - Thin custom scrollbar for notification list
+  - Glass morphism panel with backdrop blur
+- Replaced static bell button in ClientPortal.tsx with NotificationDropdown component
+- Added thin scrollbar CSS class (.custom-scrollbar-thin) to globals.css
+
+Stage Summary:
+- Files created: src/components/portfolio/NotificationDropdown.tsx
+- Files modified: prisma/schema.prisma, src/app/globals.css, src/components/portfolio/ClientPortal.tsx, 11 API route files (notification.create calls)
+- Lint: 0 errors
+- Dev server: compiles successfully

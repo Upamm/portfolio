@@ -205,6 +205,8 @@ model Notification {
   title     String
   message   String
   type      String   @default("info") // "info" | "success" | "warning" | "error"
+  category  String  @default("general") // "general" | "project" | "invoice" | "ticket" | "message" | "file"
+  link      String  @default("") // portal tab to navigate: "dashboard" | "projects" | "invoices" | "messages" | "tickets" | "files" | "settings"
   isRead    Boolean  @default(false)
   clientId  String
   createdAt DateTime @default(now())

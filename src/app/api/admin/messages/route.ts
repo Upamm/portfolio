@@ -148,6 +148,8 @@ export async function POST(request: NextRequest) {
         title: 'New Message from Admin',
         message: `${admin.name}: ${content.trim().substring(0, 100)}${content.trim().length > 100 ? '...' : ''}`,
         type: 'info',
+        category: 'message',
+        link: 'messages',
       },
     });
 

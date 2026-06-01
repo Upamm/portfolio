@@ -108,6 +108,8 @@ export async function POST(request: NextRequest) {
         title: 'New Project Created',
         message: `A new project "${title}" has been created for you.`,
         type: 'info',
+        category: 'project',
+        link: 'projects',
       },
     });
 

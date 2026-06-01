@@ -19,6 +19,7 @@ import {
   Shield,
 } from 'lucide-react';
 import VerifiedSticker from './VerifiedSticker';
+import NotificationDropdown from './NotificationDropdown';
 
 // Lazy-load tab components for performance
 const PortalLogin = lazy(() => import('./PortalLogin'));
@@ -295,10 +296,7 @@ export default function ClientPortal({ onBack }: ClientPortalProps) {
             {/* Right side actions */}
             <div className="flex items-center gap-2">
               {/* Notification Bell */}
-              <button className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors relative">
-                <Bell className="w-4 h-4" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-400" />
-              </button>
+              <NotificationDropdown onNavigate={handleTabChange} />
 
               {/* User avatar (mobile) */}
               <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-500/20 to-emerald-500/20 border border-teal-500/20 flex items-center justify-center text-teal-400 text-xs font-bold lg:hidden">

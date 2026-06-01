@@ -140,6 +140,8 @@ export async function POST(request: NextRequest) {
         title: 'New Invoice',
         message: `Invoice ${finalInvoiceNumber} for $${amount} has been created. Due: ${new Date(dueDate).toLocaleDateString()}.`,
         type: 'info',
+        category: 'invoice',
+        link: 'invoices',
       },
     });
 
