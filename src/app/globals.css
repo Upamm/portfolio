@@ -434,6 +434,11 @@ body::before {
   -webkit-backdrop-filter: blur(20px);
 }
 
+.light .mobile-menu-dropdown {
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom-color: rgba(6, 182, 212, 0.1);
+}
+
 /* Glow Effects */
 .glow-teal {
   box-shadow: 0 0 20px rgba(6, 182, 212, 0.15), 0 0 40px rgba(6, 182, 212, 0.05);
@@ -1438,6 +1443,114 @@ button:hover .logo-text-group {
   border-bottom: 1px solid rgba(6, 182, 212, 0.12) !important;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2),
               0 1px 0 rgba(6, 182, 212, 0.05);
+}
+
+.light .nav-scrolled-enhanced {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid rgba(6, 182, 212, 0.08) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06),
+              0 1px 0 rgba(6, 182, 212, 0.04);
+}
+
+/* ==================== */
+/* SERVICES DROPDOWN MENU   */
+/* ==================== */
+.services-dropdown {
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  background: rgba(10, 22, 40, 0.85) !important;
+  border: 1px solid rgba(6, 182, 212, 0.12) !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset !important;
+}
+
+.light .services-dropdown {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid rgba(6, 182, 212, 0.1) !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03) inset !important;
+}
+
+/* ==================== */
+/* NAV LIGHT MODE TEXT       */
+/* ==================== */
+.light .nav-text-dark {
+  color: #334155;
+}
+.light .nav-text-dark:hover {
+  color: #0f172a;
+}
+.light .nav-text-dark-subtle {
+  color: #64748b;
+}
+.light .nav-text-dark-subtle:hover {
+  color: #475569;
+}
+.light .nav-text-active {
+  color: #0891b2;
+}
+.light .nav-text-active-subtle {
+  color: #94a3b8;
+}
+.light .nav-text-active-subtle:hover {
+  color: #64748b;
+}
+.light .nav-text-muted {
+  color: #94a3b8;
+}
+.light .nav-mobile-bg {
+  color: #334155;
+}
+.light .nav-mobile-bg:hover {
+  color: #0f172a;
+  background-color: rgba(6, 182, 212, 0.06);
+}
+.light .nav-mobile-active {
+  color: #0891b2;
+  background-color: rgba(6, 182, 212, 0.08);
+  border-left-color: #0891b2;
+}
+.light .nav-dropdown-item {
+  color: #334155;
+}
+.light .nav-dropdown-item:hover {
+  color: #0f172a;
+  background-color: rgba(6, 182, 212, 0.06);
+}
+.light .nav-dropdown-active {
+  color: #0891b2;
+  background-color: rgba(6, 182, 212, 0.08);
+}
+.light .nav-dropdown-subtle {
+  color: #94a3b8;
+}
+.light .nav-mobile-border {
+  border-color: rgba(6, 182, 212, 0.08);
+}
+.light .nav-mobile-divider {
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.light .nav-portal-btn {
+  background: linear-gradient(to right, rgba(6, 182, 212, 0.08), rgba(16, 185, 129, 0.08));
+  border-color: rgba(6, 182, 212, 0.15);
+  color: #0891b2;
+}
+.light .nav-portal-btn:hover {
+  border-color: rgba(6, 182, 212, 0.3);
+  color: #0e7490;
+}
+.light .nav-portal-mobile {
+  background: linear-gradient(to right, rgba(6, 182, 212, 0.06), rgba(16, 185, 129, 0.06));
+  border-color: rgba(6, 182, 212, 0.12);
+  color: #0891b2;
+}
+.light .nav-mobile-services-border {
+  border-color: rgba(6, 182, 212, 0.08);
+}
+.light .nav-hamburger-btn {
+  color: #334155;
+}
+.light .nav-hamburger-btn:hover {
+  color: #0f172a;
+  background-color: rgba(6, 182, 212, 0.06);
 }
 
 /* ==================== */

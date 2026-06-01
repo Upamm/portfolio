@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown, Shield } from 'lucide-react';
 import type { PageKey } from './PortfolioApp';
-import ThemeToggle from './ThemeToggle';
+import ThemeToggle, { isThemeDark } from './ThemeToggle';
 import Logo from './Logo';
 
 interface NavLinkItem {
@@ -42,6 +42,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -51,6 +52,19 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Sync theme state
+  useEffect(() => {
+    const checkTheme = () => setIsDark(isThemeDark());
+    checkTheme();
+    const listener = window.addEventListener('theme-change', checkTheme);
+    // Also poll every 100ms for reliability
+    const interval = setInterval(checkTheme, 100);
+    return () => {
+      (window.removeEventListener as typeof window.addEventListener)('theme-change', checkTheme);
+      clearInterval(interval);
+    };
   }, []);
 
   // Close services dropdown on outside click
@@ -84,6 +98,45 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
 
   const isServicesActive = currentPage === 'services' || currentPage === 'faq' || currentPage === 'pricing';
 
+  // Text color classes based on theme
+  const navBase = isDark
+    ? 'text-slate-300 hover:text-white hover:bg-white/5'
+    : 'nav-text-dark hover:!bg-transparent';
+  const navActive = isDark ? 'text-teal-400' : 'nav-text-active';
+  const chevronColor = isDark
+    ? (isServicesActive ? 'text-teal-400' : 'text-slate-500 group-hover:text-slate-300')
+    : (isServicesActive ? 'text-teal-600' : 'text-slate-400 group-hover:text-slate-600');
+  const dropItem = isDark
+    ? 'text-slate-300 hover:text-white hover:bg-white/5'
+    : 'nav-dropdown-item hover:!bg-transparent';
+  const dropActive = isDark
+    ? 'text-teal-400 bg-teal-500/10'
+    : 'nav-dropdown-active';
+  const dropSubtle = isDark ? 'text-slate-500' : 'nav-dropdown-subtle';
+  const mobileBase = isDark
+    ? 'text-slate-300 hover:text-white hover:bg-white/5'
+    : 'nav-mobile-bg';
+  const mobileActive = isDark
+    ? 'text-teal-400 bg-teal-500/10 border-l-2 border-teal-400'
+    : 'nav-mobile-active border-l-2';
+  const mobileSubItem = isDark
+    ? 'text-slate-400 hover:text-white hover:bg-white/5'
+    : 'nav-mobile-bg';
+  const mobileSubActive = isDark
+    ? 'text-teal-400 bg-teal-500/10'
+    : 'nav-dropdown-active';
+  const mobileSubtle = isDark ? 'text-slate-500' : 'nav-dropdown-subtle';
+  const mobileBorder = isDark ? 'border-teal-500/10' : 'nav-mobile-services-border';
+  const hamburgerColor = isDark
+    ? 'text-slate-300 hover:text-white hover:bg-white/5'
+    : 'nav-hamburger-btn';
+  const portalBtnDesktop = isDark
+    ? 'bg-gradient-to-r from-teal-500/15 to-emerald-500/15 border border-teal-500/25 text-teal-300 hover:text-teal-200 hover:border-teal-500/40 hover:from-teal-500/25 hover:to-emerald-500/25'
+    : 'nav-portal-btn border';
+  const portalBtnMobile = isDark
+    ? 'bg-gradient-to-r from-teal-500/10 to-emerald-500/10 border border-teal-500/20 text-teal-300 hover:text-teal-200'
+    : 'nav-portal-mobile border';
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
@@ -113,9 +166,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                   <button
                     onClick={() => handleClick(link.key)}
                     className={`relative flex items-center gap-1 px-2.5 py-2 rounded-lg transition-all duration-200 group ${
-                      isServicesActive
-                        ? 'text-teal-400'
-                        : 'text-slate-300 hover:text-white'
+                      isServicesActive ? navActive : navBase
                     }`}
                     style={{
                       fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
@@ -127,7 +178,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                     {isServicesActive && (
                       <motion.span
                         layoutId="activeNav"
-                        className="absolute inset-0 rounded-lg bg-teal-500/10 border border-teal-500/20"
+                        className={`absolute inset-0 rounded-lg ${isDark ? 'bg-teal-500/10 border border-teal-500/20' : 'bg-teal-500/8 border border-teal-500/15'}`}
                         transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
                       />
                     )}
@@ -135,11 +186,11 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                     <ChevronDown
                       className={`relative z-10 w-3 h-3 transition-transform duration-200 ${
                         servicesOpen ? 'rotate-180' : ''
-                      } ${isServicesActive ? 'text-teal-400' : 'text-slate-500 group-hover:text-slate-300'}`}
+                      } ${chevronColor}`}
                     />
                   </button>
 
-                  {/* Desktop dropdown */}
+                  {/* Desktop dropdown - uses CSS class instead of inline style */}
                   <AnimatePresence>
                     {servicesOpen && (
                       <motion.div
@@ -147,14 +198,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 8, scale: 0.96 }}
                         transition={{ duration: 0.15, ease: 'easeOut' }}
-                        className="absolute top-full left-0 mt-1.5 w-52 rounded-xl overflow-hidden"
-                        style={{
-                          backdropFilter: 'blur(20px)',
-                          WebkitBackdropFilter: 'blur(20px)',
-                          backgroundColor: 'rgba(10, 22, 40, 0.85)',
-                          border: '1px solid rgba(6, 182, 212, 0.12)',
-                          boxShadow: '0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset',
-                        }}
+                        className="absolute top-full left-0 mt-1.5 w-52 rounded-xl overflow-hidden services-dropdown"
                       >
                         <div className="py-1.5">
                           {link.children.map((child) => (
@@ -162,9 +206,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                               key={child.key}
                               onClick={() => handleClick(child.key)}
                               className={`w-full text-left px-4 py-2.5 transition-all duration-150 flex items-center gap-2.5 ${
-                                currentPage === child.key
-                                  ? 'text-teal-400 bg-teal-500/10'
-                                  : 'text-slate-300 hover:text-white hover:bg-white/5'
+                                currentPage === child.key ? dropActive : dropItem
                               }`}
                               style={{
                                 fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
@@ -174,16 +216,16 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                               }}
                             >
                               {currentPage === child.key && (
-                                <span className="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0" />
+                                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isDark ? 'bg-teal-400' : 'bg-teal-500'}`} />
                               )}
                               <span className="flex-1">{child.label}</span>
                               {child.key === 'faq' && (
-                                <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">
+                                <span className={`text-[10px] uppercase tracking-wider font-medium ${dropSubtle}`}>
                                   FAQ
                                 </span>
                               )}
                               {child.key === 'pricing' && (
-                                <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">
+                                <span className={`text-[10px] uppercase tracking-wider font-medium ${dropSubtle}`}>
                                   $$$
                                 </span>
                               )}
@@ -200,9 +242,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                   key={link.key}
                   onClick={() => handleClick(link.key)}
                   className={`relative px-2.5 py-2 rounded-lg transition-all duration-200 ${
-                    currentPage === link.key
-                      ? 'text-teal-400'
-                      : 'text-slate-300 hover:text-white hover:bg-white/5'
+                    currentPage === link.key ? navActive : navBase
                   }`}
                   style={{
                     fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
@@ -214,7 +254,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                   {currentPage === link.key && (
                     <motion.span
                       layoutId="activeNav"
-                      className="absolute inset-0 rounded-lg bg-teal-500/10 border border-teal-500/20"
+                      className={`absolute inset-0 rounded-lg ${isDark ? 'bg-teal-500/10 border border-teal-500/20' : 'bg-teal-500/8 border border-teal-500/15'}`}
                       transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
                     />
                   )}
@@ -225,7 +265,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
             {/* Client Portal — special highlighted button (desktop) */}
             <button
               onClick={() => handleClick('portal')}
-              className="relative px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-teal-500/15 to-emerald-500/15 border border-teal-500/25 text-teal-300 hover:text-teal-200 hover:border-teal-500/40 hover:from-teal-500/25 hover:to-emerald-500/25 transition-all duration-200 flex items-center gap-1.5 ml-1"
+              className={`relative px-3.5 py-1.5 rounded-lg transition-all duration-200 flex items-center gap-1.5 ml-1 ${portalBtnDesktop}`}
               style={{
                 fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
                 fontWeight: 500,
@@ -243,7 +283,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+              className={`md:hidden p-2 rounded-lg transition-colors ${hamburgerColor}`}
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -260,7 +300,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="md:hidden overflow-hidden border-t border-teal-500/10 mobile-menu-dropdown"
+            className={`md:hidden overflow-hidden border-t mobile-menu-dropdown ${isDark ? 'border-teal-500/10' : 'nav-mobile-border'}`}
           >
             <div className="px-3 py-3 space-y-0.5">
               {navLinks.map((link, index) =>
@@ -276,9 +316,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.03 }}
                       className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-between ${
-                        isServicesActive
-                          ? 'text-teal-400 bg-teal-500/10 border-l-2 border-teal-400'
-                          : 'text-slate-300 hover:text-white hover:bg-white/5'
+                        isServicesActive ? mobileActive : mobileBase
                       }`}
                       style={{
                         fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
@@ -291,7 +329,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                       <ChevronDown
                         className={`w-3.5 h-3.5 transition-transform duration-200 ${
                           mobileServicesOpen ? 'rotate-180' : ''
-                        } ${isServicesActive ? 'text-teal-400' : 'text-slate-500'}`}
+                        } ${isServicesActive ? (isDark ? 'text-teal-400' : 'text-teal-600') : mobileSubtle}`}
                       />
                     </motion.button>
 
@@ -302,7 +340,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="overflow-hidden ml-3 border-l border-teal-500/10"
+                          className={`overflow-hidden ml-3 border-l ${mobileBorder}`}
                         >
                           <div className="py-1 space-y-0.5">
                             {link.children.map((child) => (
@@ -313,9 +351,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.05 }}
                                 className={`w-full text-left px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                                  currentPage === child.key
-                                    ? 'text-teal-400 bg-teal-500/10'
-                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                  currentPage === child.key ? mobileSubActive : mobileSubItem
                                 }`}
                                 style={{
                                   fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
@@ -341,9 +377,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.03 }}
                     className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-200 ${
-                      currentPage === link.key
-                        ? 'text-teal-400 bg-teal-500/10 border-l-2 border-teal-400'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
+                      currentPage === link.key ? mobileActive : mobileBase
                     }`}
                     style={{
                       fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
@@ -357,14 +391,14 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                 )
               )}
               {/* Divider before portal */}
-              <div className="border-t border-white/5 my-2" />
+              <div className={`border-t my-2 ${isDark ? 'border-white/5' : 'nav-mobile-divider'}`} />
               {/* Client Portal mobile */}
               <motion.button
                 onClick={() => handleClick('portal')}
                 initial={{ opacity: 0, x: -15 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navLinks.length * 0.03 }}
-                className="w-full text-left px-4 py-2.5 rounded-lg bg-gradient-to-r from-teal-500/10 to-emerald-500/10 border border-teal-500/20 text-teal-300 hover:text-teal-200 transition-all duration-200 flex items-center gap-2"
+                className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-200 flex items-center gap-2 ${portalBtnMobile}`}
                 style={{
                   fontFamily: 'var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif',
                   fontWeight: 500,

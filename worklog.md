@@ -3659,3 +3659,45 @@ All admin routes properly verify `requireAuth()` + `requireAdmin()` before proce
 4. **Medium**: Add client onboarding flow (welcome email, setup wizard)
 5. **Low**: Add data export/import functionality
 6. **Low**: Add activity audit log for admin actions
+
+---
+
+## Phase N - Light Mode Navbar Submenu Fix
+
+### Bug Fixed
+
+1. **Light Mode Submenu Background Not Working** — The navbar's Services dropdown submenu and mobile menu had hardcoded dark navy backgrounds (`rgba(10, 22, 40, ...)`) that did not adapt to light mode. All nav text colors were also hardcoded for dark mode only (e.g., `text-slate-300`, `text-white`), making them invisible on light backgrounds.
+
+### Root Cause
+- Desktop dropdown used inline `style` prop with dark `backgroundColor: 'rgba(10, 22, 40, 0.85)'` — no CSS class override possible
+- Mobile menu used `.mobile-menu-dropdown` CSS class with dark background — no `.light` variant
+- Nav scrolled state used `.nav-scrolled-enhanced` with `!important` — no `.light` variant
+- All text colors (nav links, dropdown items, chevrons, portal button, hamburger icon) were dark-theme only
+
+### Fix Details
+
+**globals.css:**
+- Added `.light .mobile-menu-dropdown` — white-ish background for mobile menu
+- Added `.light .nav-scrolled-enhanced` — white-ish background for scrolled navbar
+- Added `.services-dropdown` CSS class — extracted from inline styles on desktop dropdown
+- Added `.light .services-dropdown` — white-ish background for desktop dropdown
+- Added 20+ light mode text color utility classes: `.nav-text-dark`, `.nav-text-active`, `.nav-dropdown-item`, `.nav-dropdown-active`, `.nav-mobile-bg`, `.nav-mobile-active`, `.nav-portal-btn`, `.nav-hamburger-btn`, etc.
+
+**Navbar.tsx:**
+- Imported `isThemeDark` from ThemeToggle to track theme state
+- Replaced inline `style` on desktop dropdown with `.services-dropdown` CSS class
+- Added theme-reactive text color logic for all nav elements (desktop + mobile)
+- Dynamic classes for: nav links, active indicators, chevrons, dropdown items, mobile menu items, portal button, hamburger icon
+
+### QA Results (Agent-Browser)
+1. ✅ Desktop Services dropdown: light background `rgba(255, 255, 255, 0.96)`, proper border, shadow
+2. ✅ Mobile menu: light background `rgba(240, 250, 251, 0.96)`, visible text
+3. ✅ Nav text colors: `rgb(51, 65, 85)` (slate-700) readable on light background
+4. ✅ Scrolled navbar: light background with subtle shadow
+5. ✅ Services submenu items (All Services, Pricing, FAQ) visible on mobile
+6. ✅ Zero lint errors
+7. ✅ Zero console errors
+
+### Files Modified
+- `src/app/globals.css` — Added `.services-dropdown`, `.light .services-dropdown`, `.light .mobile-menu-dropdown`, `.light .nav-scrolled-enhanced`, 20+ light mode text color classes
+- `src/components/portfolio/Navbar.tsx` — Full theme-aware rewrite with `isThemeDark()` integration, CSS class-based dropdown, dynamic text colors
