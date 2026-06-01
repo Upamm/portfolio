@@ -252,6 +252,151 @@ body::before {
   background: linear-gradient(to top, rgba(240, 250, 251, 0.9), rgba(240, 250, 251, 0.4), rgba(240, 250, 251, 0.15));
 }
 
+/* Blog card tags - dark mode defaults */
+.blog-tag {
+  background: rgba(6, 182, 212, 0.1);
+  color: #2dd4bf;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+.blog-tag-more {
+  background: rgba(100, 116, 139, 0.1);
+  color: #94a3b8;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+/* Blog card text - dark mode defaults */
+.blog-card-meta { color: #64748b; }
+.blog-card-title { color: #ffffff; }
+.blog-card-title:hover { color: #5eead4; }
+.blog-card-excerpt { color: #94a3b8; }
+.blog-card-readmore { color: #2dd4bf; }
+
+/* Blog section popular topics */
+.blog-topic-label { color: #cbd5e1; }
+.blog-topic-label:hover { color: #5eead4; }
+.blog-topic-count {
+  background: rgba(6, 182, 212, 0.1);
+  color: #2dd4bf;
+}
+.blog-topic-heading { color: #ffffff; }
+
+/* Blog modal tags & text */
+.blog-modal-tag {
+  background: rgba(6, 182, 212, 0.1);
+  color: #2dd4bf;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+.blog-modal-heading { color: #ffffff; }
+.blog-modal-paragraph { color: #94a3b8; }
+.blog-modal-list { color: #94a3b8; }
+.blog-modal-divider { background: linear-gradient(to right, transparent, rgba(6, 182, 212, 0.2), transparent); }
+
+/* Related posts */
+.blog-related-title { color: #ffffff; }
+.blog-related-title:hover { color: #5eead4; }
+.blog-related-category {
+  background: rgba(6, 182, 212, 0.1);
+  color: #2dd4bf;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+.blog-related-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: #64748b;
+}
+.blog-related-time { color: #64748b; }
+
+/* Share bar text */
+.blog-share-title { color: #ffffff; }
+.blog-share-divider { background: linear-gradient(to-right, rgba(6, 182, 212, 0.3), transparent); }
+
+/* Tip box */
+.blog-tip-box {
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+.blog-tip-label { color: #2dd4bf; }
+.blog-tip-text { color: #94a3b8; }
+
+/* Stats block */
+.blog-stat-label { color: #64748b; }
+
+/* Related reading section */
+.blog-related-reading-title { color: #2dd4bf; }
+.blog-related-reading-link-title { color: #e2e8f0; }
+.blog-related-reading-link-title:hover { color: #5eead4; }
+.blog-related-reading-link-desc { color: #64748b; }
+
+/* ──────────────── Blog Light Mode Overrides ──────────────── */
+
+.light .blog-tag {
+  background: rgba(8, 145, 178, 0.08);
+  color: #0891b2;
+  border-color: rgba(8, 145, 178, 0.18);
+}
+.light .blog-tag-more {
+  background: rgba(100, 116, 139, 0.08);
+  color: #64748b;
+  border-color: rgba(100, 116, 139, 0.15);
+}
+.light .blog-card-meta { color: #64748b; }
+.light .blog-card-title { color: #0f172a; }
+.light .blog-card-title:hover { color: #0891b2; }
+.light .blog-card-excerpt { color: #475569; }
+.light .blog-card-readmore { color: #0891b2; }
+
+.light .blog-topic-label { color: #334155; }
+.light .blog-topic-label:hover { color: #0891b2; }
+.light .blog-topic-count {
+  background: rgba(8, 145, 178, 0.08);
+  color: #0891b2;
+}
+.light .blog-topic-heading { color: #0f172a; }
+
+.light .blog-modal-tag {
+  background: rgba(8, 145, 178, 0.08);
+  color: #0891b2;
+  border-color: rgba(8, 145, 178, 0.18);
+}
+.light .blog-modal-heading { color: #0f172a; }
+.light .blog-modal-paragraph { color: #475569; }
+.light .blog-modal-list { color: #475569; }
+.light .blog-modal-divider { background: linear-gradient(to right, transparent, rgba(8, 145, 178, 0.15), transparent); }
+
+.light .blog-related-title { color: #0f172a; }
+.light .blog-related-title:hover { color: #0891b2; }
+.light .blog-related-category {
+  background: rgba(8, 145, 178, 0.08);
+  color: #0891b2;
+  border-color: rgba(8, 145, 178, 0.18);
+}
+.light .blog-related-tag {
+  background: rgba(8, 145, 178, 0.05);
+  color: #64748b;
+}
+.light .blog-related-time { color: #64748b; }
+
+.light .blog-share-title { color: #0f172a; }
+.light .blog-share-divider { background: linear-gradient(to-right, rgba(8, 145, 178, 0.2), transparent); }
+
+.light .blog-tip-box {
+  background: rgba(8, 145, 178, 0.06);
+  border-color: rgba(8, 145, 178, 0.15);
+}
+.light .blog-tip-label { color: #0891b2; }
+.light .blog-tip-text { color: #475569; }
+
+.light .blog-stat-label { color: #64748b; }
+
+.light .blog-related-reading-title { color: #0891b2; }
+.light .blog-related-reading-link-title { color: #334155; }
+.light .blog-related-reading-link-title:hover { color: #0891b2; }
+.light .blog-related-reading-link-desc { color: #64748b; }
+
+/* Blog section header */
+.blog-section-label { color: #2dd4bf; }
+.blog-section-desc { color: #94a3b8; }
+.light .blog-section-label { color: #0891b2; }
+.light .blog-section-desc { color: #475569; }
+
 /* About section image fade */
 .about-image-fade {
   background: linear-gradient(to top, rgba(10, 22, 40, 1), rgba(10, 22, 40, 0.2), transparent 60%);

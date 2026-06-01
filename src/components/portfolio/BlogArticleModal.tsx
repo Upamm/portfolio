@@ -61,7 +61,7 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.03 }}
-        className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white mt-8 lg:mt-10 mb-3 lg:mb-4 flex items-start gap-2"
+        className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold blog-modal-heading mt-8 lg:mt-10 mb-3 lg:mb-4 flex items-start gap-2"
       >
         <span className="w-1 h-6 rounded-full bg-gradient-to-b from-teal-400 to-emerald-400 flex-shrink-0 mt-0.5" />
         <span>{block.text}</span>
@@ -75,7 +75,7 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.03 }}
-        className="text-slate-400 leading-relaxed text-sm sm:text-base lg:text-[17px] mb-4 lg:mb-5"
+        className="blog-modal-paragraph leading-relaxed text-sm sm:text-base lg:text-[17px] mb-4 lg:mb-5"
       >
         {block.text}
       </motion.p>
@@ -93,7 +93,7 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
         {block.items?.map((item, i) => (
           <li
             key={i}
-            className="flex items-start gap-3 text-sm sm:text-base lg:text-[17px] text-slate-400"
+            className="flex items-start gap-3 text-sm sm:text-base lg:text-[17px] blog-modal-list"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-2 flex-shrink-0" />
             <span className="leading-relaxed">{item}</span>
@@ -109,13 +109,13 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.03 }}
-        className="my-6 p-4 sm:p-5 rounded-xl bg-teal-500/5 border border-teal-500/20"
+        className="my-6 p-4 sm:p-5 rounded-xl blog-tip-box"
       >
         <div className="flex items-center gap-2 mb-2">
           <Lightbulb className="w-4 h-4 text-teal-400" />
-          <span className="text-sm font-semibold text-teal-400">Pro Tip</span>
+          <span className="text-sm font-semibold blog-tip-label">Pro Tip</span>
         </div>
-        <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
+        <p className="text-sm sm:text-base blog-tip-text leading-relaxed">
           {block.text}
         </p>
       </motion.div>
@@ -138,7 +138,7 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
             <div className="text-xl sm:text-2xl font-bold gradient-text mb-1">
               {stat.value}
             </div>
-            <div className="text-xs text-slate-500">{stat.label}</div>
+            <div className="text-xs blog-stat-label">{stat.label}</div>
           </div>
         ))}
       </motion.div>
@@ -170,7 +170,7 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
       >
         <div className="flex items-center gap-2 mb-4">
           <BookOpen className="w-4 h-4 text-teal-400" />
-          <span className="text-sm font-semibold text-teal-400">Continue Reading</span>
+          <span className="text-sm font-semibold blog-related-reading-title">Continue Reading</span>
         </div>
         <div className="space-y-3">
           {block.links.map((link) => {
@@ -201,10 +201,10 @@ function ContentBlock({ block, index, articleList }: { block: BlogContentBlock; 
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-semibold text-slate-200 group-hover:text-teal-300 transition-colors line-clamp-1">
+                  <h4 className="text-sm font-semibold blog-related-reading-link-title transition-colors line-clamp-1">
                     {link.title}
                   </h4>
-                  <p className="text-xs text-slate-500 mt-0.5 line-clamp-2 leading-relaxed">
+                  <p className="text-xs blog-related-reading-link-desc mt-0.5 line-clamp-2 leading-relaxed">
                     {link.description}
                   </p>
                 </div>
@@ -329,7 +329,7 @@ function ShareBar({
     >
       <div className="flex items-center gap-3 mb-4">
         <Share2 className="w-5 h-5 text-teal-400" />
-        <span className="text-sm font-semibold text-white">Share This Article</span>
+        <span className="text-sm font-semibold blog-share-title">Share This Article</span>
         <div className="flex-1 h-px bg-gradient-to-r from-teal-500/30 to-transparent" />
       </div>
 
@@ -473,12 +473,12 @@ function RelatedPosts({
             </div>
 
             {/* Category */}
-            <span className="inline-block text-[10px] px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 font-medium mb-1.5">
+            <span className="inline-block text-[10px] px-2 py-0.5 rounded-full blog-related-category font-medium mb-1.5">
               {relatedArticle.category}
             </span>
 
             {/* Title */}
-            <h4 className="text-sm font-semibold text-white leading-snug line-clamp-2 mb-1.5 group-hover:text-teal-300 transition-colors duration-200">
+            <h4 className="text-sm font-semibold blog-related-title leading-snug line-clamp-2 mb-1.5 transition-colors duration-200">
               {relatedArticle.title}
             </h4>
 
@@ -490,7 +490,7 @@ function RelatedPosts({
               return sharedTags.length > 0 ? (
                 <div className="flex flex-wrap gap-1 mb-1.5">
                   {sharedTags.slice(0, 2).map((tag) => (
-                    <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-slate-500">
+                    <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded blog-related-tag">
                       #{tag}
                     </span>
                   ))}
@@ -499,7 +499,7 @@ function RelatedPosts({
             })()}
 
             {/* Read Time */}
-            <div className="flex items-center gap-1.5 text-xs text-slate-500">
+            <div className="flex items-center gap-1.5 text-xs blog-related-time">
               <Clock className="w-3 h-3" />
               <span>{relatedArticle.readTime}</span>
             </div>
@@ -722,7 +722,7 @@ export default function BlogArticleModal({
                 </div>
 
                 {/* Full title */}
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4 lg:mb-5">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold blog-modal-heading leading-tight mb-4 lg:mb-5">
                   {article.title}
                 </h1>
 
@@ -731,7 +731,7 @@ export default function BlogArticleModal({
                   {article.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] sm:text-xs px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 font-medium"
+                      className="text-[10px] sm:text-xs px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full blog-modal-tag font-medium"
                     >
                       {tag}
                     </span>

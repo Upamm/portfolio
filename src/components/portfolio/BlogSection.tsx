@@ -103,21 +103,21 @@ function BlogCard({
       {/* Content */}
       <div className="p-5 sm:p-6">
         {/* Meta info */}
-        <div className="flex items-center gap-4 text-xs text-slate-500 mb-3">
+        <div className="flex items-center gap-4 text-xs blog-card-meta mb-3">
           <span className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5" />
             {article.date}
           </span>
-          <span className="text-slate-600">by {article.author}</span>
+          <span className="blog-card-meta">by {article.author}</span>
         </div>
 
         {/* Title */}
-        <h3 className="text-base sm:text-lg font-bold text-white mb-3 group-hover:text-teal-300 transition-colors leading-snug line-clamp-2">
+        <h3 className="text-base sm:text-lg font-bold blog-card-title mb-3 transition-colors leading-snug line-clamp-2">
           {article.title}
         </h3>
 
         {/* Excerpt */}
-        <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">
+        <p className="blog-card-excerpt text-sm leading-relaxed mb-4 line-clamp-3">
           {article.excerpt}
         </p>
 
@@ -126,20 +126,20 @@ function BlogCard({
           {article.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="text-xs px-2.5 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20"
+              className="text-xs px-2.5 py-1 rounded-full blog-tag"
             >
               {tag}
             </span>
           ))}
           {article.tags.length > 3 && (
-            <span className="text-xs px-2.5 py-1 rounded-full bg-slate-500/10 text-slate-400 border border-slate-500/20">
+            <span className="text-xs px-2.5 py-1 rounded-full blog-tag-more">
               +{article.tags.length - 3}
             </span>
           )}
         </div>
 
         {/* Read more link */}
-        <div className="flex items-center gap-2 text-teal-400 text-sm font-medium group-hover:gap-3 transition-all">
+        <div className="flex items-center gap-2 blog-card-readmore text-sm font-medium group-hover:gap-3 transition-all">
           Read Full Article
           <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </div>
@@ -305,14 +305,14 @@ export default function BlogSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-6 sm:mb-10"
         >
-          <span className="text-teal-400 text-sm font-medium uppercase tracking-widest">
+          <span className="blog-section-label text-sm font-medium uppercase tracking-widest">
             Latest Insights
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
             Blog & <span className="gradient-text">Articles</span>
           </h2>
           <span className="section-heading-line" />
-          <p className="text-slate-400 mt-6 max-w-2xl mx-auto">
+          <p className="blog-section-desc mt-6 max-w-2xl mx-auto">
             Sharing knowledge and insights about WordPress development,
             lead generation, and virtual assistance best practices.
           </p>
@@ -367,7 +367,7 @@ export default function BlogSection() {
           transition={{ duration: 0.5, delay: 0.9 }}
           className="mt-12 sm:mt-16"
         >
-          <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+          <h3 className="text-lg font-semibold blog-topic-heading mb-6 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-teal-400" />
             Popular Topics
           </h3>
@@ -378,10 +378,10 @@ export default function BlogSection() {
                 onClick={() => handleTopicClick(topic.category)}
                 className="flex items-center justify-between px-4 py-3 rounded-xl glass-card border border-white/5 hover:border-teal-500/30 transition-all group"
               >
-                <span className="text-sm text-slate-300 group-hover:text-teal-300 transition-colors">
+                <span className="text-sm blog-topic-label transition-colors">
                   {topic.label}
                 </span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400">
+                <span className="text-xs px-2 py-0.5 rounded-full blog-topic-count">
                   {topic.count} article{topic.count !== 1 ? 's' : ''}
                 </span>
               </button>
