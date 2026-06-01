@@ -3180,3 +3180,40 @@ Two issues:
 - `GET /api/portal/notifications` → 200 ✅ (1 welcome notification)
 - `GET /api/portal/profile` → 200 ✅
 - Lint: 0 errors ✅
+
+---
+
+## Master Admin Account & Admin Panel (2026-06-01)
+
+### Master Account Created
+- **Email**: `upam@portal.admin`
+- **Password**: `Upam@2025#Admin`
+- **Role**: admin
+- **Name**: Upam (Master Admin)
+- **ID**: cmpvc8l4g0000na2lcfpama2v
+
+### Admin API Routes Created
+1. `GET /api/admin/stats` — Platform-wide stats (total clients, projects, invoices, revenue, tickets, messages, recent registrations, recent tickets)
+2. `GET /api/admin/clients` — List all clients with search, status filter, pagination. Returns client counts (projects, invoices, messages, tickets, notifications)
+3. `GET /api/admin/clients/[id]` — Client detail with projects, invoices, tickets
+4. `PATCH /api/admin/clients/[id]` — Update client (name, email, company, role, isActive, phone, address)
+5. `DELETE /api/admin/clients/[id]` — Delete client and ALL associated data (cascading delete of notifications, messages, ticket replies, tickets, file uploads, milestones, invoices, projects). Cannot delete admin accounts.
+
+### Admin Panel UI (`AdminPanel.tsx`)
+- Amber/gold color scheme to distinguish from client teal theme
+- **Dashboard view**: 6 stat cards, recent registrations list, quick stats with progress bars
+- **All Clients view**: Search bar, active/inactive filter toggle, responsive client table (desktop) / cards (mobile), action buttons (view, toggle active/inactive, delete)
+- **Client Detail view**: Full client info, stats cards (projects, invoices, tickets, messages, notifications), recent projects/invoices/tickets lists, danger zone for permanent deletion
+- Crown badge for "MASTER ADMIN" branding
+- Integrated into ClientPortal — admin users see AdminPanel instead of client dashboard
+
+### Fixes
+- Removed `'/admin'` from middleware BLOCKED_PATHS (was blocking `/api/admin/*`)
+- Added `PATCH`, `PUT`, `DELETE` to middleware allowed HTTP methods
+- Fixed root-owned file issue — Turbopack cannot compile root-owned files, rewrote admin route files using `tee` as z user
+
+### Verification
+- Admin login → 200 ✅
+- GET /api/admin/stats → 200 (2 clients found) ✅
+- GET /api/admin/clients → 200 (3 accounts including admin) ✅
+- Lint: 0 errors ✅

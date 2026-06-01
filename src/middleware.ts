@@ -52,7 +52,7 @@ const BLOCKED_PATHS = [
   '/.htaccess',
   '/.htpasswd',
   '/phpmyadmin',
-  '/admin',
+  // '/admin' — removed: our own admin API routes use /api/admin/*
   '/config',
   '/backup',
   '/shell',
@@ -251,7 +251,7 @@ export function middleware(request: NextRequest) {
   }
 
   // 3. Block non-standard HTTP methods
-  const allowedMethods = ['GET', 'POST', 'HEAD', 'OPTIONS'];
+  const allowedMethods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'];
   if (!allowedMethods.includes(method.toUpperCase())) {
     logSecurityEvent('BLOCKED_METHOD', ip, pathname, ua, `Method: ${method}`);
     return new NextResponse(null, { status: 405, statusText: 'Method Not Allowed' });
@@ -352,7 +352,7 @@ export function middleware(request: NextRequest) {
   // Add CORS headers (strict: same-origin only for API)
   if (pathname.startsWith('/api/')) {
     response.headers.set('Access-Control-Allow-Origin', request.headers.get('origin') || '');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, X-CSRF-Token');
     response.headers.set('Access-Control-Max-Age', '86400');
     response.headers.set('Vary', 'Origin');

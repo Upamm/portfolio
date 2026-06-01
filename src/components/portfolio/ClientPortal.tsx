@@ -28,6 +28,7 @@ const PortalMessages = lazy(() => import('./PortalMessages'));
 const PortalFiles = lazy(() => import('./PortalFiles'));
 const PortalTickets = lazy(() => import('./PortalTickets'));
 const PortalSettings = lazy(() => import('./PortalSettings'));
+const AdminPanel = lazy(() => import('./AdminPanel'));
 
 export type PortalTab = 'dashboard' | 'projects' | 'invoices' | 'messages' | 'files' | 'tickets' | 'settings';
 
@@ -152,6 +153,11 @@ export default function ClientPortal({ onBack }: ClientPortalProps) {
   // Not logged in — show login
   if (!isLoggedIn) {
     return <PortalLogin onLogin={handleLogin} onBack={onBack} />;
+  }
+
+  // Admin logged in — show admin panel
+  if (user.role === 'admin') {
+    return <AdminPanel userName={user.name} onBack={onBack || (() => {})} onLogout={handleLogout} />;
   }
 
   // Logged in — show portal layout
