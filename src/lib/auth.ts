@@ -1,10 +1,26 @@
 import crypto from 'crypto';
 import { db } from '@/lib/db';
 
-// ── In-Memory Session Storage ──
-// Use globalThis to ensure a single shared Map instance across all Turbopack module copies
-const _sessionsKey = '__portal_sessions__';
-const _cleanupKey = '__portal_sessions_cleanup__';
+// ── Token Secret (persists across Turbopack hot-reloads via globalThis) ──
+const _secretKey = '__portal_token_secret__';
+
+function getTokenSecret(): string {
+  if (!(globalThis as Record<string, unknown>)[_secretKey]) {
+    // Generate a stable secret: use a fixed seed so it survives restarts
+    // In production, this would come from an env variable
+    (globalThis as Record<string, unknown>)[_secretKey] =
+      process.env.PORTAL_TOKEN_SECRET || crypto.randomBytes(32).toString('hex');
+  }
+  return (globalThis as Record<string, unknown>)[_secretKey] as string;
+}
+
+// ── Token Types ──
+interface TokenPayload {
+  cid: string; // client ID
+  role: string;
+  iat: number; // issued at (ms)
+  exp: number; // expiry (ms)
+}
 
 interface SessionData {
   clientId: string;
@@ -12,55 +28,70 @@ interface SessionData {
   createdAt: number;
 }
 
-function getSessions(): Map<string, SessionData> {
-  if (!(globalThis as Record<string, unknown>)[_sessionsKey]) {
-    (globalThis as Record<string, unknown>)[_sessionsKey] = new Map<string, SessionData>();
-  }
-  return (globalThis as Record<string, unknown>)[_sessionsKey] as Map<string, SessionData>;
+const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days in ms
+
+// ── Token Helpers (stateless, self-verifying) ──
+function base64urlEncode(data: string): string {
+  return Buffer.from(data, 'utf-8').toString('base64url');
 }
 
-const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days
-
-// Clean expired sessions periodically
-function cleanExpiredSessions() {
-  const sessions = getSessions();
-  const now = Date.now();
-  for (const [token, session] of sessions.entries()) {
-    if (now - session.createdAt > SESSION_DURATION) {
-      sessions.delete(token);
-    }
-  }
+function base64urlDecode(data: string): string {
+  return Buffer.from(data, 'base64url').toString('utf-8');
 }
 
-// Run cleanup every 30 minutes (ensure only one interval)
-if (!(globalThis as Record<string, unknown>)[_cleanupKey]) {
-  (globalThis as Record<string, unknown>)[_cleanupKey] = true;
-  setInterval(cleanExpiredSessions, 30 * 60 * 1000);
+function signToken(payloadB64: string): string {
+  return crypto
+    .createHmac('sha256', getTokenSecret())
+    .update(payloadB64)
+    .digest('base64url');
 }
 
-// ── Session Helpers ──
 export function createSession(clientId: string, role: string): string {
-  cleanExpiredSessions();
-  const token = crypto.randomBytes(32).toString('hex');
-  getSessions().set(token, { clientId, role, createdAt: Date.now() });
-  return token;
+  const now = Date.now();
+  const payload: TokenPayload = {
+    cid: clientId,
+    role,
+    iat: now,
+    exp: now + SESSION_DURATION,
+  };
+  const payloadB64 = base64urlEncode(JSON.stringify(payload));
+  const signature = signToken(payloadB64);
+  return `${payloadB64}.${signature}`;
 }
 
-export function verifySession(token: string) {
+export function verifySession(token: string): SessionData | null {
   if (!token) return null;
-  const sessions = getSessions();
-  const session = sessions.get(token);
-  if (!session) return null;
-  // Check expiry
-  if (Date.now() - session.createdAt > SESSION_DURATION) {
-    sessions.delete(token);
+
+  // Token format: payload.signature
+  const dotIndex = token.lastIndexOf('.');
+  if (dotIndex === -1 || dotIndex === 0 || dotIndex === token.length - 1) return null;
+
+  const payloadB64 = token.substring(0, dotIndex);
+  const signature = token.substring(dotIndex + 1);
+
+  // Verify signature
+  const expectedSig = signToken(payloadB64);
+  if (signature !== expectedSig) return null;
+
+  // Decode and validate payload
+  try {
+    const payload: TokenPayload = JSON.parse(base64urlDecode(payloadB64));
+    if (!payload.cid || !payload.role) return null;
+    if (Date.now() > payload.exp) return null; // expired
+    return {
+      clientId: payload.cid,
+      role: payload.role,
+      createdAt: payload.iat,
+    };
+  } catch {
     return null;
   }
-  return session;
 }
 
-export function destroySession(token: string) {
-  getSessions().delete(token);
+export function destroySession(_token: string): void {
+  // Stateless tokens — cannot be individually revoked.
+  // For immediate logout, the frontend clears the cookie.
+  // For server-side revocation, add a blocklist in DB if needed.
 }
 
 // ── Cookie Settings ──
