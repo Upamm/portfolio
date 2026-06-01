@@ -43,7 +43,6 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
-  const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -85,15 +84,8 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
     onNavigate(key);
   };
 
-  const handleMouseEnter = () => {
-    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-    setServicesOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => {
-      setServicesOpen(false);
-    }, 150);
+  const handleServicesToggle = () => {
+    setServicesOpen((prev) => !prev);
   };
 
   const isServicesActive = currentPage === 'services' || currentPage === 'faq' || currentPage === 'pricing';
@@ -160,11 +152,12 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
                   key={link.key}
                   ref={dropdownRef}
                   className="relative"
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
                 >
                   <button
-                    onClick={() => handleClick(link.key)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleServicesToggle();
+                    }}
                     className={`relative flex items-center gap-1 px-2.5 py-2 rounded-lg transition-all duration-200 group ${
                       isServicesActive ? navActive : navBase
                     }`}
