@@ -2852,3 +2852,30 @@ Stage Summary:
 - WordPress category: 5 posts total
 - Cycle 4 progress: WordPress ✅ -> E-Commerce (next) -> SEO -> Lead Gen -> Web Design -> Business -> VA
 - DB total: 34 posts
+---
+Task ID: perf-optimization
+Agent: main
+Task: Check all pages speed and optimize
+
+Work Log:
+- Tested all 8 hash-routed pages via agent-browser (Home, About, Services, Portfolio, Pricing, Blog, FAQ, Contact) - all load correctly
+- Measured homepage performance: 92 JS files, 1551 KB JS total, 97 resources, FCP 136ms
+- Ran comprehensive analysis via sub-agent identifying 10 optimization opportunities
+- Removed 17 unused packages: @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities @mdxeditor/editor react-syntax-highlighter next-intl react-markdown @tanstack/react-table input-otp react-day-picker react-resizable-panels cmdk recharts embla-carousel-react sonner @reactuses/core zustand
+- Deleted ~38 unused shadcn UI component files (calendar, chart, command, accordion kept + others)
+- Added optimizePackageImports for lucide-react and framer-motion in next.config.ts
+- Added image format optimization (AVIF + WebP), compression: true, tuned deviceSizes
+- Extracted 2111 lines of hardcoded blog articles from BlogSection.tsx to /src/lib/blog-data.ts
+- Reduced preloader timeout from 1500ms to 800ms
+- Converted blog images from PNG to WebP (~3.4 MB savings)
+- Cleaned up ~57 MB of QA screenshots and deployment artifacts to free disk space
+
+Stage Summary:
+- BEFORE: 92 JS files, 1551 KB JS, 97 total resources
+- AFTER: 21 JS files, 640 KB JS, 23 total resources
+- **JS bundle reduced by 59% (1551 KB → 640 KB)**
+- **Resource count reduced by 76% (97 → 23)**
+- Preloader now 800ms instead of 1500ms
+- BlogSection.tsx reduced from 2506 → 394 lines
+- All pages verified working after optimizations
+- Disk space freed from 0 to 169MB available
