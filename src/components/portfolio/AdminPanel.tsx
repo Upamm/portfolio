@@ -761,7 +761,7 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 min-w-0">
                 <p className="text-white text-sm font-medium truncate">{userName}</p>
-                <VerifiedSticker size="sm" />
+                <VerifiedSticker size="sm" variant="amber" />
               </div>
               <p className="text-amber-500 text-[10px] font-semibold flex items-center gap-1">
                 <Crown className="w-3 h-3" /> MASTER ADMIN
@@ -826,7 +826,7 @@ export default function AdminPanel({ userName, onBack, onLogout }: AdminDashboar
               <motion.div variants={itemVariants}>
                 <h2 className="text-2xl font-bold text-white">
                   Welcome, <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">{userName}</span>
-                  <span className="inline-block ml-1.5 -mt-0.5"><VerifiedSticker size="lg" /></span>
+                  <span className="inline-block ml-1.5 -mt-0.5"><VerifiedSticker size="lg" variant="amber" /></span>
                 </h2>
                 <p className="text-slate-400 text-sm mt-1">Here&apos;s your admin overview.</p>
               </motion.div>
