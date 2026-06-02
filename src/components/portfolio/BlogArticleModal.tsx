@@ -585,13 +585,14 @@ export default function BlogArticleModal({
 
   const handleNavigate = useCallback(
     (articleId: string) => {
-      onClose();
-      // Short delay so the modal can close before re-opening with new article
-      setTimeout(() => {
-        onNavigate?.(articleId);
-      }, 300);
+      // Reset scroll to top before switching article
+      if (contentRef.current) {
+        contentRef.current.scrollTop = 0;
+      }
+      // Navigate directly without closing — smoother UX
+      onNavigate?.(articleId);
     },
-    [onClose, onNavigate],
+    [onNavigate],
   );
 
   if (!mounted) return null;

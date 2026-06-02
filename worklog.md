@@ -4194,3 +4194,41 @@ The project had broken favicon setup:
 
 ### Remaining Note
 - `/favicon.ico` returns 404 now (removed), but `<link rel="icon" type="image/svg+xml" href="/icon.svg">` in the HTML head ensures the UPAM logo shows in browser tabs
+
+---
+
+## Phase 16 - Blog Related Article Links Fix
+
+### Problem
+The "You Might Also Like" related articles section at the bottom of each blog article was non-functional. Clicking a related article card would:
+1. Close the modal (via `onClose()`)
+2. Never open the new article (because `onNavigate` was `undefined`)
+
+**Root cause**: `BlogSection.tsx` rendered `<BlogArticleModal>` without passing the `onNavigate` prop. The modal's `handleNavigate` function called `onNavigate?.(articleId)` which silently did nothing since the prop was undefined.
+
+### Fix Applied
+
+**File 1: `src/components/portfolio/BlogSection.tsx`**
+- Added `onNavigate` callback prop to `<BlogArticleModal>`:
+  ```tsx
+  onNavigate={(articleId) => {
+    const idx = allArticles.findIndex((a) => a.id === articleId);
+    if (idx !== -1) setOpenArticleIndex(idx);
+  }}
+  ```
+- This finds the article by ID in the merged article list and opens it directly
+
+**File 2: `src/components/portfolio/BlogArticleModal.tsx`**
+- Rewrote `handleNavigate` to avoid the jarring close-then-reopen pattern:
+  - Before: `onClose()` → 300ms delay → `onNavigate?.(articleId)` (modal flashes closed)
+  - After: Scroll to top → `onNavigate?.(articleId)` (modal stays open, content swaps smoothly)
+- The scroll reset ensures users start at the top of the new article
+
+### Two Related Article Features Now Working
+1. **"Continue Reading"** (inline, mid-article) — uses `CustomEvent('blog-navigate')` → BlogSection event listener ✅
+2. **"You Might Also Like"** (bottom) — uses `onNavigate` prop → BlogSection callback ✅
+
+### Verification
+- ✅ All 19 unique article IDs referenced in `related-reading` blocks exist in the article data
+- ✅ `bun run lint` passes with 0 errors
+- ✅ Dev server returns 200 OK, no runtime errors

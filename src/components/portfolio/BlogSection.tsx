@@ -357,6 +357,10 @@ export default function BlogSection() {
           isOpen={openArticleIndex !== null}
           onClose={() => setOpenArticleIndex(null)}
           allArticles={allArticles}
+          onNavigate={(articleId) => {
+            const idx = allArticles.findIndex((a) => a.id === articleId);
+            if (idx !== -1) setOpenArticleIndex(idx);
+          }}
         />
 
         {/* Popular Topics */}
