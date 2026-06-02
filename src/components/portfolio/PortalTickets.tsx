@@ -321,7 +321,7 @@ export default function PortalTickets() {
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
-      await fetch(`/api/portal/tickets/${selectedTicket.id}/replies`, {
+      await fetch(`/api/portal/tickets/${selectedTicket.id}`, {
         method: 'POST',
         headers,
         body: JSON.stringify({ content: replyText }),

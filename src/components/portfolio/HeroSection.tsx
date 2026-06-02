@@ -182,12 +182,12 @@ export default function HeroSection() {
         <motion.div
           animate={{ y: [0, 5, 0] }}
           transition={{ y: { repeat: Infinity, duration: 2.5, ease: 'easeInOut' } }}
-          className="relative w-6 h-10 rounded-full border-2 border-slate-600/25 flex items-start justify-center pt-2"
+          className="relative w-7 h-11 rounded-full border-2 border-teal-400/50 shadow-[0_0_12px_rgba(6,182,212,0.15)] flex items-start justify-center pt-2"
         >
           <motion.div
-            animate={{ y: [0, 10, 0], opacity: [1, 0.2, 1] }}
+            animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
             transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
-            className="w-1 h-1 rounded-full bg-teal-400/80"
+            className="w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_6px_rgba(6,182,212,0.6)]"
           />
         </motion.div>
       </motion.div>

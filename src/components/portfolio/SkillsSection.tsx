@@ -12,17 +12,19 @@ interface SkillData {
   readonly percentage: number;
   readonly color: string;
   readonly glowColor: string;
+  readonly icon: string;
+  readonly particles: readonly string[];
 }
 
 const skills: readonly SkillData[] = [
-  { name: 'WordPress', percentage: 95, color: '#06b6d4', glowColor: 'rgba(6,182,212,0.35)' },
-  { name: 'Theme Customization', percentage: 90, color: '#22d3ee', glowColor: 'rgba(34,211,238,0.35)' },
-  { name: 'Plugin Development', percentage: 85, color: '#10b981', glowColor: 'rgba(16,185,129,0.35)' },
-  { name: 'SEO Optimization', percentage: 88, color: '#14b8a6', glowColor: 'rgba(20,184,166,0.35)' },
-  { name: 'Speed Optimization', percentage: 92, color: '#2dd4bf', glowColor: 'rgba(45,212,191,0.35)' },
-  { name: 'B2B Lead Generation', percentage: 90, color: '#34d399', glowColor: 'rgba(52,211,153,0.35)' },
-  { name: 'Data Research', percentage: 95, color: '#06b6d4', glowColor: 'rgba(6,182,212,0.35)' },
-  { name: 'Virtual Assistance', percentage: 93, color: '#22d3ee', glowColor: 'rgba(34,211,238,0.35)' },
+  { name: 'WordPress', percentage: 95, color: '#06b6d4', glowColor: 'rgba(6,182,212,0.35)', icon: 'W', particles: ['⚪', '🔷', '⬡'] },
+  { name: 'Theme Customization', percentage: 90, color: '#22d3ee', glowColor: 'rgba(34,211,238,0.35)', icon: '🎨', particles: ['◆', '◇', '✦'] },
+  { name: 'Plugin Development', percentage: 85, color: '#10b981', glowColor: 'rgba(16,185,129,0.35)', icon: '⚡', particles: ['⚡', '⎔', '✧'] },
+  { name: 'SEO Optimization', percentage: 88, color: '#14b8a6', glowColor: 'rgba(20,184,166,0.35)', icon: '🔍', particles: ['↑', '📊', '✦'] },
+  { name: 'Speed Optimization', percentage: 92, color: '#2dd4bf', glowColor: 'rgba(45,212,191,0.35)', icon: '🚀', particles: ['»', '≫', '⟫'] },
+  { name: 'B2B Lead Generation', percentage: 90, color: '#34d399', glowColor: 'rgba(52,211,153,0.35)', icon: '🎯', particles: ['◎', '◉', '⊕'] },
+  { name: 'Data Research', percentage: 95, color: '#06b6d4', glowColor: 'rgba(6,182,212,0.35)', icon: '📈', particles: ['◐', '◑', '◈'] },
+  { name: 'Virtual Assistance', percentage: 93, color: '#22d3ee', glowColor: 'rgba(34,211,238,0.35)', icon: '🤝', particles: ['✉', '☑', '⬢'] },
 ] as const;
 
 interface ToolData {
@@ -195,7 +197,25 @@ function SkillCard({
       }}
       className="group relative"
     >
-      <div className="glass-card rounded-2xl p-5 sm:p-6 flex flex-col items-center gap-4 transition-all duration-500 hover:scale-[1.04] hover:border-teal-500/30 cursor-default relative overflow-hidden">
+      <div
+        className="glass-card rounded-2xl p-5 sm:p-6 flex flex-col items-center gap-4 transition-all duration-500 hover:scale-[1.04] hover:border-teal-500/30 cursor-default relative overflow-hidden"
+        onMouseMove={(e) => {
+          const card = e.currentTarget;
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mouse-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
+          card.style.setProperty('--mouse-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+        }}
+      >
+        {/* Mouse-following spotlight */}
+        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(circle 120px at var(--mouse-x, 50%) var(--mouse-y, 50%), ${skill.glowColor}, transparent 70%)`,
+            }}
+          />
+        </div>
+
         {/* Hover glow backdrop */}
         <div
           className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -203,8 +223,54 @@ function SkillCard({
             background: `radial-gradient(circle at 50% 30%, ${skill.glowColor}, transparent 70%)`,
           }}
         />
-        {/* Spotlight corner effect */}
-        <div className="absolute -top-10 -right-10 w-28 h-28 bg-teal-500/5 rounded-full blur-2xl group-hover:bg-teal-500/10 transition-all duration-500" />
+
+        {/* Animated floating particles on hover */}
+        <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+          {skill.particles.map((particle, pIdx) => (
+            <span
+              key={pIdx}
+              className="absolute text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+              style={{
+                left: `${20 + pIdx * 30}%`,
+                top: `${15 + ((pIdx + index) % 3) * 30}%`,
+                animationDelay: `${pIdx * 0.4 + index * 0.2}s`,
+                animation: 'skill-particle-float 3s ease-in-out infinite',
+                filter: `drop-shadow(0 0 4px ${skill.color})`,
+                color: skill.color,
+                fontSize: '10px',
+              }}
+              aria-hidden="true"
+            >
+              {particle}
+            </span>
+          ))}
+          {/* Extra small dots */}
+          {[0, 1, 2].map((d) => (
+            <span
+              key={`dot-${d}`}
+              className="absolute w-1 h-1 rounded-full opacity-0 group-hover:opacity-60 transition-opacity duration-500"
+              style={{
+                left: `${10 + d * 35 + index * 5}%`,
+                top: `${60 + d * 15}%`,
+                backgroundColor: skill.color,
+                animation: `skill-particle-float ${2.5 + d * 0.5}s ease-in-out infinite`,
+                animationDelay: `${d * 0.6}s`,
+              }}
+              aria-hidden="true"
+            />
+          ))}
+        </div>
+
+        {/* Scanning line effect on hover */}
+        <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+          <div
+            className="absolute left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100"
+            style={{
+              background: `linear-gradient(to right, transparent, ${skill.color}, transparent)`,
+              animation: 'skill-scan-line 2.5s ease-in-out infinite',
+            }}
+          />
+        </div>
 
         <CircularProgressRing skill={skill} index={index} isInView={isInView} />
 

@@ -21,16 +21,8 @@ interface FooterProps {
 export default function Footer({ onNavigate }: FooterProps) {
   return (
     <footer className="relative mt-auto overflow-hidden">
-      {/* Wave Divider */}
-      <div className="wave-divider">
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path className="wave-accent" d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,80 L0,80 Z" />
-          <path className="wave-body" d="M0,55 C240,20 480,70 720,40 C960,10 1200,60 1440,55 L1440,80 L0,80 Z" />
-        </svg>
-      </div>
-
       {/* Background */}
-      <div className="absolute inset-0 footer-bg" style={{ top: '60px' }} />
+      <div className="absolute inset-0 footer-bg" />
 
       {/* CTA Banner */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 lg:pt-16">
@@ -83,8 +75,8 @@ export default function Footer({ onNavigate }: FooterProps) {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-col lg:text-left lg:items-start">
+          {/* Quick Links - hidden on mobile & tablet */}
+          <div className="hidden lg:flex flex-col lg:text-left lg:items-start">
             <h4 className="text-white font-semibold mb-4 text-sm">Quick Links</h4>
             <ul className="space-y-2.5">
               {footerLinks.map((link) => (
@@ -100,8 +92,8 @@ export default function Footer({ onNavigate }: FooterProps) {
             </ul>
           </div>
 
-          {/* Services */}
-          <div className="flex flex-col lg:text-left lg:items-start">
+          {/* Services - hidden on mobile & tablet */}
+          <div className="hidden lg:flex flex-col lg:text-left lg:items-start">
             <h4 className="text-white font-semibold mb-4 text-sm">Services</h4>
             <ul className="space-y-2.5">
               {['WordPress Development', 'Speed Optimization', 'B2B Lead Generation', 'Virtual Assistant', 'Data Entry & Research', 'WordPress Maintenance'].map((s) => (

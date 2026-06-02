@@ -32,25 +32,9 @@ const testimonials = [
     initials: 'MR',
     color: 'from-cyan-500 to-teal-500',
   },
-  {
-    name: 'Lisa P.',
-    company: 'Nexus Digital',
-    role: 'Operations Manager',
-    rating: 4,
-    text: 'Fantastic virtual assistant work. Upam handled our email management, CRM updates, and data entry tasks with precision. Very reliable and always available when we needed help.',
-    initials: 'LP',
-    color: 'from-teal-500 to-emerald-500',
-  },
-  {
-    name: 'David W.',
-    company: 'Urban Eats Co.',
-    role: 'Owner',
-    rating: 5,
-    text: 'Upam built our restaurant delivery website from scratch and it looks amazing. The WooCommerce integration was seamless and our online orders increased by 40% within the first month.',
-    initials: 'DW',
-    color: 'from-emerald-500 to-cyan-500',
-  },
 ];
+
+const SLIDE_DURATION = 5000;
 
 export default function TestimonialsSection() {
   const ref = useRef(null);
@@ -58,21 +42,27 @@ export default function TestimonialsSection() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
 
+  const total = testimonials.length;
+
+  const goTo = useCallback(
+    (index: number) => {
+      setDirection(index > current ? 1 : -1);
+      setCurrent(index);
+    },
+    [current]
+  );
+
   const next = useCallback(() => {
-    setDirection(1);
-    setCurrent((prev) => (prev + 1) % testimonials.length);
-  }, []);
+    goTo((current + 1) % total);
+  }, [current, goTo]);
 
   const prev = useCallback(() => {
-    setDirection(-1);
-    setCurrent(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
-    );
-  }, []);
+    goTo((current - 1 + total) % total);
+  }, [current, goTo]);
 
   // Auto-play
   useEffect(() => {
-    const interval = setInterval(next, 5000);
+    const interval = setInterval(next, SLIDE_DURATION);
     return () => clearInterval(interval);
   }, [next]);
 
@@ -116,7 +106,8 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-3xl mx-auto"
         >
-          <div className="relative glass-card testimonial-glow rounded-2xl p-6 sm:p-12 min-h-[280px] sm:min-h-[320px] flex items-center overflow-hidden">
+          {/* Slide Card */}
+          <div className="relative glass-card testimonial-glow rounded-2xl p-6 sm:p-12 min-h-[280px] sm:min-h-[340px] flex items-center overflow-hidden">
             {/* Quote icon */}
             <Quote className="absolute top-4 sm:top-8 right-6 sm:right-10 w-16 h-16 sm:w-20 sm:h-20 text-teal-500/5 rotate-180" />
             <Quote className="absolute bottom-4 sm:bottom-6 left-6 sm:left-10 w-12 h-12 sm:w-16 sm:h-16 text-emerald-500/5" />
@@ -132,7 +123,7 @@ export default function TestimonialsSection() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
                 className="w-full"
               >
                 {/* Stars */}
@@ -157,7 +148,7 @@ export default function TestimonialsSection() {
                 {/* Author */}
                 <div className="flex items-center gap-4">
                   <div
-                    className={`w-12 h-12 rounded-full bg-gradient-to-br ${testimonials[current].color} flex items-center justify-center`}
+                    className={`w-12 h-12 rounded-full bg-gradient-to-br ${testimonials[current].color} flex items-center justify-center shrink-0`}
                   >
                     <span className="text-white font-bold text-sm">
                       {testimonials[current].initials}
@@ -177,53 +168,37 @@ export default function TestimonialsSection() {
             </AnimatePresence>
           </div>
 
-          {/* Auto-play Progress Bar */}
-          <div className="mt-4 h-0.5 rounded-full bg-slate-700/50 overflow-hidden max-w-xs mx-auto">
-            <motion.div
-              key={current}
-              initial={{ width: '0%' }}
-              animate={{ width: '100%' }}
-              transition={{ duration: 5, ease: 'linear' }}
-              className="h-full rounded-full bg-gradient-to-r from-teal-500 to-emerald-500"
-            />
-          </div>
-
-          <p className="text-xs text-slate-500 mt-2 text-center">
-            {current + 1} / {testimonials.length}
-          </p>
-
-          {/* Controls */}
+          {/* Arrows + Dots Navigation */}
           <div className="flex items-center justify-center gap-4 mt-8">
+            {/* Previous Arrow */}
             <button
               onClick={prev}
-              className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-teal-400 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)] transition-all duration-300 shrink-0"
               aria-label="Previous testimonial"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
 
             {/* Dots */}
-            <div className="flex gap-2">
-              {testimonials.map((_, index) => (
+            <div className="flex items-center gap-2">
+              {testimonials.map((t, i) => (
                 <button
-                  key={index}
-                  onClick={() => {
-                    setDirection(index > current ? 1 : -1);
-                    setCurrent(index);
-                  }}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                    index === current
-                      ? 'bg-teal-400 w-8'
-                      : 'bg-slate-600 hover:bg-slate-500'
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className={`transition-all duration-300 rounded-full ${
+                    i === current
+                      ? 'w-8 h-2.5 bg-gradient-to-r ' + t.color + ' shadow-[0_0_8px_rgba(6,182,212,0.3)]'
+                      : 'w-2.5 h-2.5 bg-slate-600 hover:bg-slate-500'
                   }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
+                  aria-label={`Go to testimonial ${i + 1}`}
                 />
               ))}
             </div>
 
+            {/* Next Arrow */}
             <button
               onClick={next}
-              className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-teal-400 hover:shadow-[0_0_12px_rgba(6,182,212,0.2)] transition-all duration-300 shrink-0"
               aria-label="Next testimonial"
             >
               <ChevronRight className="w-5 h-5" />

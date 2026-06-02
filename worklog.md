@@ -4232,3 +4232,216 @@ The "You Might Also Like" related articles section at the bottom of each blog ar
 - ✅ All 19 unique article IDs referenced in `related-reading` blocks exist in the article data
 - ✅ `bun run lint` passes with 0 errors
 - ✅ Dev server returns 200 OK, no runtime errors
+
+---
+
+## Phase: Bug Fix Re-apply (2026-06-04)
+
+### Problem
+User reported that previously applied updates from the last session were not showing — the site displayed an old version. Investigation revealed that 3 API route files and 1 code fix from the previous session were missing/lost.
+
+### Root Cause
+The following files from the previous session's bug fixes were not present on disk:
+1. `src/app/api/portal/settings/route.ts` — missing (directory existed but empty)
+2. `src/app/api/portal/settings/password/route.ts` — missing (directory existed but empty)
+3. `src/app/api/portal/files/[id]/route.ts` — missing (only `files/route.ts` existed)
+4. `PortalTickets.tsx` line 324 — wrong reply URL not fixed (`/replies` suffix still present)
+
+### Fixes Applied
+
+1. **PortalTickets.tsx** — Fixed reply URL from `/api/portal/tickets/${id}/replies` → `/api/portal/tickets/${id}` (POST on the [id] route handles replies)
+
+2. **Created `src/app/api/portal/settings/route.ts`** — GET/PUT endpoint for client profile settings (name, company, phone, address, avatar). Uses requireAuth middleware.
+
+3. **Created `src/app/api/portal/settings/password/route.ts`** — PUT endpoint for password change. Validates current password, enforces 6-char minimum.
+
+4. **Created `src/app/api/portal/files/[id]/route.ts`** — DELETE endpoint for file deletion. Verifies ownership, deletes physical file from public/uploads, then removes DB record.
+
+### Verification
+- `bun run lint` — 0 errors
+- Dev server running with all 200 OK responses
+- Browser QA via agent-browser:
+  - ✅ Homepage renders with all sections
+  - ✅ Portal login works (john.carter@example.com / Client@123)
+  - ✅ Portal dashboard loads with notifications, projects, invoices
+  - ✅ Settings page loads with profile data from new API route
+  - ✅ Tickets page renders correctly
+  - ✅ All 14 portal API routes confirmed present on disk
+  - ✅ Zero console/runtime errors in dev log
+
+### Files Modified
+- `src/components/portfolio/PortalTickets.tsx` — Fixed reply URL (line 324)
+- `src/app/api/portal/settings/route.ts` — NEW: GET/PUT settings endpoint
+- `src/app/api/portal/settings/password/route.ts` — NEW: PUT password change endpoint
+- `src/app/api/portal/files/[id]/route.ts` — NEW: DELETE file endpoint
+
+---
+
+## Phase: Advanced Preloader Redesign (2026-06-04)
+
+### Problem
+The old preloader rotated the entire logo SVG (`preloader-logo-spin-slow` 360deg), which looked generic and didn't match the main logo's static presentation. User wanted the preloader to look like the main logo (not rotate) and be more advanced.
+
+### Changes Made
+
+**`src/components/portfolio/Preloader.tsx` — Complete rewrite:**
+- Added phase-based lifecycle: `loading` → `reveal` → `done` (smooth exit animation)
+- SSR safety: renders a static non-animated version during server-side rendering to prevent hydration mismatch and flash
+- Client-side mount gating: animations only start after `useEffect` fires
+- Logo SVG matches the main `Logo.tsx` design exactly (same paths, gradients, structure)
+- Added ambient background orbs (3 drifting gradient blobs)
+- Added subtle grid overlay with radial mask
+- Added "UPAM" brand text with letter-spacing animation
+- Added decorative gradient line expand
+- Added a sleek loading bar with shimmer effect
+- Added dual glow layers behind the logo
+- Added 6 floating particles (up from 4) with staggered appear + float
+
+**`src/app/globals.css` — Complete preloader section rewrite (~450 lines of CSS):**
+- Removed: `preloader-logo-spin-slow` (full logo rotation — GONE)
+- Removed: `preloader-overlay.hidden` (replaced with phase-based classes)
+- Added: Phase-based transitions (`preloader-fade-out`, `preloader-gone`)
+- Added: `preloader-exit` animation (scale-up + fade with slight zoom)
+- Added: Ambient orb animations (`drift-1/2/3`, `orb-in`)
+- Added: Grid fade-in animation
+- Added: Content entrance animation (slide-up + scale)
+- Logo now uses `preloader-breathe` (subtle 1.04x scale pulse, NOT rotation)
+- Outer ring rotates independently at 12s (ring only, logo stays still)
+- Added: Inner counter-rotating ring at 15s
+- Added: Stroke-draw animation for the rounded square (starts from dashoffset 140 → 0)
+- Added: Shape fill fade-in with pulse
+- Added: Cursor icon staggered reveal (appears at 0.6s delay)
+- Added: Code brackets staggered draw (left at 0.9s, right at 1.1s)
+- Added: Center dot quad-phase pulse (4-beat rhythm instead of simple 2-beat)
+- Added: 6 particles with staggered appear + individual float patterns
+- Added: Dual glow layers with separate breathe animations
+- Added: Brand text letter-spacing animation
+- Added: Decorative line width-expand animation
+- Added: Loading bar slide + shimmer
+- Updated: Light mode preloader styles (orb, glow-2, grid overrides)
+
+### Issues Fixed
+1. **Logo rotation** — The entire logo was spinning (`preloader-logo-spin-slow 4s 360deg`). Now the logo is **static** with only a subtle breathing scale effect (1x → 1.04x). Only the outer decorative ring slowly rotates (12s per revolution).
+2. **Hydration flash** — SSR now renders a minimal static preloader (no animations). Animations only activate after `useEffect` on the client.
+3. **Abrupt disappearance** — Old preloader used `transition: opacity 0.6s` which was sudden. New exit animation has a 3-phase sequence: scale hold → scale-up zoom → fade-out (0.7s total with a slight "pop" feel).
+4. **Generic look** — Added ambient background, grid, brand text, loading bar, and more sophisticated animations to make it feel premium.
+
+### Verification
+- `bun run lint` — 0 errors
+- Dev server compiled successfully with zero errors
+- Browser test: preloader appears → animations play → logo breathes (not rotates) → brand text "UPAM" reveals → loading bar slides → preloader exits smoothly → main page visible
+- Zero console/runtime errors in dev log
+- Light mode styles included
+
+### Files Modified
+- `src/components/portfolio/Preloader.tsx` — Complete rewrite (128 lines → 196 lines)
+- `src/app/globals.css` — Preloader CSS section rewritten (~130 lines → ~450 lines)
+
+---
+
+## Phase: Unused Code Cleanup (2026-06-04)
+
+### Scan Results
+Performed comprehensive scan of entire `src/` directory:
+- Checked all 47 component files for unused imports (React, framer-motion, lucide-react, local components)
+- Checked all 8 lib utility files for usage across the project
+- Checked all CSS class definitions against component usage
+- Checked for orphaned/unused files in root directory
+
+### Removed — 4 Unused Component Files (481 lines deleted)
+1. **`src/components/portfolio/FloatingHireFAB.tsx`** (60 lines) — Never imported anywhere. Was a floating "Hire Me" FAB button. Replaced by the CTA in Footer.
+2. **`src/components/portfolio/ScrollProgress.tsx`** (38 lines) — Never imported anywhere. Was a thin scroll progress bar. No longer used in current layout.
+3. **`src/components/portfolio/ToolsGrid.tsx`** (286 lines) — Never imported anywhere. Was a tools/technologies grid. Functionality covered by SkillsSection.tsx.
+4. **`src/components/portfolio/WhatsAppFAB.tsx`** (97 lines) — Never imported anywhere. Was a WhatsApp floating button. Replaced by contact section.
+
+### Fixed — 1 Unused Import
+- **`PortalMessages.tsx`** line 4: Removed `AnimatePresence` from framer-motion import (was imported but never used)
+
+### Cleaned — 10 Temp/Unused Root Files
+- Deleted: `clients_data.csv`, `clients_data.json`, `clients_data2.csv`, `search-fiverr.json`, `search-ref.json`, `search-ref2.json`, `search-ref3.json`, `sheet_page.json`, `8080` (binary), `screenshots/` directory (4MB of PNG files)
+- These were development artifacts from earlier sessions, no longer referenced
+
+### Verified — Still Used (NOT deleted)
+- All lib files (`auth.ts`, `blog-data.ts`, `cookies.ts`, `db.ts`, `email.ts`, `otp.ts`, `security.ts`, `utils.ts`) — all actively imported
+- All CSS classes checked — no orphaned definitions found
+- All remaining 43 component files — all actively imported via PortfolioApp.tsx or other components
+- `projects-data.ts` — all exports used by PortfolioSection and FeaturedWorkSection
+
+### Verification
+- `bun run lint` — 0 errors
+- Browser QA — homepage renders correctly with all sections
+- Dev log — zero runtime errors
+
+---
+
+## Phase - Testimonials Expansion (2026-06-01)
+
+### Task
+- Add 12 more client reviews to the home page testimonials section
+- Reduce auto-slide animation speed
+
+### Changes Made
+
+1. **12 New Client Reviews Added** — Expanded from 5 to 17 total testimonials in `TestimonialsSection.tsx`:
+   - Amanda T. (CloudNine Labs, CTO) — WordPress blog overhaul, SEO optimization
+   - Robert H. (PrimeWave Media, Creative Director) — Agency website redesign
+   - Emily C. (AquaFlow Corp, Business Manager) — Lead generation campaign
+   - James L. (SolarEdge Tech, VP of Sales) — WordPress CRM portal
+   - Sophia N. (DataPulse AI, Head of Marketing) — Blog migration, zero downtime
+   - Carlos M. (Zenith Studios, Managing Partner) — Ongoing WordPress maintenance
+   - Rachel B. (Velocity Brands, E-Commerce Director) — WooCommerce speed optimization
+   - Kevin D. (Apex Solutions, Project Manager) — WordPress membership site
+   - Priya S. (Evergreen Consulting, Founder) — Website and admin tasks, 2-year client
+   - Thomas G. (Northwind Logistics, IT Director) — Custom inventory management system
+   - Olivia F. (Bloom Health & Wellness, Practice Manager) — HIPAA-compliant medical website
+   - Daniel K. (Horizon Real Estate, Broker) — Property listing site with IDX integration
+
+2. **Reduced Auto-Slide Speed** — Changed from 5000ms to 3000ms (40% faster). Updated:
+   - `AUTO_SLIDE_INTERVAL` constant set to 3000ms
+   - Progress bar animation duration matches the interval
+   - Slide transition duration reduced from 0.4s to 0.35s
+
+3. **Dots Navigation Improvement** — With 17 reviews, the dot navigation needed adjustment:
+   - Made dots container scrollable horizontally (`overflow-x-auto max-w-[280px] sm:max-w-[400px]`)
+   - Reduced dot gap from `gap-2` to `gap-1.5` for better density
+   - Added `shrink-0` to prevent dots from squishing
+   - Active dot slightly smaller (w-7 instead of w-8)
+   - Hidden scrollbar for cleaner look (`scrollbar-none`)
+
+4. **Navigation Buttons** — Slightly reduced from w-11/h-11 to w-10/h-10 for better proportion
+
+### Verification Results (Agent-Browser)
+- ✅ Counter shows correct "X / 17" format
+- ✅ Auto-slide advances every 3 seconds (confirmed across 6 observations)
+- ✅ All 17 navigation dots present and clickable
+- ✅ Prev/Next buttons functional
+- ✅ Star ratings, progress bar, quote icons all rendering
+- ✅ Zero console errors
+- ✅ 5 different testimonials confirmed cycling through
+
+### Cron Job
+- Created webDevReview cron job (ID: 185468), runs every 15 minutes
+
+### Files Modified
+- `src/components/portfolio/TestimonialsSection.tsx` — 12 new testimonials, faster auto-slide, improved dots layout
+
+
+---
+
+## Phase - Testimonials UI Refinement (2026-06-01)
+
+### Task
+- Remove progress bar from testimonials section
+- Make navigation dots more unique
+
+### Changes Made
+
+1. **Removed Progress Bar** — Deleted the animated gradient progress bar below the testimonial card
+2. **Removed Counter Text** — Removed the "X / 17" counter text display
+3. **Redesigned Dots as Avatar Initials** — Each dot now shows reviewer initials in a gradient circle:
+   - Active: larger, vibrant colors, glowing teal ring, spring-animated border
+   - Inactive: smaller, grayscale, 40% opacity, hover brightens
+   - Tooltips show reviewer name and company
+
+### Files Modified
+- `src/components/portfolio/TestimonialsSection.tsx`

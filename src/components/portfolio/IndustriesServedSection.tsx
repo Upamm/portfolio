@@ -111,11 +111,23 @@ export default function IndustriesServedSection() {
               }}
             >
               {/* Icon */}
-              <div
-                className={`w-14 h-14 rounded-xl bg-gradient-to-br ${industry.gradient} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5, rotate: -20 }}
+                animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.15 + index * 0.1, type: 'spring', stiffness: 200, damping: 15 }}
+                className={`w-14 h-14 rounded-xl bg-gradient-to-br ${industry.gradient} flex items-center justify-center mb-5 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all duration-300`}
               >
-                <industry.icon className="w-7 h-7 text-white" />
-              </div>
+                <motion.div
+                  animate={isInView ? {
+                    y: [0, -3, 0],
+                  } : {}}
+                  transition={{
+                    y: { repeat: Infinity, duration: 2.5 + index * 0.3, ease: 'easeInOut' },
+                  }}
+                >
+                  <industry.icon className="w-7 h-7 text-white" />
+                </motion.div>
+              </motion.div>
 
               {/* Title */}
               <h3 className="text-lg font-bold text-white mb-3 group-hover:text-teal-300 transition-colors">
