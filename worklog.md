@@ -4156,3 +4156,41 @@ Replaced the in-memory session Map with **stateless, self-verifying signed token
 
 ### Remaining Note
 - Client accounts (john.carter@example.com, etc.) have unknown passwords from previous testing. Admin login with `mailupamm@gmail.com` / `Admin@123` works perfectly.
+
+---
+
+## Phase 15 - Favicon Fix
+
+### Problem
+The project had broken favicon setup:
+- `public/icon.svg`, `public/favicon.ico`, `public/logo.svg`, `public/apple-touch-icon.svg` all contained the OLD generic "Z" logo (1,065 bytes each, identical)
+- `public/favicon.ico` was actually SVG text with `.ico` extension — not a real binary ICO
+- `src/app/icon.svg` and `src/app/apple-touch-icon.svg` had the correct UPAM logo but were not referenced in metadata
+- No web app manifest (`manifest.json`/`manifest.webmanifest`) existed
+- The `layout.tsx` icons metadata pointed to `/icon.svg` and `/favicon.ico` — the SVG resolved to `src/app/` (correct UPAM), but `/favicon.ico` resolved to `public/favicon.ico` (old Z logo)
+
+### Fix Applied
+1. **Deleted stale public/ files**: `public/icon.svg`, `public/apple-touch-icon.svg`, `public/logo.svg`, `public/favicon.ico` — all contained old Z logo
+2. **Kept correct src/app/ files**:
+   - `src/app/icon.svg` — UPAM logo, 32×32 viewBox, auto-served at `/icon.svg`
+   - `src/app/apple-touch-icon.svg` — UPAM logo, 180×180 viewBox, auto-served at `/apple-touch-icon.svg`
+3. **Created `src/app/manifest.ts`** — Web app manifest with:
+   - name, short_name, description, start_url
+   - theme_color: `#06b6d4`, background_color: `#0a1628`
+   - Icons pointing to `/icon.svg` and `/apple-touch-icon.svg`
+   - display: standalone
+4. **Updated `src/app/layout.tsx` metadata**:
+   - Removed `/favicon.ico` reference (SVG favicons are the modern standard)
+   - Added `manifest: "/manifest.webmanifest"` for PWA support
+   - Added `other: [{ rel: "mask-icon", ... }]` for Safari pinned tabs
+   - Cleaned icon config to only reference `/icon.svg` (SVG)
+5. **Did NOT create `src/app/favicon.ico`** — Next.js requires actual binary ICO format here; SVG content causes `Format error decoding Ico` crash
+
+### Verification
+- ✅ No lint errors
+- ✅ Dev server returns 200 OK (previously returned 500 due to broken favicon.ico)
+- ✅ No runtime errors in dev.log
+- ✅ All icon references resolve to correct UPAM logo files
+
+### Remaining Note
+- `/favicon.ico` returns 404 now (removed), but `<link rel="icon" type="image/svg+xml" href="/icon.svg">` in the HTML head ensures the UPAM logo shows in browser tabs
