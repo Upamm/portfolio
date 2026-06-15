@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
-const FIVERR_IMAGE = 'https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto,t_profile_original/v1/attachments/profile/photo/c4f0de1b0c500594ed3b984332754e19-1551338465000/ade0268f-4643-49c9-804b-c301b683facb.jpg';
+const PROFILE_IMAGE = '/images/avatar.png';
 
 const roles = [
   'WordPress Virtual Assistant',
@@ -100,7 +100,7 @@ export default function HeroSection() {
               className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden shrink-0 ring-2 ring-teal-500/30 ring-offset-2 hero-avatar-ring"
             >
               <Image
-                src={FIVERR_IMAGE}
+                src={PROFILE_IMAGE}
                 alt="Upam"
                 fill
                 sizes="(max-width: 639px) 56px, 80px"
