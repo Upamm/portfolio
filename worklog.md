@@ -4445,3 +4445,22 @@ Performed comprehensive scan of entire `src/` directory:
 
 ### Files Modified
 - `src/components/portfolio/TestimonialsSection.tsx`
+
+---
+
+## Phase - GitHub Push (2026-06-15)
+
+### Task
+- Push all code to GitHub repository `https://github.com/Upamm/portfolio.git`
+
+### Result
+- ✅ Successfully pushed all commits to `main` branch on GitHub
+- Used custom SSH proxy (bun + ssh2 npm package) to work around sandbox missing openssh-client binary
+- SSH key: `~/.ssh/id_ed25519` (ed25519, upom.rok1721@gmail.com) — added to GitHub account
+- Remote: `git@github.com:Upamm/portfolio.git` (SSH)
+- Branch tracking set: `main -> origin/main`
+- Temporary proxy script and ssh2 dependency cleaned up after push
+
+### Files/Cleanup
+- Removed `/home/z/my-project/git-ssh-proxy.mjs` (temporary SSH proxy)
+- Removed `ssh2` npm dependency (was only needed for the proxy)
