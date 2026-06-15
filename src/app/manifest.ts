@@ -15,13 +15,13 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: "portrait-primary",
     icons: [
       {
-        src: "/icon.svg",
+        src: "/logo.svg",
         sizes: "any",
         type: "image/svg+xml",
         purpose: "any",
       },
       {
-        src: "/apple-touch-icon.svg",
+        src: "/logo.svg",
         sizes: "180x180",
         type: "image/svg+xml",
         purpose: "any maskable",

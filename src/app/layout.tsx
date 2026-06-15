@@ -42,13 +42,13 @@ export const metadata: Metadata = {
   authors: [{ name: "Upam", url: "https://www.fiverr.com/upam1721" }],
   icons: {
     icon: [
-      { url: "/icon.svg", type: "image/svg+xml", sizes: "any" },
+      { url: "/logo.svg", type: "image/svg+xml", sizes: "any" },
     ],
     apple: [
-      { url: "/apple-touch-icon.svg", sizes: "180x180", type: "image/svg+xml" },
+      { url: "/logo.svg", sizes: "180x180", type: "image/svg+xml" },
     ],
     other: [
-      { rel: "mask-icon", url: "/icon.svg", color: "#06b6d4" },
+      { rel: "mask-icon", url: "/logo.svg", color: "#06b6d4" },
     ],
   },
   manifest: "/manifest.webmanifest",
