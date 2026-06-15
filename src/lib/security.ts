@@ -1,7 +1,23 @@
 /**
  * Security utility library.
  * Provides CSRF protection, input sanitization, and security helpers.
+ * Uses globalThis for all in-memory state to survive Turbopack HMR re-evaluation.
  */
+
+// ───────────────────────────────────────────────────────────────
+// Global state helpers — survive module re-evaluation in Turbopack
+// ───────────────────────────────────────────────────────────────
+const g = globalThis as Record<string, unknown>;
+
+function getGlobalMap<T>(key: string): Map<string, T> {
+  if (!g[key]) g[key] = new Map<string, T>();
+  return g[key] as Map<string, T>;
+}
+
+function getGlobalArray<T>(key: string): T[] {
+  if (!g[key]) g[key] = [];
+  return g[key] as T[];
+}
 
 // ───────────────────────────────────────────────────────────────
 // CSRF Token Management (in-memory, signed with HMAC)
@@ -13,15 +29,20 @@ interface CSRFToken {
   ip: string;
 }
 
-const csrfTokens = new Map<string, CSRFToken>();
 const CSRF_TOKEN_EXPIRY = 3_600_000; // 1 hour
 const CSRF_MAX_TOKENS = 10_000;
+
+function getCSRFMap(): Map<string, CSRFToken> {
+  return getGlobalMap<CSRFToken>('__csrfTokens');
+}
 
 /**
  * Generate a cryptographic CSRF token.
  * Returns the raw token (sent to client) and the hashed key (stored server-side).
  */
 export function generateCSRFToken(ip: string, userAgent: string): string {
+  const csrfTokens = getCSRFMap();
+
   // Cleanup expired tokens
   const now = Date.now();
   if (csrfTokens.size > CSRF_MAX_TOKENS) {
@@ -54,6 +75,7 @@ export function validateCSRFToken(
   ip: string,
   userAgent: string
 ): boolean {
+  const csrfTokens = getCSRFMap();
   const hashedKey = hashToken(token);
   const stored = csrfTokens.get(hashedKey);
 
@@ -80,7 +102,6 @@ export function validateCSRFToken(
  * Simple synchronous hash for CSRF (non-crypto, but sufficient for token lookup).
  */
 function hashToken(token: string): string {
-  // Use a simple hash for the Map key, real validation is in validateCSRFToken
   let hash = 0;
   const str = token + '_csrf_salt_upam_2025';
   for (let i = 0; i < str.length; i++) {
@@ -161,7 +182,7 @@ export function sanitizeURL(url: string): string {
 }
 
 // ───────────────────────────────────────────────────────────────
-// Security Logging (in-memory)
+// Security Logging (in-memory via globalThis)
 // ───────────────────────────────────────────────────────────────
 interface SecurityEvent {
   timestamp: number;
@@ -172,8 +193,11 @@ interface SecurityEvent {
   details?: string;
 }
 
-const securityLog: SecurityEvent[] = [];
 const MAX_LOG_ENTRIES = 1000;
+
+function getSecurityLogArray(): SecurityEvent[] {
+  return getGlobalArray<SecurityEvent>('__securityLog');
+}
 
 export function logSecurityEvent(
   type: string,
@@ -182,6 +206,7 @@ export function logSecurityEvent(
   userAgent: string,
   details?: string
 ): void {
+  const securityLog = getSecurityLogArray();
   if (securityLog.length >= MAX_LOG_ENTRIES) {
     securityLog.shift();
   }
@@ -197,13 +222,14 @@ export function logSecurityEvent(
 }
 
 export function getSecurityLog(): SecurityEvent[] {
-  return [...securityLog];
+  return [...getSecurityLogArray()];
 }
 
 /**
  * Get count of recent security events for an IP (for auto-blocking).
  */
 export function getIPViolationCount(ip: string, windowMs: number = 300_000): number {
+  const securityLog = getSecurityLogArray();
   const cutoff = Date.now() - windowMs;
   return securityLog.filter((e) => e.ip === ip && e.timestamp > cutoff).length;
 }

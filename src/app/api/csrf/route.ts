@@ -7,7 +7,11 @@ interface CSRFRateEntry {
   resetAt: number;
 }
 
-const csrfRateMap = new Map<string, CSRFRateEntry>();
+const _g = globalThis as Record<string, unknown>;
+function getCSRFRateMap() {
+  if (!_g['__csrfRateMap']) _g['__csrfRateMap'] = new Map<string, CSRFRateEntry>();
+  return _g['__csrfRateMap'] as Map<string, CSRFRateEntry>;
+}
 const CSRF_TOKEN_RATE_MAX = 5; // 5 tokens per 10 seconds
 const CSRF_TOKEN_RATE_WINDOW = 10_000;
 
@@ -46,6 +50,7 @@ export async function GET(request: NextRequest) {
 
   // Rate limit CSRF token generation
   const now = Date.now();
+  const csrfRateMap = getCSRFRateMap();
   const entry = csrfRateMap.get(ip);
   if (entry && now <= entry.resetAt && entry.count >= CSRF_TOKEN_RATE_MAX) {
     logSecurityEvent('CSRF_RATE_LIMITED', ip, '/api/csrf', userAgent, 'Rate limited');

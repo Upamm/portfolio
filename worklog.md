@@ -4531,3 +4531,61 @@ Performed comprehensive scan of entire `src/` directory:
 ### Files Modified
 - `src/app/globals.css` — Added skeleton shimmer CSS classes and animations
 - `src/components/portfolio/PortfolioApp.tsx` — Replaced PageLoader spinner with page-specific skeleton loaders
+
+---
+
+## Phase 10 - Bug Fix Round (2026-06-15)
+
+### Current Project Status Assessment
+- **Overall**: Production-quality portfolio with 23+ components, multiple API routes, 1 DB model
+- **Build**: Zero lint errors, zero compilation errors
+- **Visual QA**: Tested via agent-browser — page renders correctly, all sections visible
+- **Console**: Zero runtime errors
+
+### Bugs Found & Fixed
+
+1. **🔴 CRITICAL: Toast Notifications Completely Broken** 
+   - **Root Cause**: `useToast` hook used `useEffect` with `[state]` dependency, causing listener removal/re-addition on every state change, creating a gap where toast updates were missed
+   - **Additional Root Cause**: All module-level in-memory state (listeners, memoryState, timeouts) was being reset by Turbopack HMR re-evaluation between requests
+   - **Fix**: Rewrote `useToast` hook to use `useSyncExternalStore` (React's recommended external store API) + moved all state to `globalThis` to survive Turbopack module re-evaluation
+   - **Also Fixed**: Changed toast auto-dismiss from `onOpenChange` callback (broken by React 18 Strict Mode double-mount) to `setTimeout`-based dismissal (5 seconds)
+   - **File**: `src/hooks/use-toast.ts`
+
+2. **🟠 HIGH: Zod Validation Crash (500 Error)**
+   - **Root Cause**: Project uses Zod v4 which renamed `.errors` to `.issues` on `ZodError`
+   - **Fix**: Changed `parseResult.error.errors[0]` to `parseResult.error.issues[0]` in contact route
+   - **File**: `src/app/api/contact/route.ts` (line 201)
+
+3. **🟠 HIGH: CSRF Tokens Lost Between Requests (contact form always returned 403)**
+   - **Root Cause**: Turbopack HMR re-evaluates modules between requests, destroying all module-level variables (Maps, Arrays). CSRF token storage, security logs, and rate limiters were all empty on each request
+   - **Fix**: Moved all in-memory state to `globalThis`:
+     - `src/lib/security.ts`: CSRF tokens map, security log array → `globalThis`
+     - `src/app/api/contact/route.ts`: Rate limiter maps → `globalThis`
+     - `src/app/api/csrf/route.ts`: CSRF rate limiter map → `globalThis`
+   - **Also Fixed**: IP default mismatch — CSRF route defaulted to `'127.0.0.1'` but contact route defaulted to `'unknown'`, causing IP-binding check to always fail
+
+4. **🟡 MEDIUM: `/services` Route Returns 404**
+   - **Fix**: Created `src/app/services/page.tsx` with redirect to `/#services`
+   - **File**: `src/app/services/page.tsx` (NEW)
+
+### Warnings (Not Fixed)
+- ⚠️ Next.js 16 middleware deprecation warning — `src/middleware.ts` should be migrated to `proxy.ts` in future
+
+### Verification Results
+- ✅ `bun run lint` — 0 errors, 0 warnings
+- ✅ Contact form API — returns `{success: true}` via curl with CSRF token
+- ✅ Toast notifications — renders with `data-state="open"` and correct text
+- ✅ Dev server — running without errors
+
+### Files Modified
+- `src/hooks/use-toast.ts` — Rewrote with `useSyncExternalStore` + `globalThis` state
+- `src/lib/security.ts` — Moved CSRF tokens and security log to `globalThis`
+- `src/app/api/contact/route.ts` — Fixed Zod `.issues`, moved rate limiter to `globalThis`, fixed IP default
+- `src/app/api/csrf/route.ts` — Moved rate limiter to `globalThis`
+- `src/app/services/page.tsx` — NEW: Redirect to `/#services`
+
+### Technical Notes
+- Turbopack HMR re-evaluates server modules between requests, destroying module-level state
+- `globalThis` persists across module re-evaluations in the same Node.js process
+- `useSyncExternalStore` is React's recommended API for subscribing to external stores
+- React 18 Strict Mode double-mount can trigger `onOpenChange(false)` on unmount, breaking toast auto-dismiss

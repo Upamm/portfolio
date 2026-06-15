@@ -40,29 +40,37 @@ const contactSchema = z.object({
 type ContactInput = z.infer<typeof contactSchema>;
 
 // ───────────────────────────────────────────────────────────────
-// In-memory rate limiter for contact form specifically
+// In-memory rate limiter for contact form (uses globalThis for Turbopack)
 // ───────────────────────────────────────────────────────────────
 interface ContactRateEntry {
   count: number;
   resetAt: number;
 }
 
-const contactRateMap = new Map<string, ContactRateEntry>();
+const _g = globalThis as Record<string, unknown>;
+function getGlobalMap<T>(key: string): Map<string, T> {
+  if (!_g[key]) _g[key] = new Map<string, T>();
+  return _g[key] as Map<string, T>;
+}
 
 function cleanupEntries() {
   const now = Date.now();
+  const contactRateMap = getContactRateMap();
   for (const [key, entry] of contactRateMap) {
     if (now > entry.resetAt) contactRateMap.delete(key);
   }
 }
 
+function getContactRateMap() { return getGlobalMap<ContactRateEntry>('__contactRateMap'); }
+function getContactDailyMap() { return getGlobalMap<{ count: number; resetAt: number }>('__contactDailyMap'); }
+
 const CONTACT_WINDOW = 60_000; // 1 minute
 const CONTACT_MAX = 3; // 3 submissions per minute per IP
 const CONTACT_DAILY_MAX = 10; // 10 submissions per day per IP
 
-const contactDailyMap = new Map<string, { count: number; resetAt: number }>();
-
 function checkContactRateLimit(ip: string): { allowed: boolean; reason?: string } {
+  const contactRateMap = getContactRateMap();
+  const contactDailyMap = getContactDailyMap();
   const now = Date.now();
 
   // Check for auto-block
@@ -124,7 +132,7 @@ function getClientIP(request: NextRequest): string {
   }
   const realIP = request.headers.get('x-real-ip');
   if (realIP) return realIP.trim();
-  return 'unknown';
+  return '127.0.0.1';
 }
 
 // ───────────────────────────────────────────────────────────────
@@ -198,7 +206,7 @@ export async function POST(request: NextRequest) {
     // Validate with Zod
     const parseResult = contactSchema.safeParse(body);
     if (!parseResult.success) {
-      const firstError = parseResult.error.errors[0];
+      const firstError = parseResult.error.issues[0];
       logSecurityEvent('CONTACT_VALIDATION_FAIL', ip, '/api/contact', userAgent, firstError?.message);
       return NextResponse.json(
         { success: false, error: firstError?.message || 'Validation failed.' },

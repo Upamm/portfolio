@@ -9,7 +9,7 @@ import type {
 } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
+const TOAST_REMOVE_DELAY = 5000 // Auto-dismiss after 5 seconds
 
 type ToasterToast = ToastProps & {
   id: string
@@ -56,7 +56,29 @@ interface State {
   toasts: ToasterToast[]
 }
 
-const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
+// ───────────────────────────────────────────────────────────────
+// Global state — survives Turbopack HMR re-evaluation
+// ───────────────────────────────────────────────────────────────
+const _g = globalThis as Record<string, unknown>;
+
+function getGlobalArray<T>(key: string): T[] {
+  if (!_g[key]) _g[key] = [];
+  return _g[key] as T[];
+}
+
+function getGlobalMap<K, V>(key: string): Map<K, V> {
+  if (!_g[key]) _g[key] = new Map<K, V>();
+  return _g[key] as Map<K, V>;
+}
+
+function getGlobalValue<T>(key: string, initial: T): T {
+  if (!_g[key]) _g[key] = initial;
+  return _g[key] as T;
+}
+
+const listeners: Array<(state: State) => void> = getGlobalArray<(state: State) => void>('__toast_listeners');
+const memoryState: State = getGlobalValue<State>('__toast_memoryState', { toasts: [] });
+const toastTimeouts = getGlobalMap<string, ReturnType<typeof setTimeout>>('__toast_timeouts');
 
 const addToRemoveQueue = (toastId: string) => {
   if (toastTimeouts.has(toastId)) {
@@ -93,8 +115,6 @@ export const reducer = (state: State, action: Action): State => {
     case "DISMISS_TOAST": {
       const { toastId } = action
 
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
       if (toastId) {
         addToRemoveQueue(toastId)
       } else {
@@ -129,14 +149,14 @@ export const reducer = (state: State, action: Action): State => {
   }
 }
 
-const listeners: Array<(state: State) => void> = []
-
-let memoryState: State = { toasts: [] }
-
 function dispatch(action: Action) {
-  memoryState = reducer(memoryState, action)
+  // Always read the current state from globalThis
+  const currentState = (globalThis as Record<string, unknown>).__toast_memoryState as State || { toasts: [] };
+  const newState = reducer(currentState, action);
+  // Replace the global state with a new object (required for useSyncExternalStore)
+  (globalThis as Record<string, unknown>).__toast_memoryState = newState;
   listeners.forEach((listener) => {
-    listener(memoryState)
+    listener() // Notify React to re-read snapshot
   })
 }
 
@@ -158,11 +178,11 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      onOpenChange: (open) => {
-        if (!open) dismiss()
-      },
     },
   })
+
+  // Auto-dismiss after TOAST_REMOVE_DELAY
+  setTimeout(() => dismiss(), TOAST_REMOVE_DELAY)
 
   return {
     id: id,
@@ -172,17 +192,17 @@ function toast({ ...props }: Toast) {
 }
 
 function useToast() {
-  const [state, setState] = React.useState<State>(memoryState)
-
-  React.useEffect(() => {
-    listeners.push(setState)
-    return () => {
-      const index = listeners.indexOf(setState)
-      if (index > -1) {
-        listeners.splice(index, 1)
+  // Use useSyncExternalStore for reliable external state subscription
+  const state = React.useSyncExternalStore(
+    (callback) => {
+      listeners.push(callback)
+      return () => {
+        const index = listeners.indexOf(callback)
+        if (index > -1) listeners.splice(index, 1)
       }
-    }
-  }, [state])
+    },
+    () => (globalThis as Record<string, unknown>).__toast_memoryState as State || { toasts: [] }
+  )
 
   return {
     ...state,
