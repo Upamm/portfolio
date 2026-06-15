@@ -6,6 +6,17 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { getCookie, setCookie, COOKIES } from '@/lib/cookies';
+import {
+  HomePageSkeleton,
+  AboutPageSkeleton,
+  ServicesPageSkeleton,
+  PortfolioSkeleton,
+  PricingPageSkeleton,
+  BlogPageSkeleton,
+  FAQPageSkeleton,
+  ContactPageSkeleton,
+  PortalPageSkeleton,
+} from './SectionSkeletons';
 
 // Lazy-loaded page sections
 const HeroSection = dynamic(() => import('./HeroSection'), { ssr: false });
@@ -40,14 +51,18 @@ export type PageKey = 'home' | 'about' | 'services' | 'portfolio' | 'pricing' | 
 
 const pageList: PageKey[] = ['home', 'about', 'services', 'portfolio', 'pricing', 'blog', 'faq', 'contact', 'portal'];
 
-// Loading spinner for lazy-loaded pages
-function PageLoader() {
-  return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="w-10 h-10 border-3 border-teal-500/20 border-t-teal-500 rounded-full animate-spin" />
-    </div>
-  );
-}
+// Shimmer skeleton loaders per page (no more spinners!)
+const pageSkeletons: Record<PageKey, () => React.ReactNode> = {
+  home: () => <HomePageSkeleton />,
+  about: () => <AboutPageSkeleton />,
+  services: () => <ServicesPageSkeleton />,
+  portfolio: () => <PortfolioSkeleton />,
+  pricing: () => <PricingPageSkeleton />,
+  blog: () => <BlogPageSkeleton />,
+  faq: () => <FAQPageSkeleton />,
+  contact: () => <ContactPageSkeleton />,
+  portal: () => <PortalPageSkeleton />,
+};
 
 function HomePage({ onNavigate }: { onNavigate: (page: PageKey) => void }) {
   return (
@@ -250,7 +265,7 @@ export default function PortfolioApp() {
               transition={{ duration: 0.18, ease: 'easeOut' }}
               className={isPortal ? '' : 'flex-1'}
             >
-              <Suspense fallback={<PageLoader />}>
+              <Suspense fallback={pageSkeletons[currentPage]()}>
                 <PageComponent />
               </Suspense>
             </motion.div>
