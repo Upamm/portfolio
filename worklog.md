@@ -4464,3 +4464,70 @@ Performed comprehensive scan of entire `src/` directory:
 ### Files/Cleanup
 - Removed `/home/z/my-project/git-ssh-proxy.mjs` (temporary SSH proxy)
 - Removed `ssh2` npm dependency (was only needed for the proxy)
+
+---
+
+## Phase - Shimmer Skeleton Loaders (2026-06-15)
+
+### Task
+- Replace spinner loading indicators with shimmer skeleton loaders for all sections
+
+### Changes Made
+
+1. **Created Reusable Skeleton Primitives** (`src/components/ui/skeleton.tsx`):
+   - `Skeleton` — Base animated shimmer rectangle (core building block)
+   - `SkeletonCircle` — Circular skeleton for avatars, icons, stat rings
+   - `SkeletonLine` — Single text line skeleton
+   - `SkeletonParagraph` — Multi-line text block skeleton
+   - `SkeletonCard` — Glass-morphism skeleton card shell
+   - `SkeletonSectionHeading` — Section heading skeleton (label + title + line + description)
+   - `SkeletonStat` — Stat counter skeleton (icon + number + label)
+   - `SkeletonIconCard` — Card with icon + title + description
+   - `SkeletonImageCard` — Image card (portfolio, blog, featured)
+   - `SkeletonPricingCard` — Pricing card with featured variant
+   - `SkeletonTestimonialCard` — Single centered testimonial card
+   - `SkeletonAccordionItem` — FAQ accordion bar
+   - `SkeletonTimelineItem` — Timeline milestone (left/right alternating)
+   - `SkeletonContactForm` — Contact form inputs skeleton
+   - `SkeletonProcessStep` — Process step circle + text
+
+2. **Created Section-Specific Skeleton Pages** (`src/components/portfolio/SectionSkeletons.tsx`):
+   - Individual skeletons: Hero, Marquee, StatsBanner, Clients, Industries, FeaturedWork, Testimonials, Certifications, WorkWithMe, About, Services, Process, Skills, Portfolio, Pricing, Blog, FAQ, Contact, Experience, Values, Portal
+   - Page-level composers: HomePageSkeleton, AboutPageSkeleton, ServicesPageSkeleton, PricingPageSkeleton, BlogPageSkeleton, FAQPageSkeleton, ContactPageSkeleton, PortalPageSkeleton
+   - Each skeleton matches the exact layout of its corresponding section (grid columns, card counts, responsive breakpoints)
+
+3. **Added Shimmer CSS** (`src/app/globals.css`):
+   - `skeleton-pulse` keyframe — smooth background-position animation with subtle opacity pulse (1.8s loop)
+   - `.skeleton-shimmer` — Navy-tone gradient shimmer for dark mode
+   - `.light .skeleton-shimmer` — Slate-tone gradient shimmer for light mode
+   - `.skeleton-card-glass` — Glass-morphism card background for skeleton cards
+   - `.light .skeleton-card-glass` — Light mode glass card variant
+
+4. **Updated PortfolioApp.tsx**:
+   - Removed old `PageLoader()` spinner component
+   - Added `pageSkeletons` map — each page key maps to its matching skeleton component
+   - `Suspense fallback` now uses `pageSkeletons[currentPage]()` for page-specific skeletons
+   - All 9 pages have unique skeleton layouts (home, about, services, portfolio, pricing, blog, faq, contact, portal)
+
+### Design Decisions
+- Staggered animation delays (30-80ms per element) create a natural cascading shimmer wave
+- Navy/dark blue gradients match the site's dark theme perfectly
+- Light mode has matching slate gray shimmer tones
+- Skeletons match exact grid layouts (e.g., `sm:grid-cols-2 lg:grid-cols-3`) so content "snaps" into place without layout shift
+- Glass-morphism card shells provide visual consistency with actual content cards
+
+### Verification Results
+- ✅ `bun run lint` — 0 errors
+- ✅ Dev server compiles successfully
+- ✅ Homepage renders with all sections (verified via agent-browser)
+- ✅ Page navigation works (Services, About, etc.)
+- ✅ Zero console errors
+- ✅ Committed: `feat: add shimmer skeleton loaders for all sections replacing spinners`
+
+### Files Created
+- `src/components/ui/skeleton.tsx` — NEW: Reusable skeleton primitives (15 components)
+- `src/components/portfolio/SectionSkeletons.tsx` — NEW: Section-specific skeleton pages (21 section skeletons + 9 page composers)
+
+### Files Modified
+- `src/app/globals.css` — Added skeleton shimmer CSS classes and animations
+- `src/components/portfolio/PortfolioApp.tsx` — Replaced PageLoader spinner with page-specific skeleton loaders
