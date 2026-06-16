@@ -97,7 +97,7 @@ export function destroySession(_token: string): void {
 // ── Cookie Settings ──
 export const SESSION_COOKIE = {
   name: 'portal_token',
-  httpOnly: true,
+  httpOnly: false,
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'lax' as const,
   path: '/',
