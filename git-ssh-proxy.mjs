@@ -6,7 +6,7 @@ import path from "path";
 // Git SSH proxy - acts as a drop-in SSH client for git
 // Git calls: <this-script> [-p port] [user@host] <remote-command>
 
-const SSH_KEY_PATH = path.join(process.env.HOME || "/home/z", ".ssh", "id_ed25519");
+const SSH_KEY_PATH = path.join(process.env.HOME || "/home/z", ".ssh", "id_rsa");
 const privateKey = fs.readFileSync(SSH_KEY_PATH);
 
 const gitArgs = process.argv.slice(2);
