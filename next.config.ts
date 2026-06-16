@@ -34,7 +34,7 @@ const securityHeaders = [
       "img-src 'self' data: blob: https://fiverr-res.cloudinary.com https://images.unsplash.com",
       "font-src 'self' data: https://fonts.gstatic.com",
       "connect-src 'self' https://fonts.googleapis.com https://*.space-z.ai",
-      "frame-ancestors *",
+      "frame-ancestors 'self' https://upam1721.com",
       "base-uri 'self'",
       "form-action 'self'",
       "object-src 'none'",
@@ -47,7 +47,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: "standalone",
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   reactStrictMode: false,
   compress: true,

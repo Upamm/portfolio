@@ -97,8 +97,8 @@ export function destroySession(_token: string): void {
 // ── Cookie Settings ──
 export const SESSION_COOKIE = {
   name: 'portal_token',
-  httpOnly: false, // frontend needs to read token from document.cookie
-  secure: false, // dev environment
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
   sameSite: 'lax' as const,
   path: '/',
   maxAge: 7 * 24 * 60 * 60, // 7 days in seconds

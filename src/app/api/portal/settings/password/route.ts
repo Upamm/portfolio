@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { requireAuth } from '@/lib/auth';
+import bcrypt from 'bcrypt';
 
 // PUT /api/portal/settings/password — Change password
 export async function PUT(request: NextRequest) {
@@ -36,18 +37,21 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Simple password comparison (stored as plain text in this project)
-    if (user.password !== currentPassword) {
+    // Compare with bcrypt hash
+    const isValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isValid) {
       return NextResponse.json(
         { success: false, error: 'Current password is incorrect' },
         { status: 401 }
       );
     }
 
-    // Update password
+    // Hash new password before storing
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+
     await db.client.update({
       where: { id: client.id },
-      data: { password: newPassword },
+      data: { password: hashedPassword },
     });
 
     return NextResponse.json({

@@ -135,18 +135,56 @@ model Invoice {
 }
 
 model Message {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   content   String
-  senderId  String   // client id
-  senderRole String  @default("client") // "client" | "admin"
+  senderId  String    // client id
+  senderRole String   @default("client") // "client" | "admin"
   clientId  String
-  isRead    Boolean  @default(false)
+  isRead    Boolean   @default(false)
+  starred   Boolean   @default(false)
+  deletedAt DateTime?
+  editedAt  DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  client    Client    @relation(fields: [clientId], references: [id])
+  reactions MessageReaction[]
+
+  @@index([clientId])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+model MessageReaction {
+  id        String   @id @default(cuid())
+  messageId String
+  emoji     String
+  senderId  String
+  senderRole String  @default("client")
+  createdAt DateTime @default(now())
+
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, senderId, emoji])
+  @@index([messageId])
+}
+
+model ErrorLog {
+  id        String   @id @default(cuid())
+  level     String   @default("error") // "error" | "warn" | "info"
+  source    String
+  message   String
+  stack     String   @default("")
+  path      String   @default("")
+  method    String   @default("")
+  statusCode Int     @default(500)
+  resolved  Boolean  @default(false)
+  clientId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  client    Client   @relation(fields: [clientId], references: [id])
-
-  @@index([clientId])
+  @@index([level])
+  @@index([resolved])
   @@index([createdAt])
 }
 
