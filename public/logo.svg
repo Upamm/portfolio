@@ -1,29 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 30 30" style="enable-background:new 0 0 30 30;" xml:space="preserve">
-<defs>
-  <style type="text/css">
-    .st194{fill:#2D2D2D;stroke:#FFFFFF;stroke-width:0.6317;stroke-miterlimit:10;}
-    .st23{fill:#FFFFFF;}
-
-    .z-breathe {
-      animation: breathe 2.5s ease-in-out infinite;
-    }
-
-    @keyframes breathe {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
-    }
-  </style>
-</defs>
-
-<g>
-  <path class="st194" d="M24.51,28.51H5.49c-2.21,0-4-1.79-4-4V5.49c0-2.21,1.79-4,4-4h19.03c2.21,0,4,1.79,4,4v19.03
-    C28.51,26.72,26.72,28.51,24.51,28.51z"/>
-  <g class="z-breathe">
-    <path class="st23" d="M15.47,7.1l-1.3,1.85c-0.2,0.29-0.54,0.47-0.9,0.47h-7.1V7.09C6.16,7.1,15.47,7.1,15.47,7.1z"/>
-    <polygon class="st23" points="24.3,7.1 13.14,22.91 5.7,22.91 16.86,7.1"/>
-    <path class="st23" d="M14.53,22.91l1.31-1.86c0.2-0.29,0.54-0.47,0.9-0.47h7.09v2.33H14.53z"/>
-  </g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#0f2240"/>
+    </linearGradient>
+    <linearGradient id="u-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="50%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="96" fill="url(#bg-grad)"/>
+  
+  <!-- Subtle border -->
+  <rect x="16" y="16" width="480" height="480" rx="80" fill="none" stroke="url(#accent-grad)" stroke-width="3" opacity="0.4"/>
+  
+  <!-- Decorative corner accents -->
+  <circle cx="72" cy="72" r="8" fill="#06b6d4" opacity="0.6"/>
+  <circle cx="440" cy="72" r="6" fill="#10b981" opacity="0.5"/>
+  <circle cx="72" cy="440" r="6" fill="#10b981" opacity="0.5"/>
+  <circle cx="440" cy="440" r="8" fill="#06b6d4" opacity="0.6"/>
+  
+  <!-- Main U letter -->
+  <path d="M 160 120 
+           L 160 320 
+           C 160 388 200 430 256 430 
+           C 312 430 352 388 352 320 
+           L 352 120
+           M 352 120 
+           L 380 120
+           L 380 330 
+           C 380 414 328 460 256 460 
+           C 184 460 132 414 132 330 
+           L 132 120
+           L 160 120 Z" 
+        fill="url(#u-grad)"/>
+  
+  <!-- Teal underline accent -->
+  <rect x="170" y="440" width="172" height="6" rx="3" fill="url(#accent-grad)" opacity="0.8"/>
 </svg>
