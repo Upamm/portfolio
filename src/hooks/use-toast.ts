@@ -201,7 +201,8 @@ function useToast() {
         if (index > -1) listeners.splice(index, 1)
       }
     },
-    () => (globalThis as Record<string, unknown>).__toast_memoryState as State || { toasts: [] }
+    () => (globalThis as Record<string, unknown>).__toast_memoryState as State || { toasts: [] },
+    () => ({ toasts: [] })
   )
 
   return {
