@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Preloader } from "@/components/portfolio/Preloader";
 import { JsonLdSchema } from "@/components/portfolio/JsonLdSchema";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -141,6 +142,7 @@ export default function RootLayout({
         <Preloader />
         {children}
         <Toaster />
+        <SpeedInsights />
       </body>
     </html>
   );
